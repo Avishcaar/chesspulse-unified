@@ -1,0 +1,421 @@
+/* ==========================================================================
+   PUZZLES PAGE — TELEMETRY HUD RIBBON & 6-MODULE TACTICAL CONSOLE
+   ========================================================================== */
+
+.puzzles-page {
+  min-height: calc(100vh - 80px);
+  padding: 0 24px 72px;
+  background: #07090f;
+  position: relative;
+}
+
+body[data-theme="light"] .puzzles-page {
+  background: #f8fafc;
+}
+
+.puzzles-container {
+  position: relative;
+  z-index: 2;
+  max-width: 1320px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.puzzles-stats-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(245, 158, 11, 0.14);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  color: #fbbf24;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.puzzles-stats-pill-btn:hover {
+  background: #f59e0b;
+  color: #06080f;
+}
+
+/* Top Telemetry HUD Ribbon */
+.puzzles-hud-ribbon {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.puzzles-hud-cell {
+  padding: 1.25rem 1.5rem;
+  border-right: 1px solid rgba(255, 255, 255, 0.07);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+body[data-theme="light"] .puzzles-hud-cell {
+  border-right-color: rgba(15, 23, 42, 0.08);
+}
+
+.puzzles-hud-cell:last-child {
+  border-right: none;
+}
+
+.hud-cell-code {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+}
+
+.hud-cell-val {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 1.65rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+
+.hud-cell-val.gold { color: #fbbf24; }
+.hud-cell-val.emerald { color: #10b981; }
+.hud-cell-val.cyan { color: #38bdf8; }
+.hud-cell-val.violet { color: #c084fc; }
+
+.hud-cell-lbl {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+/* Main 2-Column Layout */
+.puzzles-layout {
+  display: grid;
+  grid-template-columns: minmax(400px, 540px) 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.puzzle-main {
+  display: flex;
+  flex-direction: column;
+}
+
+.puzzle-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.puzzle-rating {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #34d399;
+  padding: 4px 10px;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 999px;
+}
+
+.puzzle-skip-top-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-muted);
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.68rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.puzzle-skip-top-btn:hover {
+  color: var(--text);
+  border-color: #f59e0b;
+}
+
+.puzzle-main-body {
+  padding: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.puzzle-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.puzzle-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.next-puzzle-btn,
+.skip-btn {
+  flex: 1;
+  padding: 0.75rem 1.2rem;
+  border-radius: 10px;
+  font-size: 0.86rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.next-puzzle-btn {
+  background: linear-gradient(135deg, #10b981, #059669);
+  border: none;
+  color: #ffffff;
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+}
+
+.skip-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-muted);
+}
+
+.skip-btn:hover {
+  color: var(--text);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.puzzle-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 24px;
+}
+
+.loading-spinner {
+  width: 42px;
+  height: 42px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #f59e0b;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Right Column: 6-Module Interactive Training Matrix */
+.puzzle-modes-console {
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+}
+
+.puzzles-signin-chip {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #fbbf24;
+  text-decoration: none;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: rgba(251, 191, 36, 0.12);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.modes-bento-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.mode-bento-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 118px 1fr auto;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.2rem 1.5rem;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  overflow: hidden;
+  transition: padding-left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body[data-theme="light"] .mode-bento-row {
+  border-bottom-color: rgba(15, 23, 42, 0.08);
+}
+
+.mode-bento-row:last-child {
+  border-bottom: none;
+}
+
+.mode-row-sweep {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--mode-color) 12%, transparent) 60%,
+    color-mix(in srgb, var(--mode-color) 22%, transparent) 100%
+  );
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.mode-bento-row:hover {
+  padding-left: 1.85rem;
+}
+
+.mode-bento-row:hover .mode-row-sweep {
+  transform: scaleY(1);
+}
+
+.mode-row-left,
+.mode-content,
+.mode-row-right {
+  position: relative;
+  z-index: 1;
+}
+
+.mode-row-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mode-code {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+}
+
+.mode-bento-row:hover .mode-code {
+  color: var(--mode-color);
+}
+
+.mode-icon-wrapper {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--mode-color) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--mode-color) 35%, transparent);
+  color: var(--mode-color);
+  transition: all 0.25s ease;
+}
+
+.mode-bento-row:hover .mode-icon-wrapper {
+  background: var(--mode-color);
+  color: #06080f;
+}
+
+.mode-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mode-title-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.mode-title {
+  font-family: 'Outfit', 'Inter', sans-serif;
+  font-size: 1.08rem;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.mode-tag-pill {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-muted);
+}
+
+.mode-desc {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+.lock-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.12);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.mode-arrow-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-muted);
+  transition: all 0.25s ease;
+}
+
+.mode-bento-row:hover .mode-arrow-circle {
+  background: var(--mode-color);
+  border-color: var(--mode-color);
+  color: #06080f;
+  transform: translate(2px, -2px);
+}
+
+@media (max-width: 1024px) {
+  .puzzles-hud-ribbon {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .puzzles-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .puzzles-hud-ribbon {
+    grid-template-columns: 1fr;
+  }
+  .mode-bento-row {
+    grid-template-columns: 1fr auto;
+  }
+  .mode-row-left {
+    display: none;
+  }
+}

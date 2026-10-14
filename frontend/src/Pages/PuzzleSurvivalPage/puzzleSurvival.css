@@ -1,0 +1,482 @@
+/* ==========================================================================
+   PUZZLE SURVIVAL PAGE — 3-LIFE ENDURANCE CLIMB & LIVE TELEMETRY
+   ========================================================================== */
+
+.puzzle-survival-page {
+  min-height: calc(100vh - 80px);
+  padding: 0 24px 72px;
+  background: #07090f;
+  position: relative;
+}
+
+body[data-theme="light"] .puzzle-survival-page {
+  background: #f8fafc;
+}
+
+.survival-container {
+  max-width: 1320px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+/* --------------------------------------------------------------------------
+   Pre-game Launchpad Grid
+   -------------------------------------------------------------------------- */
+.survival-briefing-grid {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 1.5rem;
+}
+
+@media (max-width: 960px) {
+  .survival-briefing-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.survival-launch-console {
+  display: flex;
+  flex-direction: column;
+}
+
+.survival-launch-body {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.survival-hero-shield-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2.25rem 1.5rem;
+  background: radial-gradient(circle at center, rgba(168, 85, 247, 0.12) 0%, rgba(15, 23, 42, 0.4) 100%);
+  border: 1px solid rgba(168, 85, 247, 0.28);
+  border-radius: 12px;
+  text-align: center;
+  gap: 12px;
+}
+
+.hero-shield-label {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: var(--text-muted, #94a3b8);
+}
+
+.hero-shields-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.shield-pod {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 18px;
+  border-radius: 8px;
+  background: rgba(168, 85, 247, 0.14);
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  color: #c084fc;
+  box-shadow: 0 0 16px rgba(168, 85, 247, 0.2);
+}
+
+.shield-pod span {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.65rem;
+  font-weight: 800;
+}
+
+.hero-streak-record {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #fbbf24;
+}
+
+/* Difficulty Selector */
+.survival-section-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.survival-group-lbl {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: var(--text-muted, #94a3b8);
+}
+
+.survival-diff-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 8px;
+}
+
+/* Rules Checklist */
+.survival-rules-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.s-rule-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+}
+
+body[data-theme="light"] .s-rule-item {
+  background: rgba(15, 23, 42, 0.02);
+  border-color: rgba(15, 23, 42, 0.08);
+}
+
+.s-rule-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 0.88rem;
+  flex-shrink: 0;
+}
+
+.s-rule-icon.cyan {
+  background: rgba(56, 189, 248, 0.18);
+  color: #38bdf8;
+}
+
+.s-rule-icon.red {
+  background: rgba(239, 68, 68, 0.18);
+  color: #f87171;
+}
+
+.s-rule-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.s-rule-text strong {
+  font-size: 0.88rem;
+  color: var(--text, #f8fafc);
+}
+
+.s-rule-text span {
+  font-size: 0.78rem;
+  color: var(--text-muted, #94a3b8);
+}
+
+.survival-launch-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px 24px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%);
+  border: none;
+  color: #ffffff;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 18px rgba(168, 85, 247, 0.35);
+}
+
+.survival-launch-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 26px rgba(168, 85, 247, 0.45);
+}
+
+/* Right Intel */
+.survival-intel-console {
+  display: flex;
+  flex-direction: column;
+}
+
+.survival-intel-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* --------------------------------------------------------------------------
+   Live Gameplay Stage & Shield HUD
+   -------------------------------------------------------------------------- */
+.survival-live-hud {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr 1fr 1fr;
+}
+
+@media (max-width: 800px) {
+  .survival-live-hud {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.survival-hud-cell {
+  padding: 1.25rem 1.5rem;
+  border-right: 1px solid rgba(255, 255, 255, 0.07);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.survival-hud-cell:last-child {
+  border-right: none;
+}
+
+.live-shields-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.live-shield-pod {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.68rem;
+  font-weight: 800;
+  transition: all 0.3s ease;
+}
+
+.live-shield-pod.alive {
+  background: rgba(168, 85, 247, 0.15);
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  color: #c084fc;
+}
+
+.live-shield-pod.lost {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  color: #f87171;
+  opacity: 0.6;
+}
+
+.live-shield-pod.just-lost {
+  animation: strikeShatter 0.6s ease-out;
+}
+
+@keyframes strikeShatter {
+  0% { transform: scale(1.2); background: rgba(239, 68, 68, 0.4); }
+  100% { transform: scale(1); }
+}
+
+.survival-streak-digits {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 2.35rem;
+  font-weight: 900;
+  color: #c084fc;
+  line-height: 1;
+}
+
+.survival-hud-val {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 1.65rem;
+  font-weight: 800;
+}
+
+.survival-hud-val.gold { color: #fbbf24; }
+.survival-hud-val.cyan { color: #38bdf8; }
+
+.survival-stage-layout {
+  max-width: 640px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.survival-board-window {
+  display: flex;
+  flex-direction: column;
+}
+
+.survival-board-body {
+  padding: 1.5rem;
+}
+
+.survival-lives-tag {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(168, 85, 247, 0.14);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  color: #c084fc;
+}
+
+.survival-abort-btn {
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(168, 85, 247, 0.14);
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  color: #c084fc;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* --------------------------------------------------------------------------
+   Results Screen (Game Over)
+   -------------------------------------------------------------------------- */
+.survival-results-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.survival-results-body {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.survival-streak-badge {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #c084fc;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(168, 85, 247, 0.14);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+.survival-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+@media (max-width: 800px) {
+  .survival-summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.survival-stat-box {
+  padding: 1.25rem;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.survival-stat-box.highlight {
+  background: radial-gradient(circle at center, rgba(168, 85, 247, 0.12) 0%, rgba(15, 23, 42, 0.35) 100%);
+  border-color: rgba(168, 85, 247, 0.3);
+}
+
+.s-stat-code {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-muted, #94a3b8);
+}
+
+.s-stat-val {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 2.35rem;
+  font-weight: 900;
+}
+
+.s-stat-val.violet { color: #c084fc; }
+.s-stat-val.gold { color: #fbbf24; }
+.s-stat-val.cyan { color: #38bdf8; }
+.s-stat-val.rose { color: #f43f5e; }
+
+.s-stat-lbl {
+  font-size: 0.78rem;
+  color: var(--text-muted, #94a3b8);
+}
+
+.new-record-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: rgba(251, 191, 36, 0.12);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 8px;
+  color: #fbbf24;
+  font-size: 0.85rem;
+}
+
+.survival-coach-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 1.5rem;
+  background: rgba(168, 85, 247, 0.06);
+  border: 1px solid rgba(168, 85, 247, 0.22);
+  border-radius: 8px;
+}
+
+.survival-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.survival-primary-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 22px;
+  border-radius: 6px;
+  background: #a855f7;
+  border: none;
+  color: #ffffff;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(168, 85, 247, 0.3);
+}
+
+.survival-secondary-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text, #f8fafc);
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: none;
+}

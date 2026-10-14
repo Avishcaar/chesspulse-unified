@@ -1,0 +1,507 @@
+.lichess-user-card {
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    font-family: 'Inter', system-ui, sans-serif;
+    color: var(--text);
+    position: relative;
+    overflow: hidden;
+}
+
+.lichess-user-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+}
+
+.lichess-search {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.lichess-search input {
+    flex: 1;
+    padding: 12px 16px;
+    border-radius: 10px;
+    background: var(--glass);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.lichess-search input:focus {
+    border-color: var(--accent);
+}
+
+.lichess-search input::placeholder {
+    color: var(--text);
+    opacity: 0.5;
+}
+
+.lichess-search-btn {
+    padding: 12px 20px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #fff;
+    font-weight: 600;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.lichess-search-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(15, 240, 252, 0.3);
+}
+
+.lichess-search-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.lichess-user-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+}
+
+.lichess-user-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 700;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+.lichess-user-info h3 {
+    margin: 0 0 4px 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.lichess-user-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text);
+    opacity: 0.7;
+}
+
+.lichess-patron-badge {
+    background: linear-gradient(135deg, #d97706, #fbbf24);
+    color: #1a1a1a;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.lichess-online-badge {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #4ade80;
+    box-shadow: 0 0 8px #4ade80;
+}
+
+.lichess-offline-badge {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #64748b;
+}
+
+.lichess-global-stats {
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+}
+
+.global-chart-section {
+    display: flex;
+    justify-content: center;
+}
+
+.global-donut-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.donut-chart {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.donut-chart.large {
+    width: 100px;
+    height: 100px;
+}
+
+.donut-chart::after {
+    content: '';
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background: var(--bg-soft);
+    border-radius: 50%;
+}
+
+.donut-chart.large::after {
+    width: 75px;
+    height: 75px;
+}
+
+.chart-center {
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1;
+}
+
+.chart-center span {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--text);
+}
+
+.donut-chart.large .chart-center span {
+    font-size: 18px;
+}
+
+.chart-center small {
+    font-size: 8px;
+    opacity: 0.6;
+    text-transform: uppercase;
+}
+
+/* Legends */
+.global-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.g-item {
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text);
+    opacity: 0.9;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.dot.win {
+    background: #4ade80;
+}
+
+.dot.loss {
+    background: #f87171;
+}
+
+.dot.draw {
+    background: #94a3b8;
+}
+
+
+/* Grid & Cards */
+.lichess-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.lichess-stat-card {
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.lichess-stat-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+}
+
+.stat-card-header {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 8px;
+}
+
+.stat-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text);
+    opacity: 0.6;
+    font-weight: 700;
+}
+
+.current-rating {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 8px;
+}
+
+.current-rating.bullet {
+    color: #fbbf24;
+}
+
+.current-rating.blitz {
+    color: #38bdf8;
+}
+
+.current-rating.rapid {
+    color: #4ade80;
+}
+
+.current-rating.classical {
+    color: #a855f7;
+}
+
+.current-rating.puzzle {
+    color: #f472b6;
+}
+
+/* Progress Bar for Games Count */
+.games-count-bar {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.count-label {
+    font-size: 10px;
+    opacity: 0.5;
+}
+
+.progress-bg {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--text);
+    border-radius: 2px;
+}
+
+.progress-fill.bullet {
+    background: #fbbf24;
+}
+
+.progress-fill.blitz {
+    background: #38bdf8;
+}
+
+.progress-fill.rapid {
+    background: #4ade80;
+}
+
+.progress-fill.classical {
+    background: #a855f7;
+}
+
+.progress-fill.puzzle {
+    background: #f472b6;
+}
+
+
+.lichess-profile-link {
+    display: block;
+    text-align: center;
+    padding: 12px;
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.lichess-profile-link:hover {
+    background: rgba(15, 240, 252, 0.1);
+    border-color: var(--accent);
+}
+
+.lichess-loading,
+.lichess-error,
+.lichess-empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text);
+}
+
+.lichess-loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 16px;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.lichess-error {
+    color: #f87171;
+}
+
+.lichess-empty {
+    opacity: 0.6;
+}
+
+.lichess-recent-games {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+}
+
+.lichess-recent-games h4 {
+    margin: 0 0 12px 0;
+    font-size: 14px;
+    color: var(--text);
+    opacity: 0.8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.games-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.game-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: var(--glass);
+    border: 1px solid var(--border);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.game-item:hover {
+    transform: translateX(4px);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.game-result {
+    font-weight: 800;
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    min-width: 24px;
+    text-align: center;
+}
+
+.game-item.win .game-result {
+    background: rgba(74, 222, 128, 0.2);
+    color: #4ade80;
+}
+
+.game-item.loss .game-result {
+    background: rgba(248, 113, 113, 0.2);
+    color: #f87171;
+}
+
+.game-item.draw .game-result {
+    background: rgba(148, 163, 184, 0.2);
+    color: #94a3b8;
+}
+
+.game-opponent {
+    flex: 1;
+    font-size: 13px;
+    color: var(--text);
+    font-weight: 500;
+}
+
+.game-time {
+    font-size: 11px;
+    color: var(--text);
+    opacity: 0.5;
+    font-family: monospace;
+}
+
+@media (max-width: 480px) {
+    .lichess-user-card {
+        padding: 16px;
+    }
+
+    .lichess-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .lichess-stat-box {
+        padding: 12px;
+    }
+
+    .lichess-stat-value {
+        font-size: 18px;
+    }
+}

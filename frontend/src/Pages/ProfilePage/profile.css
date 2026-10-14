@@ -1,0 +1,194 @@
+/* Profile Page Styles */
+.profile-page {
+    position: relative;
+    min-height: calc(100vh - 64px);
+    background: var(--bg);
+    padding-bottom: 48px;
+    overflow: hidden;
+}
+
+/* Loading Text */
+.loading-text {
+    text-align: center;
+    color: var(--text);
+    opacity: 0.7;
+    font-size: 1.2rem;
+    margin-top: 40px;
+}
+
+/* Header Card */
+.profile-header-card {
+    position: relative;
+    background: rgba(15, 22, 35, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 22px;
+    padding: 36px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+}
+
+.profile-header-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 24px;
+    right: 24px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(167, 139, 250, 0.45), rgba(52, 211, 153, 0.45), transparent);
+}
+
+.avatar-wrapper {
+    position: relative;
+    width: 96px;
+    height: 96px;
+}
+
+.profile-avatar-lg {
+    width: 100% !important;
+    height: 100% !important;
+    border: 2px solid rgba(167, 139, 250, 0.35);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+}
+
+.online-indicator {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 16px;
+    height: 16px;
+    background: #34d399;
+    border: 3px solid #0b0f19;
+    border-radius: 50%;
+    box-shadow: 0 0 12px rgba(52, 211, 153, 0.65);
+    z-index: 2;
+}
+
+.profile-username {
+    font-family: var(--font-display, 'Space Grotesk', sans-serif) !important;
+    background: linear-gradient(135deg, #ffffff 0%, #c4b5fd 55%, #6ee7b7 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.03em;
+}
+
+.profile-tabs {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: transparent !important;
+}
+
+.profile-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+[role="tab"] {
+    font-weight: 600 !important;
+    border-radius: 8px 8px 0 0 !important;
+    border: 1px solid transparent !important;
+    transition: all 0.2s !important;
+    color: rgba(255, 255, 255, 0.6) !important;
+    padding: 12px 24px !important;
+    border-bottom: none !important;
+    background: transparent !important;
+}
+
+[role="tab"]:hover {
+    color: white !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+}
+
+[role="tab"][data-selected] {
+    color: white !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    border-bottom-color: transparent !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(5px);
+}
+
+.tab-item {
+    background: transparent !important;
+    color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.tab-item[data-selected] {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.game-stats-grid,
+.puzzle-stats-grid {
+    animation: fadeIn 0.4s ease;
+}
+
+@media (max-width: 768px) {
+    .profile-header-card {
+        padding: 24px;
+        text-align: center;
+    }
+
+    .avatar-wrapper {
+        margin: 0 auto;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==========================================================================
+   LIGHT MODE OVERRIDES FOR PROFILE PAGE
+   ========================================================================== */
+body[data-theme="light"] .profile-page,
+html[data-theme="light"] .profile-page {
+    background: #f8fafc;
+    color: #0f172a;
+}
+
+body[data-theme="light"] .profile-header-card {
+    background: #ffffff;
+    border-color: rgba(15, 23, 42, 0.08);
+    box-shadow: 0 20px 50px rgba(15, 23, 42, 0.06);
+}
+
+body[data-theme="light"] .profile-username {
+    background: linear-gradient(135deg, #0f172a 0%, #7c3aed 55%, #059669 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+body[data-theme="light"] .profile-tabs {
+    border-bottom-color: rgba(15, 23, 42, 0.1);
+}
+
+body[data-theme="light"] [role="tab"],
+body[data-theme="light"] .tab-item {
+    color: #64748b !important;
+}
+
+body[data-theme="light"] [role="tab"]:hover,
+body[data-theme="light"] .tab-item:hover {
+    color: #0f172a !important;
+    background: rgba(15, 23, 42, 0.05) !important;
+}
+
+body[data-theme="light"] [role="tab"][data-selected],
+body[data-theme="light"] .tab-item[data-selected] {
+    color: #7c3aed !important;
+    background: rgba(124, 58, 237, 0.08) !important;
+    border-color: rgba(124, 58, 237, 0.25) !important;
+}

@@ -1,0 +1,333 @@
+/* ==========================================================================
+   PUZZLE BOARD — MODERN TACTICAL TELEMETRY BOARD STAGE
+   ========================================================================== */
+
+.puzzle-board-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+}
+
+/* Turn & Motif Ribbon */
+.puzzle-turn-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: rgba(15, 20, 32, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+  gap: 10px;
+}
+
+body[data-theme="light"] .puzzle-turn-strip {
+  background: rgba(241, 245, 249, 0.85);
+  border-color: rgba(15, 23, 42, 0.08);
+}
+
+.turn-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.turn-stone {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.turn-stone.white {
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+}
+
+.turn-stone.black {
+  background: #0f172a;
+  border: 1.5px solid #475569;
+}
+
+.turn-text {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--text, #f8fafc);
+  letter-spacing: 0.02em;
+}
+
+.puzzle-themes-chips {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.puzzle-theme-tag {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.28);
+  color: #fbbf24;
+  text-transform: capitalize;
+}
+
+/* Board Canvas Container */
+.puzzle-board {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  background: #0f172a;
+}
+
+body[data-theme="light"] .puzzle-board {
+  border-color: rgba(15, 23, 42, 0.12);
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.1);
+}
+
+.puzzle-board.solved {
+  border-color: rgba(16, 185, 129, 0.5);
+  box-shadow: 0 0 32px rgba(16, 185, 129, 0.25), 0 16px 36px rgba(0, 0, 0, 0.4);
+}
+
+.puzzle-board.failed {
+  border-color: rgba(239, 68, 68, 0.5);
+  box-shadow: 0 0 32px rgba(239, 68, 68, 0.25), 0 16px 36px rgba(0, 0, 0, 0.4);
+  animation: boardShake 0.3s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+.puzzle-board.showing {
+  border-color: rgba(56, 189, 248, 0.5);
+  box-shadow: 0 0 32px rgba(56, 189, 248, 0.25), 0 16px 36px rgba(0, 0, 0, 0.4);
+}
+
+@keyframes boardShake {
+  10%, 90% { transform: translate3d(-1.5px, 0, 0); }
+  20%, 80% { transform: translate3d(2.5px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-3px, 0, 0); }
+  40%, 60% { transform: translate3d(3px, 0, 0); }
+}
+
+/* Status Overlays */
+.puzzle-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(8, 11, 20, 0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 20;
+  pointer-events: none;
+  animation: overlayFadeIn 0.25s ease-out;
+}
+
+@keyframes overlayFadeIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.overlay-icon.success {
+  color: #10b981;
+  filter: drop-shadow(0 0 16px rgba(16, 185, 129, 0.5));
+}
+
+.overlay-icon.failed {
+  color: #ef4444;
+  filter: drop-shadow(0 0 16px rgba(239, 68, 68, 0.5));
+}
+
+.puzzle-overlay .overlay-text {
+  font-family: var(--font-sans, Inter, sans-serif);
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #f8fafc;
+  letter-spacing: -0.02em;
+}
+
+.puzzle-overlay .overlay-sub {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+/* Move Ribbon */
+.puzzle-moves-ribbon {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  background: rgba(15, 20, 32, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.moves-ribbon-label {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--text-muted, #94a3b8);
+}
+
+.moves-chips-list {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.move-san-chip {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--text, #f8fafc);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+body[data-theme="light"] .puzzle-moves-ribbon {
+  background: #ffffff;
+  border-color: rgba(15, 23, 42, 0.1);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+body[data-theme="light"] .moves-ribbon-label {
+  color: #64748b;
+}
+
+body[data-theme="light"] .move-san-chip {
+  background: #f1f5f9;
+  border-color: rgba(15, 23, 42, 0.1);
+  color: #0f172a;
+}
+
+/* Tactical Controls Bar */
+.puzzle-controls-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.puzzle-ctrl-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 6px;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text, #f8fafc);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body[data-theme="light"] .puzzle-ctrl-btn {
+  background: rgba(15, 23, 42, 0.05);
+  border-color: rgba(15, 23, 42, 0.12);
+  color: #0f172a;
+}
+
+.puzzle-ctrl-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+.puzzle-ctrl-btn.primary {
+  background: #fbbf24;
+  border-color: #fbbf24;
+  color: #06080f;
+  box-shadow: 0 4px 12px rgba(251, 191, 36, 0.25);
+}
+
+.puzzle-ctrl-btn.primary:hover {
+  background: #f59e0b;
+  border-color: #f59e0b;
+}
+
+.puzzle-ctrl-btn.studio-btn {
+  margin-left: auto;
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.25);
+  background: rgba(56, 189, 248, 0.08);
+}
+
+.puzzle-ctrl-btn.studio-btn:hover {
+  background: rgba(56, 189, 248, 0.18);
+  border-color: #38bdf8;
+}
+
+.puzzle-solved-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #34d399;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.puzzle-board-loading {
+  width: 100%;
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: rgba(15, 20, 32, 0.5);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-muted, #94a3b8);
+  font-size: 0.85rem;
+}
+
+body[data-theme="light"] .turn-text {
+  color: #0f172a;
+}
+
+body[data-theme="light"] .puzzle-board-loading {
+  background: #f8fafc;
+  border-color: rgba(15, 23, 42, 0.08);
+  color: #64748b;
+}
+
+body[data-theme="light"] .puzzle-overlay {
+  background: rgba(255, 255, 255, 0.92);
+}
+
+body[data-theme="light"] .puzzle-overlay .overlay-text {
+  color: #0f172a;
+}
+
+body[data-theme="light"] .puzzle-overlay .overlay-sub {
+  color: #64748b;
+}

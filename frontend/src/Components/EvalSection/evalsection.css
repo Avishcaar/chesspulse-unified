@@ -1,0 +1,539 @@
+/* ==========================================================================
+   EVAL SECTION — UNIFIED STOCKFISH 17 STUDIO COCKPIT
+   ========================================================================== */
+
+.eval-workstation-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.72rem 1.35rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(var(--arena-rgb), 0.18), rgba(var(--arena-rgb-2), 0.12));
+  border: 1px solid rgba(var(--arena-rgb), 0.45);
+  color: var(--text);
+  font-size: 0.86rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.eval-workstation-cta:hover {
+  transform: translateY(-2px);
+  border-color: var(--arena-accent);
+  box-shadow: 0 10px 28px rgba(var(--arena-rgb), 0.28);
+}
+
+.eval-chrome-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.eval-preset-tabs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.eval-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-muted);
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+body[data-theme="light"] .eval-tab-btn {
+  background: #ffffff;
+  border-color: rgba(15, 23, 42, 0.1);
+}
+
+.eval-tab-btn:hover {
+  color: var(--text);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.eval-tab-btn.active {
+  background: rgba(var(--arena-rgb), 0.18);
+  border-color: var(--arena-accent);
+  color: var(--text);
+  box-shadow: 0 0 16px rgba(var(--arena-rgb), 0.22);
+}
+
+.eval-tab-btn.tab-random {
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.28);
+}
+
+.eval-tab-btn.tab-pgn-toggle {
+  color: #fbbf24;
+  border-color: rgba(251, 191, 36, 0.28);
+}
+
+/* Collapsible Custom PGN Drawer */
+.eval-pgn-drawer {
+  padding: 1.25rem 1.5rem;
+  background: rgba(0, 0, 0, 0.4);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.pgn-drawer-inner {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 14px;
+  align-items: stretch;
+}
+
+.eval-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  padding: 10px 12px;
+  color: var(--text);
+  outline: none;
+  resize: vertical;
+}
+
+.pgn-drawer-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  justify-content: center;
+}
+
+.eval-btn-primary {
+  padding: 0.65rem 1.2rem;
+  border-radius: 8px;
+  background: var(--arena-accent);
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+}
+
+.eval-btn-ghost {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Dual-Pane Cockpit Body */
+.eval-cockpit-grid {
+  display: grid;
+  grid-template-columns: 520px 1fr;
+  min-height: 510px;
+}
+
+/* Left Pane: Board + Vertical Eval Bar */
+.eval-board-pane {
+  padding: 1.75rem;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.25rem;
+  background: rgba(0, 0, 0, 0.18);
+}
+
+body[data-theme="light"] .eval-board-pane {
+  background: #f8fafc;
+  border-right-color: rgba(15, 23, 42, 0.08);
+}
+
+.eval-board-stage {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 14px;
+  align-items: stretch;
+}
+
+.eval-vertical-gauge {
+  position: relative;
+  border-radius: 8px;
+  background: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.eval-vertical-fill {
+  width: 100%;
+  background: linear-gradient(180deg, #f8fafc 0%, #cbd5e1 100%);
+  transition: height 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.eval-vertical-midline {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--arena-accent);
+  opacity: 0.7;
+}
+
+.eval-vertical-readout {
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.58rem;
+  font-weight: 800;
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 0 6px rgba(0, 0, 0, 0.7);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.eval-board-frame {
+  width: 100%;
+  max-width: 430px;
+  aspect-ratio: 1 / 1;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Transport Controls Dock */
+.eval-transport-dock {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 1rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+body[data-theme="light"] .eval-transport-dock {
+  background: #ffffff;
+  border-color: rgba(15, 23, 42, 0.1);
+}
+
+.transport-ply-counter,
+.transport-active-move {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.transport-ply-counter strong,
+.transport-active-move strong {
+  color: var(--text);
+  font-size: 0.8rem;
+}
+
+.board-playback-controls {
+  display: flex;
+  gap: 6px;
+}
+
+.playback-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+body[data-theme="light"] .playback-btn {
+  background: #f1f5f9;
+  border-color: rgba(15, 23, 42, 0.1);
+}
+
+.playback-btn:hover {
+  border-color: var(--arena-accent);
+  color: var(--arena-accent);
+  transform: translateY(-1px);
+}
+
+.playback-play-btn {
+  background: var(--arena-accent);
+  color: #ffffff;
+  border-color: var(--arena-accent);
+}
+
+.playback-play-btn:hover {
+  color: #ffffff;
+  filter: brightness(1.1);
+}
+
+/* Right Pane: Telemetry & FIDE Scoresheet */
+.eval-telemetry-pane {
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.eval-telemetry-hud {
+  background: rgba(0, 0, 0, 0.32);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 1.15rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+body[data-theme="light"] .eval-telemetry-hud {
+  background: #f8fafc;
+  border-color: rgba(15, 23, 42, 0.08);
+}
+
+.hud-metric-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.hud-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #38bdf8;
+}
+
+.hud-eval-value {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #10b981;
+  text-shadow: 0 0 14px rgba(16, 185, 129, 0.35);
+}
+
+.hud-eval-track {
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  position: relative;
+  overflow: hidden;
+}
+
+.hud-eval-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ef4444 0%, #38bdf8 50%, #10b981 100%);
+  transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hud-center-marker {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.eval-match-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.eval-match-players {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.eval-player-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.stone-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.stone-dot.white {
+  background: #f8fafc;
+  border: 1.5px solid #cbd5e1;
+}
+
+.stone-dot.black {
+  background: #0f172a;
+  border: 1.5px solid #64748b;
+}
+
+.eval-p-name {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.eval-vs-sep {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+.eval-match-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.eval-meta-badge {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-muted);
+}
+
+.eval-meta-badge.accent {
+  color: var(--arena-accent);
+  border-color: rgba(var(--arena-rgb), 0.35);
+}
+
+/* 2-Column FIDE Scoresheet */
+.eval-scoresheet {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.24);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+body[data-theme="light"] .eval-scoresheet {
+  background: #f8fafc;
+  border-color: rgba(15, 23, 42, 0.08);
+}
+
+.scoresheet-header {
+  display: grid;
+  grid-template-columns: 54px 1fr 1fr;
+  padding: 10px 16px;
+  background: rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+body[data-theme="light"] .scoresheet-header {
+  background: #f1f5f9;
+  border-bottom-color: rgba(15, 23, 42, 0.08);
+}
+
+.scoresheet-body {
+  max-height: 290px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.scoresheet-row {
+  display: grid;
+  grid-template-columns: 54px 1fr 1fr;
+  align-items: center;
+  padding: 4px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.8rem;
+}
+
+.scoresheet-row:nth-child(even) {
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.scoresheet-num {
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  padding-left: 4px;
+}
+
+.scoresheet-ply {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 5px 10px;
+  text-align: left;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.scoresheet-ply:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.scoresheet-ply.active {
+  background: var(--arena-accent);
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 2px 10px rgba(var(--arena-rgb), 0.35);
+}
+
+.scoresheet-ply.empty {
+  color: var(--text-muted);
+  cursor: default;
+}
+
+@media (max-width: 1040px) {
+  .eval-cockpit-grid {
+    grid-template-columns: 1fr;
+  }
+  .eval-board-pane {
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .eval-board-frame {
+    margin: 0 auto;
+  }
+}

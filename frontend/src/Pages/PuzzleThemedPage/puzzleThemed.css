@@ -1,0 +1,373 @@
+/* ==========================================================================
+   PUZZLE THEMED PAGE — 11 MOTIF LAB & PATTERN RECOGNITION STUDIO
+   ========================================================================== */
+
+.puzzle-themed-page {
+  min-height: calc(100vh - 80px);
+  padding: 0 24px 72px;
+  background: #07090f;
+  position: relative;
+}
+
+body[data-theme="light"] .puzzle-themed-page {
+  background: #f8fafc;
+}
+
+.themed-container {
+  max-width: 1320px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+/* --------------------------------------------------------------------------
+   Difficulty Filter Ribbon
+   -------------------------------------------------------------------------- */
+.themed-filter-ribbon {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 16px;
+  flex-wrap: wrap;
+}
+
+.filter-ribbon-label {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: var(--text-muted, #94a3b8);
+}
+
+.filter-pills-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filter-pill-btn {
+  padding: 5px 12px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-muted, #94a3b8);
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-pill-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text, #f8fafc);
+}
+
+.filter-pill-btn.active {
+  background: rgba(245, 158, 11, 0.14);
+  border-color: rgba(245, 158, 11, 0.35);
+  color: #fbbf24;
+  font-weight: 700;
+}
+
+/* --------------------------------------------------------------------------
+   11 Motif Studio Cards Grid
+   -------------------------------------------------------------------------- */
+.themes-grid-console {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 1.25rem;
+}
+
+.motif-studio-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  background: rgba(13, 17, 28, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+  gap: 1rem;
+}
+
+body[data-theme="light"] .motif-studio-card {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(15, 23, 42, 0.08);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+.motif-card-glow {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 140px;
+  height: 140px;
+  background: radial-gradient(circle, var(--motif-accent, #fbbf24) 0%, transparent 70%);
+  opacity: 0.06;
+  filter: blur(28px);
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.motif-studio-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+}
+
+.motif-studio-card:hover .motif-card-glow {
+  opacity: 0.16;
+}
+
+.motif-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.motif-icon-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.motif-tag-pill {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-muted, #94a3b8);
+}
+
+.motif-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.motif-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text, #f8fafc);
+  letter-spacing: -0.01em;
+}
+
+.motif-desc {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--text-muted, #94a3b8);
+  margin: 0;
+}
+
+.motif-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--text, #f8fafc);
+}
+
+.motif-arrow {
+  transition: transform 0.2s ease;
+  color: var(--motif-accent, #fbbf24);
+}
+
+.motif-studio-card:hover .motif-arrow {
+  transform: translateX(4px);
+}
+
+/* --------------------------------------------------------------------------
+   Active Practice Stage HUD & Layout
+   -------------------------------------------------------------------------- */
+.themed-live-hud {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1.5fr;
+}
+
+@media (max-width: 800px) {
+  .themed-live-hud {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.theme-active-tag-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.theme-active-title {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text, #f8fafc);
+}
+
+.themed-layout {
+  display: grid;
+  grid-template-columns: minmax(400px, 580px) 1fr;
+  gap: 1.5rem;
+  align-items: stretch;
+}
+
+@media (max-width: 960px) {
+  .themed-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.themed-board-window {
+  display: flex;
+  flex-direction: column;
+}
+
+.themed-board-stage {
+  padding: 1.5rem;
+}
+
+.themed-board-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.themed-next-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  background: #fbbf24;
+  border: 1px solid #fbbf24;
+  color: #06080f;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.72rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.themed-next-big-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 12px 20px;
+  border-radius: 8px;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: #fbbf24;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.84rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.themed-next-big-btn:hover {
+  background: #fbbf24;
+  color: #06080f;
+}
+
+.themed-change-top-btn {
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(245, 158, 11, 0.14);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  color: #fbbf24;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* Sidebar Controls */
+.themed-sidebar-window {
+  display: flex;
+  flex-direction: column;
+}
+
+.themed-sidebar-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  height: 100%;
+}
+
+.motif-brief-text {
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--text, #f8fafc);
+  margin: 0;
+}
+
+.themed-diff-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.diff-opt-btn {
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  color: var(--text-muted, #94a3b8);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.diff-opt-btn:hover {
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--text, #f8fafc);
+}
+
+.diff-opt-btn.active {
+  background: rgba(245, 158, 11, 0.14);
+  border-color: rgba(245, 158, 11, 0.35);
+  color: #fbbf24;
+  font-weight: 700;
+}
+
+.themed-switch-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: auto;
+  padding: 10px 16px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text, #f8fafc);
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+}

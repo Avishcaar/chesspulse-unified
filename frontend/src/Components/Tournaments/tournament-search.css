@@ -1,0 +1,89 @@
+.tournament-search {
+    width: 100%;
+    max-width: 560px;
+}
+
+.search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-icon {
+    position: absolute;
+    left: 16px;
+    color: #34d399;
+    pointer-events: none;
+}
+
+.search-input {
+    width: 100%;
+    padding: 13px 46px 13px 46px;
+    background: rgba(17, 24, 39, 0.72);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    color: #f8fafc;
+    font-size: 0.92rem;
+    outline: none;
+    transition: all 0.25s ease;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25);
+}
+
+.search-input::placeholder {
+    color: #64748b;
+}
+
+.search-input:focus {
+    border-color: rgba(16, 185, 129, 0.45);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.14), 0 12px 32px rgba(0, 0, 0, 0.35);
+}
+
+.search-clear-btn {
+    position: absolute;
+    right: 12px;
+    width: 26px;
+    height: 26px;
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    border-radius: 50%;
+    color: #f87171;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.search-clear-btn:hover {
+    background: rgba(239, 68, 68, 0.28);
+    transform: scale(1.08);
+}
+
+@media (max-width: 768px) {
+    .search-input {
+        padding: 12px 40px 12px 44px;
+        font-size: 0.88rem;
+    }
+}
+
+/* ==========================================================================
+   LIGHT MODE OVERRIDES FOR TOURNAMENT SEARCH
+   ========================================================================== */
+body[data-theme="light"] .search-input {
+    background: #ffffff;
+    border-color: rgba(15, 23, 42, 0.12);
+    color: #0f172a;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+}
+
+body[data-theme="light"] .search-input::placeholder {
+    color: #94a3b8;
+}
+
+body[data-theme="light"] .search-input:focus {
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15), 0 8px 24px rgba(15, 23, 42, 0.08);
+}
