@@ -123,7 +123,7 @@ app.use('/api/puzzles', puzzleRoutes);
 app.use('/api/bot-games', botGameRoutes);
 
 // Catch-all 404 for unhandled API routes
-app.all('/api/*', (req, res) => {
+app.use('/api', (req, res) => {
     res.status(404).json({
         success: false,
         message: 'API route not found'
@@ -136,7 +136,8 @@ if (fs.existsSync(frontendDistPath)) {
     app.use(express.static(frontendDistPath));
 
     // Handle React client-side SPA routing (all non-API GET requests return index.html)
-    app.get('*', (req, res, next) => {
+    app.use((req, res, next) => {
+        if (req.method !== 'GET') return next();
         if (req.path.startsWith('/api') || req.path.startsWith('/socket.io')) {
             return next();
         }
