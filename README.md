@@ -1,162 +1,241 @@
-# ♟ ChessPulse Unified — Monorepo for Single-Platform Render Deployment
+# ♟ ChessPulse — Unified Full-Stack Platform
 
-> **Unified Full-Stack Architecture**: Modern React 19 + Vite frontend coupled with an Express 5 + Socket.io backend and client-side Stockfish 17 WASM engine — bundled to deploy as a single, high-performance Web Service on **Render**.
+<div align="center">
+
+![ChessPulse Banner](https://img.shields.io/badge/ChessPulse-Unified%20Architecture-7c3aed?style=for-the-badge&logo=lichess&logoColor=white)
+<br/>
+
+[![React](https://img.shields.io/badge/React_19-20232A?style=flat-square&logo=react&logoColor=61DAFB)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite_7-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Express](https://img.shields.io/badge/Express_5-000000?style=flat-square&logo=express&logoColor=white)](https://expressjs.com/)
+[![Node.js](https://img.shields.io/badge/Node.js_18+-339933?style=flat-square&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
+[![Socket.io](https://img.shields.io/badge/Socket.io_4-010101?style=flat-square&logo=socketdotio&logoColor=white)](https://socket.io/)
+[![MongoDB](https://img.shields.io/badge/MongoDB_Atlas-47A248?style=flat-square&logo=mongodb&logoColor=white)](https://www.mongodb.com/atlas)
+[![Stockfish](https://img.shields.io/badge/Stockfish_17-WASM%20NNUE-10b981?style=flat-square)](https://stockfishchess.org/)
+[![Render](https://img.shields.io/badge/Deploy_to-Render-46E3B7?style=flat-square&logo=render&logoColor=black)](https://render.com/)
+
+<p align="center">
+  <strong>A high-performance chess intelligence platform combining a React 19 SPA, Express 5 API, Socket.io real-time engine, and in-browser Stockfish 17 WASM worker into a single unified deployment for Render.</strong>
+</p>
+
+[Key Features](#-key-features) •
+[Architecture](#-architecture) •
+[Quick Start](#-local-development) •
+[Deploy to Render](#-deploying-to-render) •
+[Environment Variables](#-environment-variables) •
+[Project Structure](#-project-structure)
+
+</div>
 
 ---
 
-## 🚀 Why a Unified Project?
+## 🌟 Key Features
 
-Previously, deploying the frontend on Vercel and the backend on Render introduced:
-- **CORS friction & cookie restrictions** across cross-domain origins.
-- **Sleep delay & wake-up latency** when the free backend spun down while the frontend stayed live.
-- **WebSocket connection hurdles** with separate hostnames.
-- **Multiple dashboards & billing accounts** to manage.
-
-**The Unified Setup fixes all of this:**
-- **Single URL & Domain**: Frontend and backend run on the exact same host (`https://chesspulse.onrender.com`).
-- **Zero CORS issues**: Client makes relative requests (`/api/...`) and connects to WebSockets via `window.location.origin`.
-- **WASM & Worker Ready**: Helmet security headers are optimized so Stockfish 17 WebAssembly (`stockfish.wasm` + Web Workers) and CDN avatars load without CSP blocking.
-- **Full SPA Routing**: Express serves the production React build from `frontend/dist` and routes non-API URLs to `index.html` via client-side React Router.
+- **⚡ Client-Side Stockfish 17 NNUE WASM**: Multi-threaded neural chess engine operating directly in a Web Worker inside the browser. Achieves 0ms server latency and requires zero cloud compute for evaluations.
+- **🤖 3D Carousel Bots Arena**: Interactive 3D coverflow carousel showcasing personality-driven chess bots spanning 800 to 2800 ELO with custom opening repertoires and adaptive blunder rates.
+- **⏱️ Live Matchmaking & Matrix Time Controls**: Real-time multiplayer rooms powered by Socket.io with Bullet (1+0, 2+1), Blitz (3+0, 5+3), and Rapid (10+0, 15+10) cadences.
+- **🧩 Advanced Puzzles Suite**: Bento-style puzzle training with Rated Puzzle Rush, Survival mode, motif-based themed puzzles, curated grandmaster collections, and global ELO leaderboards.
+- **🔬 Studio Game Analysis & Recruiter Sandbox**: Interactive analysis board with centipawn evaluation graph, accuracy calculation, blunder vectorization, custom PGN ingestion terminal, and live pipeline simulation stepper.
+- **🎨 Complete Board Customization**: Dynamic piece sets, sound effects, board themes, and 100% responsive High-Contrast Light and Dark mode styling.
+- **🛡️ Production Authentication**: Dual JWT authentication (access + refresh token rotation) with MongoDB Atlas persistence and Google OAuth 2.0 integration.
 
 ---
 
-## 📁 Repository Structure
+## 🏛 Architecture
+
+In this unified monorepo, Express 5 acts as both the backend API server, the real-time WebSocket hub, and the static file server for the production React build:
+
+```mermaid
+flowchart TD
+    Client["Client Browser\n(React 19 + Stockfish 17 WASM)"]
+    
+    subgraph Render["Render Web Service (Single Host: PORT 10000)"]
+        Server["Express 5 + HTTP Server"]
+        SocketServer["Socket.io Server\n(/socket.io)"]
+        APIRouter["API Router\n(/api/*)"]
+        StaticServer["Static SPA Handler\n(frontend/dist)"]
+    end
+    
+    DB[("MongoDB Atlas")]
+    StockfishWorker["Stockfish Worker\n(Client In-Memory / WASM)"]
+    
+    Client -->|HTTP /api/*| APIRouter
+    Client <-->|WebSockets| SocketServer
+    Client -->|SPA Routes /*| StaticServer
+    Client -.->|Spawns in Worker| StockfishWorker
+    
+    APIRouter --> DB
+    SocketServer --> DB
+```
+
+### Why a Single Unified Service?
+1. **Zero CORS Friction**: Frontend and backend share the exact same origin (`https://<app>.onrender.com`). No cross-domain cookie restrictions or browser security blocks.
+2. **Instant WebSockets**: Socket.io connects directly to `window.location.origin` without needing separate hostnames or SSL certificates.
+3. **Optimized WASM Security**: Helmet headers are pre-tuned so `stockfish.wasm` and Web Workers run without Content-Security-Policy (CSP) interference.
+4. **No Free-Tier Sleep Mismatch**: The frontend and backend never go out of sync because they run on the same instance.
+
+---
+
+## 📁 Project Structure
 
 ```
 chesspulse-unified/
-├── backend/                        # Node.js + Express + Socket.io Server
-│   ├── config/                     # Database (MongoDB Atlas) & Passport OAuth
-│   ├── middleware/                 # Rate limiting, Auth JWT, Validators, Error handlers
-│   ├── models/                     # Mongoose schemas (User, BotGame, OnlineGame, etc.)
-│   ├── routes/                     # REST API endpoints (/api/auth, /api/puzzles, etc.)
-│   ├── socket/                     # Live multiplayer Socket.io game rooms & clocks
-│   ├── utils/                      # ELO calculator, JWT utils, Gemini AI
-│   ├── .env.example                # Backend environment template
-│   ├── package.json                # Backend dependencies (Express, Mongoose, Socket.io)
-│   └── server.js                   # Unified server (Serves /api, sockets & static React SPA)
+├── backend/                       # Express 5 + Socket.io Server
+│   ├── config/                    # MongoDB Atlas connection & Passport OAuth strategy
+│   ├── middleware/                # JWT auth, rate limiter, validators, error handler
+│   ├── models/                    # Mongoose schemas (User, BotGame, OnlineGame, etc.)
+│   ├── routes/                    # REST endpoints (/api/auth, /api/puzzles, /api/bot-games)
+│   ├── socket/                    # Live multiplayer Socket.io game rooms & clocks
+│   ├── utils/                     # ELO calculator, JWT utils, Gemini AI
+│   ├── .env.example               # Backend environment reference
+│   ├── package.json               # Backend dependencies
+│   └── server.js                  # Main server (routes /api, WebSockets & serves frontend/dist)
 │
-├── frontend/                       # Vite + React 19 Frontend
-│   ├── public/                     # Static assets (Stockfish 17 WASM & Worker, samples)
-│   ├── src/                        # React components, pages, hooks, contexts, theme
-│   ├── index.html                  # HTML entry point
-│   ├── vite.config.ts              # Vite config with development API & Socket proxy
-│   ├── .env.example                # Frontend environment template
-│   └── package.json                # Frontend dependencies (Lucide, Tailwind, Chess.js, etc.)
+├── frontend/                      # React 19 + Vite Frontend
+│   ├── public/                    # Stockfish 17 WASM & Worker, samples, audio assets
+│   ├── src/                       # Components, pages, hooks, contexts, theme system
+│   ├── index.html                 # HTML shell
+│   ├── vite.config.ts             # Vite configuration with local /api & /socket.io proxy
+│   ├── .env.example               # Frontend environment reference
+│   └── package.json               # Frontend dependencies
 │
-├── .gitignore                      # Ignore node_modules, dist, and local .env files
-├── .env.example                    # Unified environment reference
-├── package.json                    # Root package.json with unified build & start scripts
-├── render.yaml                     # 1-Click Render Blueprint configuration
-└── README.md                       # Documentation & Deployment Guide
+├── .agents/skills/                # Antigravity Skills (render-deployment, custom-workflow)
+├── .gitignore                     # Monorepo gitignore (ignores node_modules, dist, .env)
+├── .env.example                   # Master environment documentation
+├── package.json                   # Root orchestrator (scripts: build, start, dev, install:all)
+├── render.yaml                    # 1-Click Render Blueprint specification
+└── README.md                      # Documentation & deployment guide
 ```
 
 ---
 
-## 🛠 Local Development Setup
+## 💻 Local Development
 
 ### 1. Prerequisites
-- **Node.js** v18+ installed.
-- A **MongoDB** database (MongoDB Atlas connection string).
+- **Node.js**: v18.0.0 or higher
+- **MongoDB**: A free MongoDB Atlas cluster URI (or local MongoDB instance)
 
-### 2. Install Dependencies
-Run from the root directory:
+### 2. Installation
+Clone the repository and install all dependencies:
 ```bash
+# Clone the repository
+git clone https://github.com/<your-username>/chesspulse-unified.git
+cd chesspulse-unified
+
+# Install root, backend, and frontend dependencies in one command
 npm run install:all
 ```
-*(Or install devDependencies at root to enable the concurrent dev script: `npm install`)*
 
 ### 3. Configure Local Environment
-Create `backend/.env` based on `backend/.env.example`:
+Create a `.env` file inside `backend/` using `backend/.env.example`:
 ```ini
 PORT=5001
 NODE_ENV=development
 MONGODB_URI=your_mongodb_atlas_connection_string
-JWT_SECRET=your_dev_jwt_secret_key
-REFRESH_TOKEN_SECRET=your_dev_refresh_token_secret
-SESSION_SECRET=your_dev_session_secret
+JWT_SECRET=your_local_jwt_secret_key
+REFRESH_TOKEN_SECRET=your_local_refresh_token_secret
+SESSION_SECRET=your_local_session_secret
 ```
 
-### 4. Run Both Ends Concurrently
+### 4. Start Development Servers
+Run both backend and frontend concurrently:
 ```bash
 npm run dev
 ```
-- **Backend API & WebSockets**: Runs on `http://localhost:5001`
-- **Frontend Vite Dev Server**: Runs on `http://localhost:5173` (proxies `/api` and `/socket.io` to `5001`)
+- **Backend API & WebSockets**: `http://localhost:5001`
+- **Frontend App (Vite)**: `http://localhost:5173` *(Vite proxies `/api` and `/socket.io` to `5001`)*
 
 ---
 
-## 🚢 Deploying to Render (Single Service)
+## 🚀 Deploying to Render
 
-You can deploy using either **Option A (Render Blueprint - Easiest)** or **Option B (Manual Web Service)**.
+### Manual Web Service Setup (Recommended)
 
-### Option A: 1-Click Blueprint (Recommended)
-1. Push this `chesspulse-unified` folder to a new repository on your GitHub account.
-2. Go to the [Render Dashboard](https://dashboard.render.com).
-3. Click **New +** → **Blueprint**.
-4. Connect your GitHub repository.
-5. Render will automatically detect [`render.yaml`](file:///render.yaml) and configure:
-   - **Service Type**: Web Service (Node)
-   - **Build Command**: `npm run build`
-   - **Start Command**: `npm start`
-   - **Health Check**: `/api/health`
-6. Fill in your `MONGODB_URI` and any optional keys (`GROQ_API_KEY`, Google OAuth).
-7. Click **Apply** to deploy!
+1. Push your code to GitHub:
+   ```bash
+   git remote add origin https://github.com/<your-username>/chesspulse-unified.git
+   git branch -M main
+   git push -u origin main
+   ```
 
----
+2. Go to the [Render Dashboard](https://dashboard.render.com) and click **New +** → **Web Service**.
+3. Select your `chesspulse-unified` repository.
+4. Fill in the exact deployment settings below:
 
-### Option B: Manual Web Service Setup
-1. Push the code to GitHub.
-2. In the Render Dashboard, click **New +** → **Web Service**.
-3. Select your GitHub repository.
-4. Fill in the following settings:
-   - **Name**: `chesspulse` (or your preferred name)
-   - **Region**: Choose the closest to your users (e.g., *Oregon (US West)* or *Frankfurt (EU)*)
-   - **Branch**: `main`
-   - **Runtime**: `Node`
-   - **Build Command**:
-     ```bash
-     npm run build
-     ```
-   - **Start Command**:
-     ```bash
-     npm start
-     ```
-   - **Plan**: `Free` (or higher)
+#### Service Settings
 
-5. Under **Environment Variables**, add the following:
-
-| Key | Suggested / Default Value | Purpose |
+| Field | Value to Enter | Explanation |
 |---|---|---|
-| `NODE_ENV` | `production` | Enables production optimizations & static file serving |
-| `PORT` | `10000` | Port assigned by Render |
-| `MONGODB_URI` | `mongodb+srv://...` | Your MongoDB Atlas connection URI |
-| `JWT_SECRET` | *(64-char random string)* | Access token signing secret |
-| `JWT_EXPIRES_IN` | `3h` | Access token lifetime |
-| `REFRESH_TOKEN_SECRET` | *(64-char random string)* | Refresh token signing secret |
-| `REFRESH_TOKEN_EXPIRES_IN` | `7d` | Refresh token lifetime |
-| `SESSION_SECRET` | *(Random string)* | Session encryption secret |
-| `GROQ_API_KEY` | *(Optional)* | Groq API Key for AI bot commentary |
-| `GOOGLE_CLIENT_ID` | *(Optional)* | Google OAuth client ID |
-| `GOOGLE_CLIENT_SECRET` | *(Optional)* | Google OAuth client secret |
-| `GOOGLE_CALLBACK_URL` | `https://<your-render-name>.onrender.com/api/oauth/google/callback` | OAuth redirect |
+| **Name** | `chesspulse` | The name of your service (becomes `chesspulse.onrender.com`) |
+| **Region** | `Oregon (US West)` | Select the region closest to your MongoDB cluster |
+| **Branch** | `main` | Production branch |
+| **Root Directory** | *(Leave completely blank)* | Uses root `package.json` |
+| **Runtime** | `Node` | Node.js runtime |
+| **Build Command** | `npm run build` | Installs modules and builds `frontend/dist` |
+| **Start Command** | `npm start` | Starts `node backend/server.js` |
+| **Plan** | `Free` | Free tier available |
 
-6. Click **Create Web Service**.
-
-Render will run `npm run build` (installing dependencies for both ends and compiling Vite into `frontend/dist`), and then run `node backend/server.js` to serve both your backend API and your frontend SPA.
+#### Advanced Settings
+- **Health Check Path**: `/api/health`
+- **Auto-Deploy**: `Yes`
 
 ---
 
-## ⚡ How the Unified Pipeline Works
+## 🔐 Environment Variables
 
-1. **Build Phase (`npm run build`)**:
-   - `npm install --prefix backend` installs backend production modules.
-   - `npm install --prefix frontend` installs frontend production & dev modules.
-   - `npm run build --prefix frontend` runs Vite compiler, outputting optimized HTML, CSS, JS, and Stockfish 17 WASM files into `frontend/dist`.
+Add these environment variables under the **Environment** tab in your Render Web Service dashboard:
 
-2. **Runtime Phase (`npm start`)**:
-   - Starts Express 5 and HTTP Server with Socket.io on port `process.env.PORT`.
-   - Connects to MongoDB Atlas.
-   - Registers `/api/auth`, `/api/user`, `/api/puzzles`, `/api/bot-games`, `/api/oauth`.
-   - Attaches Socket.io on the exact same HTTP server for real-time online chess matches.
-   - Calls `app.use(express.static('frontend/dist'))` to serve the static frontend assets.
-   - Uses `app.get('*', ...)` catch-all to route SPA page views (`/play/online`, `/analysis`, `/bots`, `/puzzles`, etc.) to `frontend/dist/index.html`.
+| Variable Key | Recommended / Example Value | Description |
+|---|---|---|
+| `NODE_ENV` | `production` | **Required.** Activates production static file serving |
+| `PORT` | `10000` | **Required.** Port assigned by Render |
+| `MONGODB_URI` | `mongodb+srv://<user>:<password>@cluster0.mongodb.net/?appName=Cluster0` | **Required.** MongoDB Atlas connection URI |
+| `JWT_SECRET` | *(64-char random string)* | **Required.** Signs access tokens |
+| `JWT_EXPIRES_IN` | `3h` | Access token lifespan |
+| `REFRESH_TOKEN_SECRET` | *(64-char random string)* | **Required.** Signs refresh tokens |
+| `REFRESH_TOKEN_EXPIRES_IN` | `7d` | Refresh token lifespan |
+| `SESSION_SECRET` | *(Secure random string)* | **Required.** Encrypts session cookies |
+| `GROQ_API_KEY` | `gsk_...` | *Optional.* AI coach commentary |
+| `GOOGLE_CLIENT_ID` | `...apps.googleusercontent.com` | *Optional.* Google OAuth Login |
+| `GOOGLE_CLIENT_SECRET` | `GOCSPX-...` | *Optional.* Google OAuth Secret |
+| `GOOGLE_CALLBACK_URL` | `https://<your-render-name>.onrender.com/api/oauth/google/callback` | *Optional.* Google OAuth callback URL |
+
+> [!TIP]
+> Notice that `FRONTEND_URL` and `VITE_API_URL` are **not** needed in production because the frontend is served on the exact same host and automatically connects via relative `/api` and `window.location.origin`!
+
+---
+
+## 🛠 Available NPM Scripts
+
+From the root of `chesspulse-unified`:
+
+| Command | Action |
+|---|---|
+| `npm run dev` | Runs backend nodemon server and Vite frontend concurrently with colored logs |
+| `npm run build` | Installs backend + frontend dependencies and compiles Vite into `frontend/dist` |
+| `npm start` | Starts the production Express server (`node backend/server.js`) |
+| `npm run dev:backend` | Starts only the backend with auto-reload (`nodemon backend/server.js`) |
+| `npm run dev:frontend` | Starts only the Vite frontend dev server on port 5173 |
+| `npm run install:all` | Installs dependencies at root, backend, and frontend |
+
+---
+
+## 🔍 Verification & Health Check
+
+After deployment, verify that your service is healthy:
+
+```bash
+# 1. Test API Health Endpoint
+curl https://<your-service>.onrender.com/api/health
+# Response: {"success":true,"message":"ChessPulse Unified Server is healthy",...}
+
+# 2. Test Frontend Root
+curl -I https://<your-service>.onrender.com/
+# Response: HTTP/2 200 (serves frontend/dist/index.html)
+```
+
+---
+
+## 📄 License
+
+This project is licensed under the [ISC License](LICENSE).
