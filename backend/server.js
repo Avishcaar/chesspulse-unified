@@ -25,6 +25,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const frontendDistPath = path.resolve(__dirname, '../frontend/dist');
 
+// Auto-detect production mode on Render platform or via NODE_ENV
+if (process.env.RENDER === 'true' || process.env.RENDER || process.env.NODE_ENV === 'production') {
+    process.env.NODE_ENV = 'production';
+}
+
 const app = express();
 const httpServer = createServer(app);
 
@@ -111,6 +116,7 @@ app.get('/api/health', (req, res) => {
         success: true,
         message: 'ChessPulse Unified Server is healthy',
         environment: process.env.NODE_ENV || 'development',
+        render: Boolean(process.env.RENDER),
         timestamp: new Date().toISOString()
     });
 });
