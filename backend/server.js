@@ -17,6 +17,7 @@ import userRoutes from './routes/user.js';
 import oauthRoutes from './routes/oauth.js';
 import puzzleRoutes from './routes/puzzles.js';
 import botGameRoutes from './routes/botGames.js';
+import rankingsRoutes from './routes/rankings.js';
 import errorHandler from './middleware/errorHandler.js';
 import { apiLimiter } from './middleware/rateLimiter.js';
 import { initializeSocketHandlers } from './socket/socketHandler.js';
@@ -127,6 +128,7 @@ app.use('/api/user', userRoutes);
 app.use('/api/oauth', oauthRoutes);
 app.use('/api/puzzles', puzzleRoutes);
 app.use('/api/bot-games', botGameRoutes);
+app.use('/api/rankings', rankingsRoutes);
 
 // Catch-all 404 for unhandled API routes
 app.use('/api', (req, res) => {
