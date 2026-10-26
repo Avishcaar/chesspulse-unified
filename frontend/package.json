@@ -17,7 +17,6 @@
     "@vitejs/plugin-react": "^5.1.0",
     "axios": "^1.13.2",
     "chess.js": "^1.4.0",
-    "chesspulse-unified": "file:..",
     "cors": "^2.8.5",
     "framer-motion": "^12.23.24",
     "gsap": "^3.15.0",
