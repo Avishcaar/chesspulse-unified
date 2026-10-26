@@ -7,7 +7,10 @@ import { generateAccessToken, generateRefreshToken } from '../utils/jwt.js';
 const router = express.Router();
 
 const getFrontendUrl = (req) => {
-    if (process.env.FRONTEND_URL) return process.env.FRONTEND_URL;
+    // If FRONTEND_URL is explicitly set to a remote domain, use it; otherwise ignore localhost in cloud production
+    if (process.env.FRONTEND_URL && (!process.env.RENDER || !process.env.FRONTEND_URL.includes('localhost'))) {
+        return process.env.FRONTEND_URL;
+    }
     const protocol = req.headers['x-forwarded-proto'] || req.protocol;
     return `${protocol}://${req.get('host')}`;
 };
