@@ -138,7 +138,17 @@ export const puzzleStatsService = {
             const response = await puzzleStatsAPI.get('/curation-plan');
             return response.data;
         } catch (error) {
-            console.error('Error fetching curation plan:', error);
+            console.error('Error fetching Pulse profile:', error);
+            throw error;
+        }
+    },
+
+    generateCurationPlan: async (profile) => {
+        try {
+            const response = await puzzleStatsAPI.post('/curation-plan', { profile });
+            return response.data;
+        } catch (error) {
+            console.error('Error generating Pulse plan:', error);
             throw error;
         }
     }

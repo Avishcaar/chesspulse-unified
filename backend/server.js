@@ -1,8 +1,4 @@
-try {
-    await import('dotenv/config');
-} catch {
-    // In cloud/containerized environments (Render, Koyeb), environment variables are injected directly via process.env
-}
+import 'dotenv/config';
 import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';

@@ -4,7 +4,10 @@ import { successResponse, errorResponse } from '../utils/responseHandler.js';
 import PuzzleAttempt from '../models/PuzzleAttempt.js';
 import UserPuzzleStats from '../models/UserPuzzleStats.js';
 import User from '../models/User.js';
+import BotGame from '../models/BotGame.js';
+import OnlineGame from '../models/OnlineGame.js';
 import geminiService from '../utils/geminiService.js';
+import { getCachedExternalProfiles, syncExternalChessProfiles } from '../services/externalChessService.js';
 
 const router = express.Router();
 
@@ -22,6 +25,229 @@ function getDifficultyTier(rating) {
     if (rating < 1600) return 'intermediate';
     if (rating < 2000) return 'advanced';
     return 'expert';
+}
+
+const PULSE_LEVELS = new Set(['new', 'beginner', 'club', 'intermediate', 'advanced', 'expert']);
+const PULSE_GOALS = new Set(['tactics', 'opening', 'middlegame', 'endgame', 'calculation', 'boardVision']);
+const PULSE_CHALLENGES = new Set([
+    'missTactics',
+    'calculateLines',
+    'openingTransitions',
+    'middlegamePlans',
+    'endgameTechnique',
+    'timePressure',
+    'unsure'
+]);
+const PULSE_SESSION_LENGTHS = new Set([10, 20, 30]);
+const PULSE_EXTERNAL_SOURCES = new Set(['chesscom', 'lichess']);
+
+function parsePulseProfile(input = {}, user) {
+    const level = typeof input.level === 'string' ? input.level : '';
+    const goals = Array.isArray(input.goals)
+        ? [...new Set(input.goals.filter((goal) => typeof goal === 'string' && PULSE_GOALS.has(goal)))]
+        : [];
+    const challenge = typeof input.challenge === 'string' ? input.challenge : 'unsure';
+    const sessionMinutes = Number(input.sessionMinutes);
+    const externalSources = Array.isArray(input.externalSources)
+        ? [...new Set(input.externalSources.filter((source) => typeof source === 'string' && PULSE_EXTERNAL_SOURCES.has(source)))]
+        : [];
+    const rating = input.rating === null || input.rating === '' || input.rating === undefined
+        ? null
+        : Number(input.rating);
+
+    if (!PULSE_LEVELS.has(level)) {
+        return { error: 'Choose the level that best describes your current chess strength.' };
+    }
+    if (goals.length === 0 || goals.length > 3) {
+        return { error: 'Choose one to three areas you want to improve.' };
+    }
+    if (!PULSE_CHALLENGES.has(challenge)) {
+        return { error: 'Choose the challenge that feels closest to your games.' };
+    }
+    if (!PULSE_SESSION_LENGTHS.has(sessionMinutes)) {
+        return { error: 'Choose a 10, 20, or 30 minute session.' };
+    }
+    if (rating !== null && (!Number.isInteger(rating) || rating < 400 || rating > 2800)) {
+        return { error: 'Enter a rating between 400 and 2800, or leave it blank.' };
+    }
+
+    const sourceFields = { chesscom: 'chesscomUsername', lichess: 'lichessUsername' };
+    const missingSource = externalSources.find((source) => !user?.[sourceFields[source]]);
+    if (missingSource) {
+        const label = missingSource === 'chesscom' ? 'Chess.com' : 'Lichess';
+        return { error: `Save your ${label} username in Profile settings before including its games.` };
+    }
+
+    return {
+        profile: { level, rating, goals, challenge, sessionMinutes, externalSources }
+    };
+}
+
+async function getPulseActivity(user, stats, externalProfiles = []) {
+    const username = user.username;
+    const onlineQuery = username
+        ? { $or: [{ 'white.username': username }, { 'black.username': username }] }
+        : null;
+    const userRatings = user.ratings || {};
+
+    const [puzzleAttemptCount, recentAttempts, onlineGameCount, recentOnlineGames, botGameCount, recentBotGames] = await Promise.all([
+        PuzzleAttempt.countDocuments({ userId: user._id }),
+        PuzzleAttempt.find({ userId: user._id })
+            .sort({ createdAt: -1 })
+            .limit(24)
+            .select('solved puzzleRating themes mode timeMs createdAt')
+            .lean(),
+        onlineQuery ? OnlineGame.countDocuments(onlineQuery) : Promise.resolve(0),
+        onlineQuery
+            ? OnlineGame.find(onlineQuery)
+                .sort({ createdAt: -1 })
+                .limit(5)
+                .select('white.username black.username result resultReason ratingCategory timeControl moves ratingChanges createdAt')
+                .lean()
+            : Promise.resolve([]),
+        BotGame.countDocuments({ user: user._id }),
+        BotGame.find({ user: user._id })
+            .sort({ createdAt: -1 })
+            .limit(5)
+            .select('botElo result endReason totalMoves moves createdAt')
+            .lean()
+    ]);
+
+    const puzzleAttempts = Math.max(stats.totalAttempted || 0, puzzleAttemptCount);
+    const gameRatings = ['rapid', 'blitz', 'bullet']
+        .map((category) => ({
+            category,
+            rating: userRatings[category]?.rating || 1200,
+            gamesPlayed: userRatings[category]?.gamesPlayed || 0,
+            wins: userRatings[category]?.wins || 0,
+            losses: userRatings[category]?.losses || 0,
+            draws: userRatings[category]?.draws || 0
+        }))
+        .filter((item) => item.gamesPlayed > 0);
+    const ratedGameCount = gameRatings.reduce((sum, item) => sum + item.gamesPlayed, 0);
+    const multiplayerGames = Math.max(onlineGameCount, ratedGameCount);
+
+    const themePerformance = [];
+    stats.themeStats.forEach((value, theme) => {
+        const attempted = value.attempted || 0;
+        const solved = value.solved || 0;
+        if (attempted > 0) {
+            themePerformance.push({
+                theme,
+                attempted,
+                accuracy: Math.round((solved / attempted) * 100)
+            });
+        }
+    });
+
+    const weakThemes = themePerformance
+        .filter((item) => item.attempted >= 3)
+        .sort((a, b) => a.accuracy - b.accuracy)
+        .slice(0, 6);
+    const strongThemes = themePerformance
+        .filter((item) => item.attempted >= 3 && item.accuracy >= 75)
+        .sort((a, b) => b.accuracy - a.accuracy)
+        .slice(0, 4);
+
+    const recentGames = recentOnlineGames.map((game) => {
+        const isWhite = game.white?.username === username;
+        const side = isWhite ? 'white' : 'black';
+        const result = game.result === 'draw'
+            ? 'draw'
+            : game.result === side
+                ? 'win'
+                : game.result === 'aborted'
+                    ? 'aborted'
+                    : 'loss';
+
+        return {
+            type: 'multiplayer',
+            result,
+            endReason: game.resultReason,
+            timeControl: game.timeControl,
+            ratingCategory: game.ratingCategory,
+            ratingChange: game.ratingChanges?.[side] || 0,
+            moves: (game.moves || []).slice(0, 36).map((move) => String(move).slice(0, 12))
+        };
+    });
+
+    const recentGamesFromBots = recentBotGames.map((game) => ({
+        type: 'bot',
+        result: game.result,
+        botRating: game.botElo,
+        endReason: game.endReason,
+        moveCount: game.totalMoves,
+        moves: (game.moves || []).slice(0, 36).map((move) => String(move).slice(0, 12))
+    }));
+
+    const hasChessPulseData = puzzleAttempts > 0 || multiplayerGames > 0 || botGameCount > 0;
+    const hasExternalPlayData = externalProfiles.some((profile) =>
+        (profile.performance?.gamesAnalyzed || 0) > 0 ||
+        (profile.ratings || []).some((rating) => rating.gamesPlayed > 0) ||
+        Object.values(profile.puzzleStats || {}).some((value) => Number.isFinite(value) && value > 0)
+    );
+    const hasPlayData = hasChessPulseData || hasExternalPlayData;
+    const externalSummary = externalProfiles.map((profile) => ({
+        provider: profile.provider,
+        username: profile.username,
+        fetchedAt: profile.fetchedAt,
+        ratings: profile.ratings || [],
+        puzzleStats: profile.puzzleStats || {},
+        gamesAnalyzed: profile.performance?.gamesAnalyzed || 0,
+        totalGamesOnProvider: profile.performance?.totalGamesOnProvider || null,
+        scorePercent: profile.performance?.scorePercent ?? null,
+        averageAccuracy: profile.performance?.averageAccuracy ?? null,
+        analysis: profile.performance?.analysis || null,
+        bySpeed: profile.performance?.bySpeed || [],
+        openings: profile.performance?.openings || []
+    }));
+    const summary = {
+        hasPlayData,
+        hasChessPulseData,
+        puzzleAttempts,
+        multiplayerGames,
+        botGames: botGameCount,
+        puzzleRating: puzzleAttempts > 0 ? stats.rating : null,
+        gameRatings,
+        weakThemes,
+        strongThemes,
+        externalProfiles: externalSummary
+    };
+
+    return {
+        summary,
+        modelContext: {
+            hasPlayData,
+            puzzle: {
+                attempts: puzzleAttempts,
+                rating: summary.puzzleRating,
+                weakThemes,
+                strongThemes,
+                recentAttempts: recentAttempts.map((attempt) => ({
+                    solved: attempt.solved,
+                    rating: attempt.puzzleRating,
+                    themes: attempt.themes || [],
+                    mode: attempt.mode,
+                    timeMs: attempt.timeMs
+                }))
+            },
+            online: {
+                games: multiplayerGames,
+                ratings: gameRatings,
+                recentGames
+            },
+            bots: {
+                games: botGameCount,
+                recentGames: recentGamesFromBots
+            },
+            externalProfiles: externalProfiles.map((profile) => ({
+                provider: profile.provider,
+                ratings: profile.ratings || [],
+                puzzleStats: profile.puzzleStats || {},
+                performance: profile.performance || {}
+            }))
+        }
+    };
 }
 
 router.post('/attempt', authenticate, async (req, res) => {
@@ -585,29 +811,76 @@ router.post('/session-feedback', authenticate, async (req, res) => {
 
 router.get('/curation-plan', authenticate, async (req, res) => {
     try {
-        const userId = req.userId;
-        const stats = await UserPuzzleStats.getOrCreate(userId);
+        const stats = await UserPuzzleStats.getOrCreate(req.userId);
+        const savedProfile = stats.pulseProfile?.toObject?.() || stats.pulseProfile || null;
+        const externalProfiles = getCachedExternalProfiles(
+            stats.externalActivity,
+            savedProfile?.externalSources || [],
+            req.user
+        );
+        const { summary } = await getPulseActivity(req.user, stats, externalProfiles);
 
-        const weakThemes = [];
-        const strongThemes = [];
-        stats.themeStats.forEach((value, key) => {
-            if (value.attempted >= 3) {
-                const accuracy = Math.round((value.solved / value.attempted) * 100);
-                if (accuracy < 55) weakThemes.push({ theme: key, accuracy });
-                else if (accuracy >= 75) strongThemes.push({ theme: key, accuracy });
-            }
-        });
-
-        const plan = await geminiService.getCuratedCuration({
-            rating: stats.rating,
-            weakThemes: weakThemes.sort((a, b) => a.accuracy - b.accuracy).slice(0, 5),
-            strongThemes: strongThemes.sort((a, b) => b.accuracy - a.accuracy).slice(0, 5)
-        });
-
-        return successResponse(res, plan, 'Curation plan generated');
+        return successResponse(res, {
+            profile: savedProfile,
+            plan: stats.pulsePlan || null,
+            activity: summary,
+            externalConnections: {
+                chesscom: req.user.chesscomUsername || null,
+                lichess: req.user.lichessUsername || null
+            },
+            planUpdatedAt: stats.pulsePlanUpdatedAt || null
+        }, 'Pulse profile retrieved');
     } catch (error) {
-        console.error('Error generating curation plan:', error);
-        return errorResponse(res, 'Failed to generate curation plan', 500);
+        console.error('Error loading Pulse profile:', error);
+        return errorResponse(res, 'Failed to load Pulse profile', 500);
+    }
+});
+
+router.post('/curation-plan', authenticate, async (req, res) => {
+    try {
+        const parsed = parsePulseProfile(req.body?.profile, req.user);
+        if (parsed.error) return errorResponse(res, parsed.error, 400);
+
+        const stats = await UserPuzzleStats.getOrCreate(req.userId);
+        const externalSync = await syncExternalChessProfiles(
+            req.user,
+            parsed.profile.externalSources,
+            stats.externalActivity
+        );
+        stats.externalActivity = externalSync.cache;
+        stats.markModified('externalActivity');
+
+        const externalProfiles = getCachedExternalProfiles(
+            externalSync.cache,
+            parsed.profile.externalSources,
+            req.user
+        );
+        const { summary, modelContext } = await getPulseActivity(req.user, stats, externalProfiles);
+        summary.externalWarnings = externalSync.warnings;
+        const plan = await geminiService.getCuratedCuration({
+            profile: parsed.profile,
+            activity: modelContext
+        });
+
+        stats.pulseProfile = parsed.profile;
+        stats.pulsePlan = plan;
+        stats.pulsePlanUpdatedAt = new Date();
+        stats.markModified('pulsePlan');
+        await stats.save();
+
+        return successResponse(res, {
+            profile: parsed.profile,
+            plan,
+            activity: summary,
+            externalConnections: {
+                chesscom: req.user.chesscomUsername || null,
+                lichess: req.user.lichessUsername || null
+            },
+            planUpdatedAt: stats.pulsePlanUpdatedAt
+        }, 'Pulse training plan generated');
+    } catch (error) {
+        console.error('Error generating Pulse training plan:', error);
+        return errorResponse(res, 'Failed to generate Pulse training plan', 500);
     }
 });
 

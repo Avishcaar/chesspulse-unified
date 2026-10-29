@@ -12,6 +12,29 @@ const dailyStatSchema = new mongoose.Schema({
     rating: { type: Number }
 }, { _id: false });
 
+const pulseProfileSchema = new mongoose.Schema({
+    level: {
+        type: String,
+        enum: ['new', 'beginner', 'club', 'intermediate', 'advanced', 'expert'],
+        required: true
+    },
+    rating: { type: Number, min: 400, max: 2800, default: null },
+    goals: [{
+        type: String,
+        enum: ['tactics', 'opening', 'middlegame', 'endgame', 'calculation', 'boardVision']
+    }],
+    challenge: {
+        type: String,
+        enum: ['missTactics', 'calculateLines', 'openingTransitions', 'middlegamePlans', 'endgameTechnique', 'timePressure', 'unsure'],
+        default: 'unsure'
+    },
+    sessionMinutes: { type: Number, enum: [10, 20, 30], default: 20 },
+    externalSources: [{
+        type: String,
+        enum: ['chesscom', 'lichess']
+    }]
+}, { _id: false });
+
 const userPuzzleStatsSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -68,8 +91,13 @@ const userPuzzleStatsSchema = new mongoose.Schema({
         survival: { type: themeStatSchema, default: () => ({ solved: 0, attempted: 0 }) },
         rated: { type: themeStatSchema, default: () => ({ solved: 0, attempted: 0 }) },
         themed: { type: themeStatSchema, default: () => ({ solved: 0, attempted: 0 }) },
-        daily: { type: themeStatSchema, default: () => ({ solved: 0, attempted: 0 }) }
+      daily: { type: themeStatSchema, default: () => ({ solved: 0, attempted: 0 }) },
+      curated: { type: themeStatSchema, default: () => ({ solved: 0, attempted: 0 }) }
     },
+    pulseProfile: { type: pulseProfileSchema, default: null },
+    pulsePlan: { type: mongoose.Schema.Types.Mixed, default: null },
+    pulsePlanUpdatedAt: { type: Date, default: null },
+    externalActivity: { type: mongoose.Schema.Types.Mixed, default: () => ({ providers: {} }) },
     dailyHistory: [dailyStatSchema],
     totalTimeMs: {
         type: Number,

@@ -85,13 +85,13 @@ export default function ChesscomUserCard({ initialUsername = '' }) {
 
             {error && !loading && (
                 <div className="chesscom-error">
-                    <p>⚠️ {error}</p>
+                    <p>{error}</p>
                 </div>
             )}
 
             {!userData && !loading && !error && (
                 <div className="chesscom-empty">
-                    <p>🔍 Search for a Chess.com player to see their stats</p>
+                    <p>Search for a Chess.com player to view rating & stats</p>
                 </div>
             )}
 
@@ -113,7 +113,7 @@ export default function ChesscomUserCard({ initialUsername = '' }) {
                             {userData.profile?.country && (
                                 <span className="country-flag" title={userData.profile.country}>
                                     {/* Extract country code from URL if possible, or just link */}
-                                    🌍
+                                    FIDE
                                 </span>
                             )}
                         </div>

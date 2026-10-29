@@ -6,23 +6,77 @@ import { generateAccessToken, generateRefreshToken } from '../utils/jwt.js';
 
 const router = express.Router();
 
-const getFrontendUrl = (req) => {
-    // If FRONTEND_URL is explicitly set to a remote domain, use it; otherwise ignore localhost in cloud production
-    if (process.env.FRONTEND_URL && (!process.env.RENDER || !process.env.FRONTEND_URL.includes('localhost'))) {
-        return process.env.FRONTEND_URL;
+const isProduction = process.env.RENDER === 'true' || process.env.NODE_ENV === 'production';
+
+function getOrigin(value) {
+    try {
+        const url = new URL(value);
+        if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password) return null;
+        return url.origin;
+    } catch (_) {
+        return null;
     }
-    const protocol = req.headers['x-forwarded-proto'] || req.protocol;
-    return `${protocol}://${req.get('host')}`;
+}
+
+function getConfiguredFrontendOrigin() {
+    const origin = getOrigin(process.env.FRONTEND_URL);
+    if (!origin || !isProduction) return origin;
+    const hostname = new URL(origin).hostname;
+    return ['localhost', '127.0.0.1', '::1'].includes(hostname) ? null : origin;
+}
+
+function getRequestOrigin(req) {
+    const protocol = String(req.headers['x-forwarded-proto'] || req.protocol).split(',')[0].trim();
+    return getOrigin(`${protocol}://${req.get('host')}`);
+}
+
+function isTrustedFrontendOrigin(origin, req) {
+    if (!origin) return false;
+    const configuredOrigin = getConfiguredFrontendOrigin();
+    if (configuredOrigin === origin) return true;
+    if (getRequestOrigin(req) === origin) return true;
+    return !isProduction && ['http://localhost:5173', 'http://127.0.0.1:5173'].includes(origin);
+}
+
+const getFrontendUrl = (req) => {
+    const sessionOrigin = getOrigin(req?.session?.frontendOrigin);
+    if (isTrustedFrontendOrigin(sessionOrigin, req)) return sessionOrigin;
+
+    const refererOrigin = getOrigin(req?.headers?.referer);
+    if (isTrustedFrontendOrigin(refererOrigin, req)) return refererOrigin;
+
+    const configuredOrigin = getConfiguredFrontendOrigin();
+    if (configuredOrigin) return configuredOrigin;
+
+    return isProduction ? getRequestOrigin(req) : 'http://localhost:5173';
 };
 
-router.get('/google',
-    passport.authenticate('google', {
+router.get('/google', (req, res, next) => {
+    // Preserve only a known application origin across the OAuth round trip.
+    if (req.headers.referer) {
+        const refOrigin = getOrigin(req.headers.referer);
+        if (req.session && isTrustedFrontendOrigin(refOrigin, req)) {
+            req.session.frontendOrigin = refOrigin;
+        }
+    }
+
+    if (!passport._strategies || !passport._strategies.google) {
+        const frontendUrl = getFrontendUrl(req);
+        return res.redirect(`${frontendUrl}/signin?error=${encodeURIComponent('Google OAuth is not configured on this server')}`);
+    }
+
+    return passport.authenticate('google', {
         scope: ['profile', 'email'],
         session: false
-    })
-);
+    })(req, res, next);
+});
 
 router.get('/google/callback', async (req, res, next) => {
+    if (!passport._strategies || !passport._strategies.google) {
+        const frontendUrl = getFrontendUrl(req);
+        return res.redirect(`${frontendUrl}/signin?error=${encodeURIComponent('Google OAuth is not configured on this server')}`);
+    }
+
     passport.authenticate('google', { session: false }, async (err, user, info) => {
         try {
             console.log('OAuth callback - err:', err, 'user:', !!user);
@@ -54,7 +108,7 @@ router.get('/google/callback', async (req, res, next) => {
 
             const redirectUrl = `${frontendUrl}/auth-success?accessToken=${accessToken}&refreshToken=${refreshToken}`;
 
-            console.log('OAuth success - redirecting to frontend:', redirectUrl);
+            console.log('OAuth success - redirecting to frontend:', frontendUrl);
             return res.redirect(redirectUrl);
 
         } catch (error) {

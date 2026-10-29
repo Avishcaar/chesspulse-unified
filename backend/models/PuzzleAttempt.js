@@ -40,7 +40,7 @@ const puzzleAttemptSchema = new mongoose.Schema({
   }],
   mode: {
     type: String,
-    enum: ['rush', 'survival', 'rated', 'themed', 'daily'],
+    enum: ['rush', 'survival', 'rated', 'themed', 'daily', 'curated'],
     required: true
   },
   difficulty: {

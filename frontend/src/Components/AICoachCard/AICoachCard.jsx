@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { puzzleStatsService } from '../../services/puzzleStatsService';
@@ -10,59 +10,6 @@ const AICoachCard = ({ onRefresh }) => {
     const [advice, setAdvice] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const cardRef = useRef(null);
-    const particlesRef = useRef([]);
-
-    const createParticle = useCallback((x, y) => {
-        if (!cardRef.current) return;
-
-        const particle = document.createElement('div');
-        particle.className = 'cursor-particle';
-
-        const symbols = ['✦', '✧', '⬡', '◇', '◈', '∆'];
-        particle.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-
-        // Random offset for spread effect
-        const offsetX = (Math.random() - 0.5) * 30;
-        const offsetY = (Math.random() - 0.5) * 30;
-
-        particle.style.left = `${x + offsetX}px`;
-        particle.style.top = `${y + offsetY}px`;
-        particle.style.setProperty('--dx', `${(Math.random() - 0.5) * 40}px`);
-        particle.style.setProperty('--dy', `${-20 - Math.random() * 30}px`);
-
-        cardRef.current.appendChild(particle);
-        particlesRef.current.push(particle);
-
-        // Remove after animation
-        setTimeout(() => {
-            if (particle.parentNode) {
-                particle.parentNode.removeChild(particle);
-            }
-            particlesRef.current = particlesRef.current.filter(p => p !== particle);
-        }, 1000);
-    }, []);
-
-    const handleMouseMove = useCallback((e) => {
-        if (!cardRef.current) return;
-
-        const rect = cardRef.current.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-
-        if (Math.random() > 0.7) {
-            createParticle(x, y);
-        }
-    }, [createParticle]);
-
-    useEffect(() => {
-        return () => {
-            particlesRef.current.forEach(p => {
-                if (p.parentNode) p.parentNode.removeChild(p);
-            });
-        };
-    }, []);
-
     const fetchAdvice = async () => {
         if (!isAuthenticated) return;
 
@@ -87,7 +34,7 @@ const AICoachCard = ({ onRefresh }) => {
 
     if (!isAuthenticated) {
         return (
-            <div className="ai-coach-card guest" ref={cardRef} onMouseMove={handleMouseMove}>
+            <div className="ai-coach-card guest">
                 <div className="ai-glow"></div>
                 <div className="matrix-bg"></div>
                 <div className="coach-content-wrapper">
@@ -100,7 +47,7 @@ const AICoachCard = ({ onRefresh }) => {
                             <span></span><span></span><span></span><span></span>
                         </div>
                     </div>
-                    <h3 className="ai-title">Pulse AI</h3>
+                    <h3 className="ai-title">Pulse</h3>
                     <p className="ai-tagline">Your personal chess intelligence</p>
                     <div className="coach-actions">
                         <Link to="/puzzles/curated" className="ai-cta practice">
@@ -120,14 +67,14 @@ const AICoachCard = ({ onRefresh }) => {
 
     if (loading) {
         return (
-            <div className="ai-coach-card loading" ref={cardRef} onMouseMove={handleMouseMove}>
+            <div className="ai-coach-card loading">
                 <div className="ai-glow"></div>
                 <div className="coach-header">
                     <div className="ai-badge">
                         <span className="pulse"></span>
                         AI
                     </div>
-                    <h3>Pulse AI</h3>
+                    <h3>Pulse</h3>
                 </div>
                 <div className="coach-loading">
                     <div className="scan-line"></div>
@@ -139,11 +86,11 @@ const AICoachCard = ({ onRefresh }) => {
 
     if (error || !advice) {
         return (
-            <div className="ai-coach-card error" ref={cardRef} onMouseMove={handleMouseMove}>
+            <div className="ai-coach-card error">
                 <div className="ai-glow"></div>
                 <div className="coach-header">
                     <div className="ai-badge">AI</div>
-                    <h3>Pulse AI</h3>
+                    <h3>Pulse</h3>
                 </div>
                 <p className="coach-error">{error || 'Solve puzzles to unlock insights'}</p>
                 <button className="coach-retry" onClick={fetchAdvice}>Retry</button>
@@ -152,14 +99,14 @@ const AICoachCard = ({ onRefresh }) => {
     }
 
     return (
-        <div className="ai-coach-card active" ref={cardRef} onMouseMove={handleMouseMove}>
+        <div className="ai-coach-card active">
             <div className="ai-glow"></div>
             <div className="coach-header">
                 <div className="ai-badge active">
                     <span className="pulse"></span>
                     AI
                 </div>
-                <h3>Pulse AI</h3>
+                <h3>Pulse</h3>
                 <button className="coach-refresh" onClick={fetchAdvice} title="Refresh">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" />

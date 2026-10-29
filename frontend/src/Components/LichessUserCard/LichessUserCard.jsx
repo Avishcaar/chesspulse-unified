@@ -84,13 +84,13 @@ export default function LichessUserCard({ initialUsername = '' }) {
             )}
             {error && !loading && (
                 <div className="lichess-error">
-                    <p>⚠️ {error}</p>
+                    <p>{error}</p>
                 </div>
             )}
 
             {!userData && !loading && !error && (
                 <div className="lichess-empty">
-                    <p>🔍 Search for a Lichess player to see their stats</p>
+                    <p>Search for a Lichess player to view rating & stats</p>
                 </div>
             )}
 

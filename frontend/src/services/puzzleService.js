@@ -270,7 +270,7 @@ export const puzzleService = {
     },
 
     getPuzzleWithFilters: async (filters = {}) => {
-        const { rating, ratingRange = 200, themes, moveLength, difficulty, exclude = [] } = filters;
+        const { rating, ratingRange = 200, themes, moveLength, difficulty, exclude = [], strict = false } = filters;
         const excludeSet = new Set(exclude);
 
         let candidateIndices = null;
@@ -318,19 +318,20 @@ export const puzzleService = {
         }
 
         if (!candidateIndices) {
-            return getRandomFromPool();
+            return strict ? null : getRandomFromPool();
         }
 
-        return getRandomFromIndices(candidateIndices, excludeSet) || getRandomFromPool();
+        return getRandomFromIndices(candidateIndices, excludeSet) || (strict ? null : getRandomFromPool());
     },
 
     getPuzzlesBatchWithFilters: async (count = 10, filters = {}) => {
         const puzzles = [];
-        const usedIds = new Set();
+        const { exclude = [], ...batchFilters } = filters;
+        const usedIds = new Set(exclude);
 
         while (puzzles.length < count) {
             const puzzle = await puzzleService.getPuzzleWithFilters({
-                ...filters,
+                ...batchFilters,
                 exclude: [...usedIds]
             });
 

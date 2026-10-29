@@ -19,7 +19,7 @@
 /* Header Card */
 .profile-header-card {
     position: relative;
-    background: rgba(15, 22, 35, 0.72);
+    background: var(--bg2);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 22px;
     padding: 36px;
@@ -165,7 +165,7 @@ body[data-theme="light"] .profile-header-card {
 }
 
 body[data-theme="light"] .profile-username {
-    background: linear-gradient(135deg, #0f172a 0%, #7c3aed 55%, #059669 100%);
+    background: linear-gradient(135deg, #0f172a 0%, #e11d48 55%, #059669 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -188,7 +188,7 @@ body[data-theme="light"] .tab-item:hover {
 
 body[data-theme="light"] [role="tab"][data-selected],
 body[data-theme="light"] .tab-item[data-selected] {
-    color: #7c3aed !important;
+    color: #e11d48 !important;
     background: rgba(124, 58, 237, 0.08) !important;
     border-color: rgba(124, 58, 237, 0.25) !important;
 }

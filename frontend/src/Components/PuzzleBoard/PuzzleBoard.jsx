@@ -6,7 +6,6 @@ import { getCustomPieces } from '../../utils/pieceSets';
 import { playSound, getMoveSound } from '../../utils/sounds';
 import { Chess } from 'chess.js';
 import {
-  Sparkles,
   Lightbulb,
   Play,
   RotateCcw,
@@ -578,7 +577,7 @@ const PuzzleBoard = ({
 
           {status === 'solved' && (
             <div className="puzzle-solved-indicator">
-              <Sparkles size={15} />
+              <CheckCircle2 size={15} />
               <span>Great calculation! Ready for next puzzle.</span>
             </div>
           )}
