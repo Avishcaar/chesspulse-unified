@@ -4,6 +4,7 @@ import "./rankings.css";
 import fide from "../../assets/fide.jpg";
 import { Trophy, Globe, TrendingUp, TrendingDown } from "lucide-react";
 import { RANKINGS_FALLBACK } from "../../data/rankingsFallback";
+import { useGsapChapterReveal } from "../../utils/useGsapReveal";
 
 const CATEGORIES = {
   general: ["standard", "rapid", "blitz", "juniors"],
@@ -11,6 +12,7 @@ const CATEGORIES = {
 };
 
 export default function Rankings() {
+  const chapterRef = useGsapChapterReveal();
   const [section, setSection] = useState("general");
   const [type, setType] = useState("standard");
   const [players, setPlayers] = useState([]);
@@ -62,24 +64,23 @@ export default function Rankings() {
   };
 
   return (
-    <section className="cp-studio-section rankings-wrapper">
+    <section id="world-grandmaster-standings" className="cp-studio-section rankings-wrapper">
       <div className="cp-studio-container">
-        {/* Lumora Editorial Chapter Header */}
-        <div className="cp-chapter-header">
+        {/* Chapter Header */}
+        <div className="cp-chapter-header" ref={chapterRef}>
           <div className="cp-chapter-meta">
             <span className="cp-chapter-index">
               <span className="cp-chapter-index-dot" />
-              03 // FIDE LEADERBOARD
+              RANKINGS
             </span>
-            <span className="cp-chapter-subtag">2700CHESS LIVE FEDERATION FEED</span>
           </div>
           <div className="cp-chapter-main">
             <h2 className="cp-chapter-title">
               World Grandmaster{" "}
-              <span className="cp-chapter-title-accent">Standings</span>
+              <span className="art-italic cp-chapter-title-accent">Standings</span>
             </h2>
             <p className="cp-chapter-desc">
-              Live official Elo ratings and real-time point deltas tracking the world&apos;s top 10 competitors across divisions.
+              Official FIDE ratings of the world&apos;s top players.
             </p>
           </div>
           <div className="cp-chapter-actions">

@@ -14,7 +14,7 @@
   font-family: var(--font-mono, monospace);
   font-weight: 700;
   color: var(--accent);
-  text-shadow: 0 0 12px rgba(139, 92, 246, 0.4);
+  text-shadow: 0 0 12px color-mix(in srgb, var(--accent, #f43f5e) 40%, transparent);
   pointer-events: none;
   user-select: none;
   animation: floatUpGlyph linear forwards;

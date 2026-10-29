@@ -6,8 +6,8 @@ const SLIDES = [
   {
     id: "engine",
     arenaMap: "classic",
-    title: "Stockfish 17 WASM",
-    subtitle: "Client-side Depth-22 Engine",
+    title: "Stockfish 17",
+    titleItalic: "Analysis",
     badge: "ENGINE ACTIVE",
     badgeColor: "emerald",
     icon: Cpu,
@@ -20,34 +20,34 @@ const SLIDES = [
       { k: "LATENCY", v: "< 14ms" },
     ],
     pvLine: "1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O",
-    ctaText: "Launch Workstation",
+    ctaText: "Open Analysis Lab",
     ctaLink: "/analysis",
   },
   {
     id: "broadcast",
     arenaMap: "blitz",
-    title: "Grandmaster TV",
-    subtitle: "Realtime WebSocket Streams",
-    badge: "● LIVE BROADCAST",
+    title: "World",
+    titleItalic: "Broadcasts",
+    badge: "LIVE MATCH",
     badgeColor: "cyan",
     icon: Radio,
     statMain: "CARLSEN vs NAKAMURA",
-    statLabel: "Speed Chess Championship 2026",
+    statLabel: "Speed Chess Championship",
     metrics: [
       { k: "WHITE", v: "2832 ELO" },
       { k: "BLACK", v: "2875 ELO" },
-      { k: "CLOCK", v: "03:42 // 04:18" },
+      { k: "CLOCK", v: "03:42 · 04:18" },
       { k: "STREAM", v: "SUB-SECOND" },
     ],
     pvLine: "38... Rxd7! 39. Qxd7 Qxe4+ 40. Kh2 Qe5+ (Winning)",
-    ctaText: "Spectate Tournaments",
+    ctaText: "Watch Tournaments",
     ctaLink: "/tournaments",
   },
   {
     id: "tactics",
     arenaMap: "gold",
-    title: "Tactical Arena",
-    subtitle: "Adaptive Grandmaster Puzzles",
+    title: "Tactics &",
+    titleItalic: "Motifs",
     badge: "2,500+ PUZZLES",
     badgeColor: "violet",
     icon: Zap,
@@ -60,7 +60,7 @@ const SLIDES = [
       { k: "THEME", v: "MATE IN 3" },
     ],
     pvLine: "1. Rxg7+! Kxg7 2. Qh6+ Kg8 3. Qf8# (Discovered Mate)",
-    ctaText: "Train Tactics",
+    ctaText: "Solve Puzzles",
     ctaLink: "/puzzles",
   },
 ];
@@ -111,7 +111,7 @@ export default function HeroShowcaseCard({ activeArena }) {
                 {idx === 0 && <Cpu size={12} />}
                 {idx === 1 && <Radio size={12} />}
                 {idx === 2 && <Zap size={12} />}
-                <span>{s.title.split(" ")[0]}</span>
+                <span>{s.titleItalic || s.title}</span>
               </button>
             ))}
           </div>
@@ -146,7 +146,7 @@ export default function HeroShowcaseCard({ activeArena }) {
 
           {/* Best Line Telemetry snippet */}
           <div className="showcase-pv-box">
-            <span className="pv-tag">TELEMETRY LINE</span>
+            <span className="pv-tag">BEST CONTINUATION</span>
             <code className="pv-code">{slide.pvLine}</code>
           </div>
 

@@ -1,381 +1,256 @@
 /* ==========================================================================
-   FEATURE BAND — LUMORA 4-PILL STATEMENT BAND & HOVER-SWEEP CAPABILITY ROWS
+   FEATURE BAND — EDITORIAL EXHIBITION GALLERY
    ========================================================================== */
 
 .feature-band-section {
-  padding-top: 4.5rem;
+  padding-top: 3.5rem;
   padding-bottom: 5rem;
+  position: relative;
 }
 
-/* 1. Lumora-Inspired 4-Pill Interlocking Band */
-.lumora-pill-band {
+/* 4-Card Grid */
+.exhibition-gallery-grid {
   display: grid;
-  grid-template-columns: 1.25fr auto 1.35fr 1.2fr;
-  gap: 14px;
-  margin-bottom: 4.5rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
   align-items: stretch;
 }
 
-.lumora-pill {
-  height: 92px;
-  border-radius: 999px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  padding: 0 2.2rem;
+/* Exhibition Card */
+.exhibition-card {
   position: relative;
-  overflow: hidden;
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.35s ease;
-}
-
-.lumora-pill:hover {
-  transform: translateY(-3px) scale(1.015);
-}
-
-.lumora-pill-word {
-  font-family: 'Outfit', 'Inter', sans-serif;
-  font-size: clamp(1.35rem, 2.5vw, 2.25rem);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  white-space: nowrap;
-}
-
-.lumora-pill-kicker {
-  font-family: var(--font-mono, 'JetBrains Mono', monospace);
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  color: var(--arena-accent);
-  background: rgba(255, 255, 255, 0.06);
-  padding: 4px 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.lumora-pill.pill-surface {
-  background: linear-gradient(145deg, rgba(25, 33, 52, 0.85), rgba(13, 18, 30, 0.95));
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--text);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
-}
-
-.lumora-pill.pill-accent {
-  width: 92px;
-  padding: 0;
-  background: linear-gradient(135deg, var(--arena-accent), var(--arena-accent-2));
-  color: #ffffff;
-  box-shadow: 0 12px 32px rgba(var(--arena-rgb), 0.35);
-}
-
-.lumora-pill-arrow-svg {
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.lumora-pill-band:hover .lumora-pill-arrow-svg {
-  transform: translateX(4px) rotate(-15deg);
-}
-
-.lumora-pill.pill-ink {
-  background: #0c101b;
-  border: 1px solid rgba(var(--arena-rgb), 0.35);
-  color: #ffffff;
-  box-shadow:
-    0 14px 36px rgba(0, 0, 0, 0.45),
-    inset 0 0 28px rgba(var(--arena-rgb), 0.12);
-}
-
-.lumora-pill.pill-outline {
-  background: rgba(255, 255, 255, 0.025);
-  border: 1px dashed rgba(255, 255, 255, 0.2);
-  color: var(--text);
-}
-
-.lumora-pill-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: #10b981;
-  box-shadow: 0 0 12px #10b981;
-}
-
-body[data-theme="light"] .lumora-pill.pill-surface {
-  background: #ffffff;
-  border-color: rgba(15, 23, 42, 0.12);
-  color: #0f172a;
-}
-
-body[data-theme="light"] .lumora-pill.pill-outline {
-  background: #f1f5f9;
-  border-color: rgba(15, 23, 42, 0.22);
-  color: #0f172a;
-}
-
-.fb-studio-pill-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 0.7rem 1.25rem;
-  border-radius: 999px;
-  font-size: 0.84rem;
-  font-weight: 600;
-  color: var(--text);
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  text-decoration: none;
-  transition: all 0.25s ease;
-}
-
-.fb-studio-pill-link:hover {
-  border-color: var(--arena-accent);
-  color: var(--arena-accent);
-  transform: translateY(-2px);
-}
-
-/* 2. Lumora-Style Numbered Hover-Sweep Capability Rows */
-.capability-rows-list {
+  border-radius: 24px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  padding: 1.75rem 1.5rem 1.5rem;
   display: flex;
   flex-direction: column;
-  border-top: 1px solid rgba(255, 255, 255, 0.09);
-}
-
-body[data-theme="light"] .capability-rows-list {
-  border-top-color: rgba(15, 23, 42, 0.1);
-}
-
-.capability-row {
-  position: relative;
-  display: grid;
-  grid-template-columns: 230px 1.35fr 1fr 220px;
-  align-items: center;
-  gap: 2rem;
-  padding: 2rem 1.75rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   text-decoration: none;
-  color: var(--text);
   overflow: hidden;
-  transition: border-color 0.3s ease, padding-left 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.3s ease,
+              box-shadow 0.35s ease;
+  box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.45),
+              inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
-body[data-theme="light"] .capability-row {
-  border-bottom-color: rgba(15, 23, 42, 0.1);
+body[data-theme="light"] .exhibition-card {
+  background: var(--bg-soft);
+  border-color: var(--border);
+  box-shadow: 0 12px 30px -8px rgba(28, 25, 23, 0.08),
+              inset 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 
-.capability-row-sweep {
+.exhibition-card:hover {
+  transform: translateY(-5px);
+  border-color: color-mix(in srgb, var(--card-accent) 45%, transparent);
+  box-shadow: 0 24px 50px -12px rgba(0, 0, 0, 0.55),
+              0 0 30px -8px color-mix(in srgb, var(--card-accent) 25%, transparent),
+              inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+/* Ambient Accent Glow */
+.exhibition-card-glow {
   position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0.03) 0%,
-    color-mix(in srgb, var(--row-accent) 14%, transparent) 60%,
-    color-mix(in srgb, var(--row-accent) 22%, transparent) 100%
-  );
-  transform: scaleY(0);
-  transform-origin: bottom;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  top: -80px;
+  right: -80px;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--card-accent) 20%, transparent) 0%, transparent 70%);
   pointer-events: none;
-  z-index: 0;
+  opacity: 0.6;
+  transition: opacity 0.35s ease;
 }
 
-.capability-row:hover,
-.capability-row.is-hovered {
-  padding-left: 2.25rem;
-  border-bottom-color: var(--row-accent);
+.exhibition-card:hover .exhibition-card-glow {
+  opacity: 1;
 }
 
-.capability-row:hover .capability-row-sweep,
-.capability-row.is-hovered .capability-row-sweep {
-  transform: scaleY(1);
-}
-
-.cap-col-index,
-.cap-col-main,
-.cap-col-specs,
-.cap-col-telemetry {
-  position: relative;
-  z-index: 1;
-}
-
-.cap-col-index {
+/* Card Top Bar */
+.exhibition-card-top {
   display: flex;
   align-items: center;
-  gap: 14px;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
 }
 
-.cap-num {
+.exhibition-card-num {
+  font-family: var(--font-serif, 'Cormorant Garamond', serif);
+  font-size: 1.55rem;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--card-accent);
+  line-height: 1;
+}
+
+.exhibition-card-tag {
   font-family: var(--font-mono, 'JetBrains Mono', monospace);
-  font-size: 0.95rem;
-  font-weight: 800;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
   color: var(--text-muted);
-  transition: color 0.25s ease;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
 }
 
-.capability-row:hover .cap-num {
-  color: var(--row-accent);
-}
-
-.cap-icon-box {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
+/* Visual Piece Window */
+.exhibition-piece-window {
+  position: relative;
+  height: 140px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--row-accent);
-  transition: all 0.3s ease;
+  margin-bottom: 1.25rem;
+  border-radius: 16px;
+  background: radial-gradient(ellipse at 50% 60%, color-mix(in srgb, var(--card-accent) 12%, transparent) 0%, transparent 72%);
+  overflow: hidden;
 }
 
-.capability-row:hover .cap-icon-box {
-  background: var(--row-accent);
-  color: #06080f;
-  border-color: var(--row-accent);
-  box-shadow: 0 0 20px color-mix(in srgb, var(--row-accent) 50%, transparent);
+.exhibition-piece-archival-backdrop {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
 }
 
-.cap-tag {
+.piece-archival-ring {
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  border: 1px dashed color-mix(in srgb, var(--card-accent) 28%, transparent);
+  animation: ringSlowRotate 45s linear infinite;
+}
+
+@keyframes ringSlowRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.piece-archival-stamp {
+  position: absolute;
+  bottom: 8px;
   font-family: var(--font-mono, 'JetBrains Mono', monospace);
-  font-size: 0.68rem;
-  font-weight: 700;
+  font-size: 0.6rem;
   letter-spacing: 0.12em;
   color: var(--text-muted);
-  padding: 3px 9px;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  opacity: 0.6;
 }
 
-.cap-col-main {
+.exhibition-piece-render {
+  position: relative;
+  z-index: 2;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease;
+  filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.45));
+}
+
+.exhibition-card:hover .exhibition-piece-render {
+  transform: translateY(-4px) scale(1.06);
+  filter: drop-shadow(0 16px 28px rgba(0, 0, 0, 0.6))
+          drop-shadow(0 0 16px color-mix(in srgb, var(--card-accent) 40%, transparent));
+}
+
+/* Card Body */
+.exhibition-card-body {
+  margin-bottom: 1.25rem;
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-.cap-title {
-  font-family: 'Outfit', 'Inter', sans-serif;
-  font-size: clamp(1.2rem, 1.8vw, 1.5rem);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  margin: 0;
+.exhibition-card-title {
+  font-family: var(--font-sans, 'Plus Jakarta Sans', sans-serif);
+  font-size: 1.22rem;
+  font-weight: 700;
   color: var(--text);
-}
-
-.cap-desc {
-  font-size: 0.88rem;
-  color: var(--text-muted);
-  line-height: 1.55;
   margin: 0;
-  max-width: 54ch;
-}
-
-.cap-col-specs {
+  letter-spacing: -0.02em;
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  align-items: baseline;
+  gap: 5px;
 }
 
-.cap-spec-chip {
-  font-family: var(--font-mono, 'JetBrains Mono', monospace);
-  font-size: 0.7rem;
+.exhibition-title-italic {
+  font-family: var(--font-serif, 'Cormorant Garamond', serif);
+  font-style: italic;
   font-weight: 600;
+  color: var(--card-accent);
+}
+
+.exhibition-card-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Card Footer */
+.exhibition-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  margin-top: auto;
+}
+
+.exhibition-metric-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.exhibition-metric-val {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
+.exhibition-metric-lbl {
+  font-family: var(--font-sans, sans-serif);
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.exhibition-arrow-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-sans);
+  font-size: 0.74rem;
+  font-weight: 700;
   color: var(--text-muted);
   padding: 4px 10px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
   transition: all 0.25s ease;
 }
 
-.capability-row:hover .cap-spec-chip {
-  border-color: color-mix(in srgb, var(--row-accent) 45%, transparent);
-  color: var(--text);
+.exhibition-card:hover .exhibition-arrow-pill {
+  color: var(--card-accent);
+  border-color: color-mix(in srgb, var(--card-accent) 50%, transparent);
+  transform: translateX(2px);
 }
 
-.cap-col-telemetry {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 18px;
-}
-
-.cap-metric-block {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  text-align: right;
-}
-
-.cap-metric-val {
-  font-family: var(--font-mono, 'JetBrains Mono', monospace);
-  font-size: 1.35rem;
-  font-weight: 800;
-  color: var(--text);
-  letter-spacing: -0.03em;
-  transition: color 0.25s ease;
-}
-
-.capability-row:hover .cap-metric-val {
-  color: var(--row-accent);
-}
-
-.cap-metric-lbl {
-  font-family: var(--font-mono, 'JetBrains Mono', monospace);
-  font-size: 0.66rem;
-  color: var(--text-muted);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
-.cap-arrow-circle {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: var(--text);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  flex-shrink: 0;
-}
-
-.capability-row:hover .cap-arrow-circle {
-  background: var(--row-accent);
-  border-color: var(--row-accent);
-  color: #06080f;
-  transform: translate(3px, -3px);
-}
-
-@media (max-width: 1120px) {
-  .lumora-pill-band {
+/* Responsive */
+@media (max-width: 1080px) {
+  .exhibition-gallery-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  .lumora-pill.pill-accent {
-    width: 100%;
-  }
-  .capability-row {
-    grid-template-columns: 1fr auto;
-    gap: 1rem;
-  }
-  .cap-col-specs {
-    grid-column: 1 / -1;
-  }
 }
 
-@media (max-width: 680px) {
-  .lumora-pill-band {
+@media (max-width: 600px) {
+  .exhibition-gallery-grid {
     grid-template-columns: 1fr;
-  }
-  .lumora-pill {
-    height: 68px;
-  }
-  .capability-row {
-    grid-template-columns: 1fr;
-    padding: 1.5rem 1rem;
-  }
-  .cap-col-telemetry {
-    justify-content: space-between;
   }
 }

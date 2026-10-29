@@ -1,0 +1,386 @@
+/* ==========================================================================
+   ChessArtCinematic — Seamless Living Canvas
+   Embedded directly into the website background with zero boxy borders,
+   feathered multi-edge dissolutions, and minimal transparent controls.
+   ========================================================================== */
+
+.cp-art-cinema-section {
+  --arena-accent: #d4af37;
+  --arena-accent-2: #fef08a;
+  --arena-rgb: 212, 175, 55;
+  --arena-rgb-2: 254, 240, 138;
+  --arena-glow: rgba(212, 175, 55, 0.28);
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--bg);
+  padding: 2.5rem 1rem 3.5rem;
+  overflow: hidden;
+}
+
+.cp-art-cinema-pin-stage {
+  position: relative;
+  width: 100%;
+}
+
+.cp-art-cinema-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* ── Seamless Stage Viewport (Embedded Seamlessly into Background) ───────── */
+
+.art-stage-viewport {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 11;
+  max-height: calc(100vh - 120px);
+  min-height: 520px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: visible;
+  user-select: none;
+  cursor: default;
+}
+
+/* 3D Perspective Stage Container */
+.art-perspective-wrapper {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1200px;
+  perspective-origin: center center;
+  overflow: visible;
+}
+
+.art-3d-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: none !important;
+  will-change: transform;
+}
+
+/* Individual Layer Planes */
+.art-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  transform-style: preserve-3d;
+  transition: none !important;
+  will-change: transform;
+  overflow: visible;
+}
+
+.art-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  display: block;
+}
+
+.art-layer-bg {
+  z-index: 10;
+  background: transparent;
+}
+
+/* Layer 1: Board & Table — Behind characters, soft bottom blend */
+.art-layer-board {
+  z-index: 15; /* BEHIND the characters */
+  -webkit-mask-image: linear-gradient(to top, transparent 0%, rgba(0, 0, 0, 0.75) 4%, #000 10%);
+  mask-image: linear-gradient(to top, transparent 0%, rgba(0, 0, 0, 0.75) 4%, #000 10%);
+}
+
+/* Layer 2: Challenger Boy — Feathered backside on left flank to eliminate hard cut */
+.art-layer-boy {
+  z-index: 20; /* IN FRONT of chessboard */
+  -webkit-mask-image: linear-gradient(to top, transparent 0%, rgba(0, 0, 0, 0.75) 4%, #000 10%);
+  mask-image: linear-gradient(to top, transparent 0%, rgba(0, 0, 0, 0.75) 4%, #000 10%);
+}
+
+.art-layer-boy .art-img {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(0, 0, 0, 0.12) 3%,
+    rgba(0, 0, 0, 0.45) 8%,
+    rgba(0, 0, 0, 0.82) 14%,
+    #000 22%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(0, 0, 0, 0.12) 3%,
+    rgba(0, 0, 0, 0.45) 8%,
+    rgba(0, 0, 0, 0.82) 14%,
+    #000 22%
+  );
+}
+
+/* Layer 3: Chess Grandpa / Mentor — Feathered backside on right flank to eliminate hard cut */
+.art-layer-grandpa,
+.art-layer-girl {
+  z-index: 22; /* IN FRONT of chessboard */
+  -webkit-mask-image: linear-gradient(to top, transparent 0%, rgba(0, 0, 0, 0.75) 4%, #000 10%);
+  mask-image: linear-gradient(to top, transparent 0%, rgba(0, 0, 0, 0.75) 4%, #000 10%);
+}
+
+.art-layer-grandpa .art-img,
+.art-layer-girl .art-img {
+  -webkit-mask-image: linear-gradient(
+    to left,
+    transparent 0%,
+    rgba(0, 0, 0, 0.12) 3%,
+    rgba(0, 0, 0, 0.45) 8%,
+    rgba(0, 0, 0, 0.82) 14%,
+    #000 22%
+  );
+  mask-image: linear-gradient(
+    to left,
+    transparent 0%,
+    rgba(0, 0, 0, 0.12) 3%,
+    rgba(0, 0, 0, 0.45) 8%,
+    rgba(0, 0, 0, 0.82) 14%,
+    #000 22%
+  );
+}
+
+.art-cinematic-bg-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+}
+
+/* Ambient Floating Motes */
+.art-motes-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 32;
+  overflow: hidden;
+}
+
+.mote {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(254, 240, 138, 0.7) 0%, rgba(212, 175, 55, 0) 70%);
+  animation: moteFloat 10s infinite ease-in-out;
+}
+
+.mote-1 { width: 4px; height: 4px; top: 25%; left: 30%; animation-duration: 9s; animation-delay: 0s; }
+.mote-2 { width: 6px; height: 6px; top: 60%; left: 70%; animation-duration: 12s; animation-delay: 2s; }
+.mote-3 { width: 3px; height: 3px; top: 40%; left: 80%; animation-duration: 8s; animation-delay: 4s; }
+.mote-4 { width: 5px; height: 5px; top: 75%; left: 20%; animation-duration: 11s; animation-delay: 1s; }
+.mote-5 { width: 4px; height: 4px; top: 15%; left: 65%; animation-duration: 10s; animation-delay: 3s; }
+
+@keyframes moteFloat {
+  0%, 100% { transform: translateY(0) translateX(0); opacity: 0.2; }
+  50% { transform: translateY(-24px) translateX(12px); opacity: 0.85; }
+}
+
+/* ── Floating Minimal Transparent Narrative & Action Controls ────────────── */
+
+.art-scene-caption {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(640px, calc(100% - 32px));
+  text-align: center;
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  pointer-events: auto;
+  z-index: 38;
+}
+
+.art-minimal-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  background: transparent;
+  padding: 0;
+}
+
+.art-caption-phase {
+  display: block;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: #d4af37;
+  text-transform: uppercase;
+  margin-bottom: 0.35rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95);
+}
+
+.art-caption-title {
+  font-family: var(--font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-size: clamp(1.6rem, 2.8vw, 2.4rem);
+  font-style: italic;
+  font-weight: 600;
+  color: #fafaf9;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+  margin: 0 0 0.35rem;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.98), 0 1px 3px rgba(0, 0, 0, 0.9);
+}
+
+.art-caption-text {
+  font-family: var(--font-sans, 'Plus Jakarta Sans', system-ui, sans-serif);
+  font-size: clamp(0.85rem, 1.1vw, 0.95rem);
+  line-height: 1.5;
+  color: #e7e5e4;
+  max-width: 520px;
+  margin: 0 auto;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.98);
+}
+
+.art-minimal-actions {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  margin-top: 1rem;
+  pointer-events: auto;
+  flex-wrap: wrap;
+}
+
+.art-minimal-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.58rem 1.35rem;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #d4af37 0%, #b89327 100%);
+  border: 1px solid rgba(254, 240, 138, 0.4);
+  color: #120e0a;
+  font-family: var(--font-sans, 'Plus Jakarta Sans', system-ui, sans-serif);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6), 0 0 18px rgba(212, 175, 55, 0.3);
+  transition: all 0.25s ease;
+}
+
+.art-minimal-btn-primary:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #fef08a 0%, #d4af37 100%);
+  box-shadow: 0 6px 24px rgba(212, 175, 55, 0.55);
+}
+
+.art-minimal-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1.15rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #d6d3d1;
+  font-family: var(--font-sans, 'Plus Jakarta Sans', system-ui, sans-serif);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.2s ease;
+}
+
+.art-minimal-btn-secondary:hover {
+  color: #fafaf9;
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+/* ── Subtle Initial Scroll Prompt ───────────────────────────────────────── */
+
+.art-scroll-prompt {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  color: #a8a29e;
+  font-family: var(--font-sans, 'Plus Jakarta Sans', system-ui, sans-serif);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  pointer-events: none;
+  z-index: 38;
+  transition: opacity 0.4s ease;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
+}
+
+.prompt-mouse {
+  width: 18px;
+  height: 28px;
+  border: 1.5px solid rgba(212, 175, 55, 0.6);
+  border-radius: 12px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.prompt-wheel {
+  width: 2.5px;
+  height: 6px;
+  background: #d4af37;
+  border-radius: 2px;
+  position: absolute;
+  top: 4px;
+  animation: promptWheel 1.6s infinite ease;
+}
+
+@keyframes promptWheel {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(10px); opacity: 0; }
+}
+
+.prompt-chevron {
+  color: #d4af37;
+  animation: promptBounce 1.6s infinite ease;
+}
+
+@keyframes promptBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(3px); }
+}
+
+@media (max-width: 640px) {
+  .art-stage-viewport {
+    aspect-ratio: 4 / 3;
+    min-height: 400px;
+  }
+  .art-caption-title {
+    font-size: 1.5rem;
+  }
+  .art-caption-text {
+    font-size: 0.82rem;
+  }
+}

@@ -1,54 +1,65 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Cpu, Radio, Trophy, Swords, ArrowUpRight, ArrowRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
+import { StauntonPiece } from "../Hero/ChessPiecesSVG";
+import { useSpecularSpotlight } from "../../utils/useSpecularSpotlight";
+import { useGsapChapterReveal } from "../../utils/useGsapReveal";
 import "./featureband.css";
 
-const CAPABILITY_ROWS = [
+const EXHIBITION_ITEMS = [
   {
     num: "01",
-    tag: "ENGINE CORE",
-    title: "Stockfish 17 NNUE Workstation",
-    desc: "Multi-threaded WebAssembly evaluation running directly in browser worker threads with centipawn accuracy and variation trees.",
-    specs: ["Depth 22 Horizon", "WASM SIMD", "Zero Server Latency"],
+    tag: "ENGINE ROOM",
+    archiveRef: "PLATE 17 · WASM NNUE",
+    titlePrefix: "Stockfish 17",
+    titleAccent: "Analysis",
+    desc: "Depth-22 NNUE evaluation running entirely client-side in WebAssembly with zero server latency.",
     metric: "1.45M+",
-    metricLabel: "Positions Evaluated",
-    icon: Cpu,
-    accent: "#a855f7",
+    metricLabel: "Positions / sec",
+    piece: "queen",
+    theme: "engine",
+    accent: "#f43f5e",
     link: "/analysis",
   },
   {
     num: "02",
-    tag: "BROADCAST TV",
-    title: "Live FIDE & Grandmaster Streams",
-    desc: "Sub-second NDJSON & PGN telemetry pipelines streaming official FIDE World Championship boards and high-Elo arena battles.",
-    specs: ["NDJSON WebSockets", "Live Clocks", "Multi-Board Grid"],
+    tag: "CHAMPIONSHIPS",
+    archiveRef: "FIDE · WORLD BROADCASTS",
+    titlePrefix: "World",
+    titleAccent: "Broadcasts",
+    desc: "Official FIDE World Championship streams, live game clocks, and synchronized board feeds.",
     metric: "< 14ms",
-    metricLabel: "Stream Sync Delta",
-    icon: Radio,
+    metricLabel: "Sync Latency",
+    piece: "king",
+    theme: "gold",
     accent: "#06b6d4",
     link: "/tournaments",
   },
   {
     num: "03",
-    tag: "TACTICAL LAB",
-    title: "Adaptive Grandmaster Puzzle Arena",
-    desc: "Rated ELO progression, high-velocity Puzzle Rush, 3-Life Survival, and 11 tactical motif laboratories calibrated to your weaknesses.",
-    specs: ["2,500+ GM Motifs", "Pulse AI Curated", "ELO Skill Track"],
+    tag: "TACTICS",
+    archiveRef: "REPERTOIRE · 2,500+ MOTIFS",
+    titlePrefix: "Tactics &",
+    titleAccent: "Motifs",
+    desc: "Curated grandmaster combinations, timed Puzzle Rush runs, and motif-specific drill sets.",
     metric: "99.4%",
-    metricLabel: "Line Verification",
-    icon: Trophy,
+    metricLabel: "Drill Accuracy",
+    piece: "knight",
+    theme: "classic",
     accent: "#10b981",
     link: "/puzzles",
   },
   {
     num: "04",
-    tag: "AI SPARRING",
-    title: "Calibrated Neural Personalities",
-    desc: "Spar against distinct Stockfish-backed challengers ranging from club tacticians to relentless 2800+ ELO Grandmaster engines.",
-    specs: ["Adaptive ELO Tiers", "3D Board Studio", "Instant Post-Mortem"],
-    metric: "60 FPS",
-    metricLabel: "Interactive Studio",
-    icon: Swords,
+    tag: "AUTOMATA",
+    archiveRef: "SPARRING · 400-2400 ELO",
+    titlePrefix: "Sparring",
+    titleAccent: "Bots",
+    desc: "Calibrated AI opponents ranging from club sparring partners to master-strength engines.",
+    metric: "7 Bots",
+    metricLabel: "Calibrated ELO",
+    piece: "rook",
+    theme: "blitz",
     accent: "#f59e0b",
     link: "/bots",
   },
@@ -56,106 +67,91 @@ const CAPABILITY_ROWS = [
 
 export default function FeatureBand() {
   const [hoveredIdx, setHoveredIdx] = useState(null);
+  const { handleMouseMove } = useSpecularSpotlight();
+  const chapterRef = useGsapChapterReveal();
 
   return (
     <section className="cp-studio-section feature-band-section">
       <div className="cp-studio-container">
-        {/* Lumora-Inspired 4-Pill Interlocking Architectural Statement Band */}
-        <div className="lumora-pill-band" aria-label="We Engineer Grandmaster Telemetry">
-          <div className="lumora-pill pill-surface">
-            <span className="lumora-pill-kicker">00 // STUDIO</span>
-            <span className="lumora-pill-word">We Engineer</span>
-          </div>
-          <div className="lumora-pill pill-accent">
-            <ArrowRight size={34} strokeWidth={2.2} className="lumora-pill-arrow-svg" />
-          </div>
-          <div className="lumora-pill pill-ink">
-            <span className="lumora-pill-word">Grandmaster</span>
-          </div>
-          <div className="lumora-pill pill-outline">
-            <span className="lumora-pill-word">Telemetry.</span>
-            <span className="lumora-pill-dot" />
-          </div>
-        </div>
-
-        {/* Editorial Chapter Header */}
-        <div className="cp-chapter-header">
+        {/* Chapter Header */}
+        <div className="cp-chapter-header" ref={chapterRef}>
           <div className="cp-chapter-meta">
             <span className="cp-chapter-index">
               <span className="cp-chapter-index-dot" />
-              00 // ARCHITECTURE
+              EXHIBITION GALLERIES
             </span>
-            <span className="cp-chapter-subtag">FOUR CORE WORKSTATIONS</span>
           </div>
           <div className="cp-chapter-main">
-            <h2 className="cp-chapter-title">
-              Built Like a High-Frequency{" "}
-              <span className="cp-chapter-title-accent">Chess Trading Desk</span>
+            <h2 className="cp-chapter-title art-editorial-title">
+              Crafted for Speed & <span className="art-italic cp-chapter-title-accent">Precision</span>
             </h2>
             <p className="cp-chapter-desc">
-              Every module is engineered around compiled client-side WebAssembly, real-time tournament streams, and tactile studio controls.
+              Explore the four core interactive modules curated inside the ChessPulse studio.
             </p>
-          </div>
-          <div className="cp-chapter-actions">
-            <Link to="/customize" className="fb-studio-pill-link">
-              <span>Configure 3D Board Studio</span>
-              <ArrowUpRight size={15} />
-            </Link>
           </div>
         </div>
 
-        {/* Lumora-Style Numbered Hover-Sweep Rows (01 — 04) */}
-        <div className="capability-rows-list">
-          {CAPABILITY_ROWS.map((row, idx) => {
-            const Icon = row.icon;
+        {/* 4-Card Editorial Exhibition Gallery */}
+        <div className="exhibition-gallery-grid">
+          {EXHIBITION_ITEMS.map((item, idx) => {
             const isHovered = hoveredIdx === idx;
 
             return (
               <Link
-                to={row.link}
-                key={row.num}
-                className={`capability-row ${isHovered ? "is-hovered" : ""}`}
+                to={item.link}
+                key={item.num}
+                className={`exhibition-card interactive-specular-card ${isHovered ? "is-hovered" : ""}`}
                 onMouseEnter={() => setHoveredIdx(idx)}
                 onMouseLeave={() => setHoveredIdx(null)}
+                onMouseMove={handleMouseMove}
                 style={{
-                  "--row-accent": row.accent,
+                  "--card-accent": item.accent,
                 }}
               >
-                {/* Hover Sweep Fill Background */}
-                <div className="capability-row-sweep" aria-hidden="true" />
+                {/* Subtle Ambient Accent Glow */}
+                <div className="exhibition-card-glow" aria-hidden="true" />
 
-                {/* Column 1: Index + Tag + Icon */}
-                <div className="cap-col-index">
-                  <span className="cap-num">{row.num}</span>
-                  <div className="cap-icon-box">
-                    <Icon size={20} strokeWidth={1.9} />
+                {/* Card Top: Garamond Italic Numeral + Badge */}
+                <div className="exhibition-card-top">
+                  <span className="exhibition-card-num">{item.num}</span>
+                  <span className="exhibition-card-tag">{item.tag}</span>
+                </div>
+
+                {/* Center Visual: Curated Staunton Piece in Atmospheric Halo */}
+                <div className="exhibition-piece-window">
+                  <div className="exhibition-piece-halo" />
+                  <div className="exhibition-piece-archival-backdrop">
+                    <div className="piece-archival-ring" />
+                    <span className="piece-archival-stamp">{item.archiveRef}</span>
                   </div>
-                  <span className="cap-tag">{row.tag}</span>
-                </div>
-
-                {/* Column 2: Title + Editorial Description */}
-                <div className="cap-col-main">
-                  <h3 className="cap-title">{row.title}</h3>
-                  <p className="cap-desc">{row.desc}</p>
-                </div>
-
-                {/* Column 3: Technical Spec Pills */}
-                <div className="cap-col-specs">
-                  {row.specs.map((spec) => (
-                    <span key={spec} className="cap-spec-chip">
-                      {spec}
-                    </span>
-                  ))}
-                </div>
-
-                {/* Column 4: Live Telemetry Metric + Magnetic Arrow */}
-                <div className="cap-col-telemetry">
-                  <div className="cap-metric-block">
-                    <span className="cap-metric-val">{row.metric}</span>
-                    <span className="cap-metric-lbl">{row.metricLabel}</span>
+                  <div className="exhibition-piece-render">
+                    <StauntonPiece
+                      type={item.piece}
+                      theme={item.theme}
+                      size={96}
+                      uid={`exhibition-${item.num}`}
+                    />
                   </div>
-                  <div className="cap-arrow-circle">
-                    <ArrowUpRight size={18} />
+                </div>
+
+                {/* Content: Editorial Title & 1-line summary */}
+                <div className="exhibition-card-body">
+                  <h3 className="exhibition-card-title">
+                    {item.titlePrefix}{" "}
+                    <span className="art-italic exhibition-title-italic">{item.titleAccent}</span>
+                  </h3>
+                  <p className="exhibition-card-desc">{item.desc}</p>
+                </div>
+
+                {/* Bottom Footer: Metric Telemetry + Action Pill */}
+                <div className="exhibition-card-footer">
+                  <div className="exhibition-metric-wrap">
+                    <span className="exhibition-metric-val">{item.metric}</span>
+                    <span className="exhibition-metric-lbl">{item.metricLabel}</span>
+                  </div>
+                  <div className="exhibition-arrow-pill" aria-hidden="true">
+                    <span>View</span>
+                    <ArrowUpRight size={15} />
                   </div>
                 </div>
               </Link>

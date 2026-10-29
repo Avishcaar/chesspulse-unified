@@ -7,6 +7,7 @@ import { getStockfishService } from "../../services/stockfishService";
 import { greatestGames } from "../../data/greatestGames";
 import { useBoardCustomization } from "../../contexts/BoardCustomizationContext";
 import { getCustomPieces } from "../../utils/pieceSets";
+import { useGsapChapterReveal } from "../../utils/useGsapReveal";
 import {
   Play,
   Pause,
@@ -14,11 +15,13 @@ import {
   SkipForward,
   ChevronLeft,
   ChevronRight,
-  Sparkles,
+  Shuffle,
   ArrowUpRight,
-  Activity,
   Terminal,
   Code2,
+  SlidersHorizontal,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 
 function parsePGN(pgn) {
@@ -50,18 +53,20 @@ function parsePGN(pgn) {
 }
 
 export default function EvalSection() {
+  const chapterRef = useGsapChapterReveal();
   const [pgn, setPgn] = useState("");
   const [tags, setTags] = useState({});
   const [moves, setMoves] = useState([]);
   const startFen = new Chess().fen();
   const [fenList, setFenList] = useState([startFen]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [evaluation, setEvaluation] = useState(0.35);
-  const [fillHeight, setFillHeight] = useState("53%");
+  const [evaluation, setEvaluation] = useState(0.18);
+  const [fillHeight, setFillHeight] = useState("52%");
   const [playing, setPlaying] = useState(false);
   const [isEvaluating, setIsEvaluating] = useState(false);
   const [activePreset, setActivePreset] = useState(0);
   const [showPgnDrawer, setShowPgnDrawer] = useState(false);
+  const [showScoresheet, setShowScoresheet] = useState(false);
 
   const playRef = useRef(null);
   const chessRef = useRef(null);
@@ -151,7 +156,7 @@ export default function EvalSection() {
       const targetIdx =
         typeof initialMoveIdx === "number"
           ? Math.min(initialMoveIdx, fenArr.length - 1)
-          : Math.min(24, fenArr.length - 1);
+          : 0;
       setCurrentIndex(targetIdx >= 0 ? targetIdx : 0);
 
       const targetFen = fenArr[targetIdx] || fenArr[fenArr.length - 1];
@@ -170,7 +175,7 @@ export default function EvalSection() {
         console.error("Failed to initialize Stockfish:", error);
       }
       if (greatestGames && greatestGames[0]) {
-        handleEvaluate(greatestGames[0].pgn, 24);
+        handleEvaluate(greatestGames[0].pgn, 0);
       }
     };
     initEngine();
@@ -184,14 +189,14 @@ export default function EvalSection() {
   const loadPresetGame = (index) => {
     setActivePreset(index);
     if (greatestGames && greatestGames[index]) {
-      handleEvaluate(greatestGames[index].pgn, 22);
+      handleEvaluate(greatestGames[index].pgn, 0);
     }
   };
 
   const loadRandomGame = () => {
     const randIdx = Math.floor(Math.random() * greatestGames.length);
     setActivePreset(randIdx);
-    handleEvaluate(greatestGames[randIdx].pgn, 20);
+    handleEvaluate(greatestGames[randIdx].pgn, 0);
   };
 
   useEffect(() => {
@@ -267,31 +272,24 @@ export default function EvalSection() {
       : "+0.00";
 
   return (
-    <section className="cp-studio-section eval-section-wrapper">
+    <section className="cp-studio-section eval-section-wrapper" id="eval-analysis-section">
       <div className="cp-studio-container">
-        {/* Lumora Editorial Chapter Header */}
-        <div className="cp-chapter-header">
+        {/* Chapter Header */}
+        <div className="cp-chapter-header" ref={chapterRef}>
           <div className="cp-chapter-meta">
             <span className="cp-chapter-index">
               <span className="cp-chapter-index-dot" />
-              01 // ENGINE WORKSTATION
+              ANALYSIS
             </span>
-            <span className="cp-chapter-subtag">STOCKFISH 17 WASM · NNUE</span>
           </div>
           <div className="cp-chapter-main">
             <h2 className="cp-chapter-title">
-              Interactive Centipawn{" "}
-              <span className="cp-chapter-title-accent">Telemetry Cockpit</span>
+              Interactive Game{" "}
+              <span className="art-italic cp-chapter-title-accent">Analysis</span>
             </h2>
             <p className="cp-chapter-desc">
-              Step through immortal grandmaster games or inject custom PGN notation to compute real-time WebAssembly engine evaluations.
+              Step through famous grandmaster games with live Stockfish 17 evaluation.
             </p>
-          </div>
-          <div className="cp-chapter-actions">
-            <Link to="/analysis" className="eval-workstation-cta">
-              <span>Launch Full Depth-22 Lab</span>
-              <ArrowUpRight size={16} />
-            </Link>
           </div>
         </div>
 
@@ -307,7 +305,7 @@ export default function EvalSection() {
               </div>
               <span className="cp-window-title">
                 <Terminal size={13} />
-                <span>stockfish-17-nnue.wasm — {isEvaluating ? "computing vectors..." : "ready"}</span>
+                <span>Stockfish 17 — {isEvaluating ? "Calculating..." : "Ready"}</span>
               </span>
             </div>
 
@@ -339,7 +337,7 @@ export default function EvalSection() {
                 className="eval-tab-btn tab-random"
                 onClick={loadRandomGame}
               >
-                <Sparkles size={12} />
+                <Shuffle size={12} />
                 <span>Random GM</span>
               </button>
               <button
@@ -478,28 +476,36 @@ export default function EvalSection() {
               </div>
             </div>
 
-            {/* Right Pane: Telemetry HUD + Match Header + 2-Column FIDE Scoresheet */}
+            {/* Right Pane: Telemetry HUD + Match Header + 2-Column FIDE Scoresheet (Collapsible) */}
             <div className="eval-telemetry-pane">
+              {/* Header with Declutter Focus / Scoresheet Toggle */}
+              <div className="eval-pane-header">
+                <div className="eval-pane-title">
+                  <span>ENGINE EVALUATION</span>
+                </div>
+                <button
+                  type="button"
+                  className={`eval-toggle-scoresheet-btn ${showScoresheet ? "active" : ""}`}
+                  onClick={() => setShowScoresheet((v) => !v)}
+                  title={showScoresheet ? "Switch to Focus Mode" : "Expand Move Scoresheet"}
+                >
+                  <SlidersHorizontal size={12} />
+                  <span>{showScoresheet ? "Focus Mode" : `Scoresheet (${moves.length})`}</span>
+                  {showScoresheet ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+                </button>
+              </div>
+
               {/* Top Telemetry Scorebug */}
               <div className="eval-telemetry-hud">
                 <div className="hud-metric-row">
                   <div className="hud-status">
-                    <Activity size={15} className="hud-icon" />
                     <span className="hud-status-text">
                       {isEvaluating
-                        ? "COMPUTING NNUE VECTORS..."
-                        : "STOCKFISH 17 CENTIPAWN ADVANTAGE"}
+                        ? "Evaluating..."
+                        : "Stockfish 17 Advantage"}
                     </span>
                   </div>
                   <div className="hud-eval-value">{formattedEval}</div>
-                </div>
-
-                <div className="hud-eval-track" aria-hidden="true">
-                  <div
-                    className="hud-eval-fill"
-                    style={{ width: fillHeight }}
-                  />
-                  <div className="hud-center-marker" />
                 </div>
 
                 {/* Match Players & Metadata Strip */}
@@ -523,50 +529,83 @@ export default function EvalSection() {
                 </div>
               </div>
 
-              {/* 2-Column Tabular FIDE Scoresheet */}
-              <div className="eval-scoresheet">
-                <div className="scoresheet-header">
-                  <span>#</span>
-                  <span>WHITE</span>
-                  <span>BLACK</span>
-                </div>
-
-                <div className="scoresheet-body">
-                  {movePairs.length === 0 ? (
-                    <div className="eval-moves-empty">
-                      Select a masterpiece above or paste PGN to inspect the move tree.
+              {/* Collapsible View: Clean Focus Mode vs Full FIDE Scoresheet */}
+              {!showScoresheet ? (
+                <div className="eval-focus-dock">
+                  <div className="eval-focus-ply-card">
+                    <div className="focus-ply-meta">
+                      <span className="focus-ply-label">ACTIVE POSITION</span>
+                      <span className="focus-ply-san">
+                        {currentIndex > 0
+                          ? `${Math.ceil(currentIndex / 2)}. ${moves[currentIndex - 1]}`
+                          : "Start Position"}
+                      </span>
                     </div>
-                  ) : (
-                    movePairs.map((pair) => (
-                      <div key={pair.moveNumber} className="scoresheet-row">
-                        <span className="scoresheet-num">{pair.moveNumber}.</span>
-                        <button
-                          type="button"
-                          className={`scoresheet-ply ${
-                            currentIndex === pair.white.index ? "active" : ""
-                          }`}
-                          onClick={() => gotoIndex(pair.white.index)}
-                        >
-                          {pair.white.san}
-                        </button>
-                        {pair.black ? (
+                    <div className="focus-ply-context">
+                      <span className="focus-context-lbl">
+                        PLY {currentIndex} / {moves.length}
+                      </span>
+                      <span className="focus-context-eval">
+                        {isEvaluating ? "Computing..." : `Eval: ${formattedEval}`}
+                      </span>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    className="eval-expand-scoresheet-cta"
+                    onClick={() => setShowScoresheet(true)}
+                  >
+                    <span>Inspect Full FIDE Scoresheet ({movePairs.length} Moves · {moves.length} Plies)</span>
+                    <ChevronDown size={14} />
+                  </button>
+                </div>
+              ) : (
+                /* 2-Column Tabular FIDE Scoresheet */
+                <div className="eval-scoresheet">
+                  <div className="scoresheet-header">
+                    <span>#</span>
+                    <span>WHITE</span>
+                    <span>BLACK</span>
+                  </div>
+
+                  <div className="scoresheet-body">
+                    {movePairs.length === 0 ? (
+                      <div className="eval-moves-empty">
+                        Select a masterpiece above or paste PGN to inspect the move tree.
+                      </div>
+                    ) : (
+                      movePairs.map((pair) => (
+                        <div key={pair.moveNumber} className="scoresheet-row">
+                          <span className="scoresheet-num">{pair.moveNumber}.</span>
                           <button
                             type="button"
                             className={`scoresheet-ply ${
-                              currentIndex === pair.black.index ? "active" : ""
+                              currentIndex === pair.white.index ? "active" : ""
                             }`}
-                            onClick={() => gotoIndex(pair.black.index)}
+                            onClick={() => gotoIndex(pair.white.index)}
                           >
-                            {pair.black.san}
+                            {pair.white.san}
                           </button>
-                        ) : (
-                          <span className="scoresheet-ply empty">—</span>
-                        )}
-                      </div>
-                    ))
-                  )}
+                          {pair.black ? (
+                            <button
+                              type="button"
+                              className={`scoresheet-ply ${
+                                currentIndex === pair.black.index ? "active" : ""
+                              }`}
+                              onClick={() => gotoIndex(pair.black.index)}
+                            >
+                              {pair.black.san}
+                            </button>
+                          ) : (
+                            <span className="scoresheet-ply empty">—</span>
+                          )}
+                        </div>
+                      ))
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>

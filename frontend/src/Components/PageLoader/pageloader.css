@@ -129,7 +129,7 @@
 .loader-percent {
   font-size: clamp(1.8rem, 4vw, 3rem);
   font-weight: 400;
-  color: #8b5cf6;
+  color: #f43f5e;
 }
 
 .loader-progress-track {
@@ -147,8 +147,8 @@
   top: 0;
   left: 0;
   bottom: 0;
-  background: linear-gradient(90deg, #8b5cf6, #06b6d4, #10b981);
-  box-shadow: 0 0 16px rgba(139, 92, 246, 0.8);
+  background: linear-gradient(90deg, #f43f5e, #06b6d4, #10b981);
+  box-shadow: 0 0 16px rgba(244, 63, 94, 0.8);
   transition: width 0.08s linear;
 }
 

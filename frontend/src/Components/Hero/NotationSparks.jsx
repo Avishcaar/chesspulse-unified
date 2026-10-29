@@ -43,7 +43,12 @@ export default function NotationSparks() {
       }, duration * 1000);
     }, 450);
 
-    return () => clearInterval(intervalId);
+    return () => {
+      clearInterval(intervalId);
+      if (container) {
+        container.innerHTML = "";
+      }
+    };
   }, []);
 
   return <div id="notation-sparks-container" ref={containerRef} aria-hidden="true" />;

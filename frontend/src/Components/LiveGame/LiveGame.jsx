@@ -5,62 +5,73 @@ import { getCustomPieces } from "../../utils/pieceSets";
 import { useBoardCustomization } from "../../contexts/BoardCustomizationContext";
 import { Chess } from "chess.js";
 import { Radio, ExternalLink, Zap, Clock, ArrowUpRight, RefreshCw } from "lucide-react";
+import { useSpecularSpotlight } from "../../utils/useSpecularSpotlight";
+import { useGsapChapterReveal } from "../../utils/useGsapReveal";
 import "./livegame.css";
 
 const FIXED_SPEEDS = [
   {
     speed: "bullet",
-    channel: "CH-01 // BULLET",
-    title: "Bullet Division",
+    channel: "BULLET",
+    title: "Bullet",
     timeControl: "1+0 · 2+1",
     accent: "#06b6d4",
     icon: Zap,
   },
   {
     speed: "blitz",
-    channel: "CH-02 // BLITZ",
-    title: "Blitz Division",
+    channel: "BLITZ",
+    title: "Blitz",
     timeControl: "3+0 · 3+2",
-    accent: "#a855f7",
+    accent: "#f43f5e",
     icon: Radio,
   },
   {
     speed: "rapid",
-    channel: "CH-03 // RAPID",
-    title: "Rapid Division",
+    channel: "RAPID",
+    title: "Rapid",
     timeControl: "10+0 · 15+10",
     accent: "#10b981",
     icon: Clock,
   },
 ];
 
+function extractLichessGameId(pgn) {
+  const explicitId = pgn.match(/^\[GameId "([^"]+)"\]/m)?.[1];
+  if (explicitId) return explicitId;
+
+  const siteUrl = pgn.match(/^\[Site "([^"]+)"\]/m)?.[1];
+  if (!siteUrl) return null;
+
+  try {
+    const pathParts = new URL(siteUrl).pathname.split("/").filter(Boolean);
+    return pathParts.at(-1) || null;
+  } catch {
+    return null;
+  }
+}
+
 export default function LiveGame() {
+  const chapterRef = useGsapChapterReveal();
   return (
-    <section className="cp-studio-section live-row-wrapper">
+    <section className="cp-studio-section live-row-wrapper" id="live-broadcasts-section">
       <div className="cp-studio-container">
-        {/* Lumora Editorial Chapter Header */}
-        <div className="cp-chapter-header">
+        {/* Chapter Header */}
+        <div className="cp-chapter-header" ref={chapterRef}>
           <div className="cp-chapter-meta">
             <span className="cp-chapter-index">
               <span className="cp-chapter-index-dot" />
-              02 // LIVE ARENA STREAMS
+              LIVE
             </span>
-            <span className="cp-chapter-subtag">WEBSOCKET NDJSON PIPELINE</span>
           </div>
           <div className="cp-chapter-main">
             <h2 className="cp-chapter-title">
-              Grandmaster{" "}
-              <span className="cp-chapter-title-accent">Broadcast TV</span>
+              Speed Chess{" "}
+              <span className="art-italic cp-chapter-title-accent">Live</span>
             </h2>
             <p className="cp-chapter-desc">
-              Synchronized sub-second board telemetry from live high-Elo arena battles across Bullet, Blitz, and Rapid divisions.
+              Spectate live Bullet, Blitz, and Rapid games with every move streamed to the board.
             </p>
-          </div>
-          <div className="cp-chapter-actions">
-            <Link to="/tournaments" className="live-tournaments-cta">
-              <span>Official FIDE Broadcasts</span>
-              <ArrowUpRight size={15} />
-            </Link>
           </div>
         </div>
 
@@ -100,6 +111,7 @@ const LiveGameCard = React.memo(function LiveGameCard({
   const [gameId, setGameId] = useState(null);
   const { darkSquareColor, lightSquareColor, showNotation, pieceSet, animationSpeed, arrowColor } =
     useBoardCustomization();
+  const { handleMouseMove } = useSpecularSpotlight();
   const [error, setError] = useState(null);
   const [lastMove, setLastMove] = useState(null);
 
@@ -274,7 +286,7 @@ const LiveGameCard = React.memo(function LiveGameCard({
         setWhite({ name: whiteName, elo: whiteElo });
         setBlack({ name: blackName, elo: blackElo });
 
-        const id = text.match(/\[Site "https:\/\/lichess\.org\/([^"]+)"\]/)?.[1];
+        const id = extractLichessGameId(text);
         if (!id) {
           setError("Channel standby");
           return;
@@ -314,7 +326,11 @@ const LiveGameCard = React.memo(function LiveGameCard({
   }, [lastMove]);
 
   return (
-    <div className="live-stream-card" style={{ "--div-accent": accent }}>
+    <div
+      className="live-stream-card interactive-specular-card"
+      onMouseMove={handleMouseMove}
+      style={{ "--div-accent": accent }}
+    >
       {/* Broadcast Monitor Header */}
       <div className="stream-card-header">
         <div className="stream-type-pill">

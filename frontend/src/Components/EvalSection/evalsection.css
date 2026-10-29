@@ -323,7 +323,6 @@ body[data-theme="light"] .eval-telemetry-hud {
 .hud-status {
   display: flex;
   align-items: center;
-  gap: 8px;
   font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 0.72rem;
   font-weight: 700;
@@ -337,29 +336,6 @@ body[data-theme="light"] .eval-telemetry-hud {
   font-weight: 800;
   color: #10b981;
   text-shadow: 0 0 14px rgba(16, 185, 129, 0.35);
-}
-
-.hud-eval-track {
-  height: 8px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.06);
-  position: relative;
-  overflow: hidden;
-}
-
-.hud-eval-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #ef4444 0%, #38bdf8 50%, #10b981 100%);
-  transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.hud-center-marker {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  width: 2px;
-  background: rgba(255, 255, 255, 0.5);
 }
 
 .eval-match-banner {
@@ -535,5 +511,169 @@ body[data-theme="light"] .scoresheet-header {
   }
   .eval-board-frame {
     margin: 0 auto;
+  }
+}
+
+/* Declutter & Focus Mode Extensions */
+.eval-pane-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: -4px;
+}
+
+.eval-pane-title {
+  display: flex;
+  align-items: center;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.eval-toggle-scoresheet-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
+  border-radius: 6px;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.68rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body[data-theme="light"] .eval-toggle-scoresheet-btn {
+  background: #f1f5f9;
+  border-color: rgba(15, 23, 42, 0.1);
+  color: #475569;
+}
+
+.eval-toggle-scoresheet-btn:hover,
+.eval-toggle-scoresheet-btn.active {
+  border-color: var(--arena-accent);
+  color: var(--arena-accent);
+  background: rgba(244, 63, 94, 0.08);
+  transform: translateY(-1px);
+}
+
+.eval-focus-dock {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: fadeInFocus 0.25s ease-out;
+}
+
+@keyframes fadeInFocus {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.eval-focus-ply-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.15rem 1.25rem;
+  background: rgba(0, 0, 0, 0.24);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+}
+
+body[data-theme="light"] .eval-focus-ply-card {
+  background: #ffffff;
+  border-color: rgba(15, 23, 42, 0.08);
+}
+
+.focus-ply-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.focus-ply-label {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+.focus-ply-san {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+
+.focus-ply-context {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.focus-context-lbl {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+.focus-context-eval {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #10b981;
+}
+
+.eval-expand-scoresheet-cta {
+  width: fit-content;
+  max-width: 100%;
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.58rem 0.78rem;
+  border-radius: 8px;
+  background: rgba(var(--arena-rgb), 0.08);
+  border: 1px solid rgba(var(--arena-rgb), 0.28);
+  color: var(--text);
+  font-family: var(--font-sans, 'Plus Jakarta Sans', sans-serif);
+  font-size: 0.77rem;
+  font-weight: 600;
+  line-height: 1.25;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body[data-theme="light"] .eval-expand-scoresheet-cta {
+  background: #fff;
+  border-color: rgba(var(--arena-rgb), 0.26);
+  color: #424740;
+}
+
+.eval-expand-scoresheet-cta:hover {
+  border-color: var(--arena-accent);
+  color: var(--arena-accent);
+  background: rgba(244, 63, 94, 0.06);
+  transform: translateY(-1px);
+}
+
+.eval-expand-scoresheet-cta svg {
+  flex: 0 0 auto;
+  color: var(--arena-accent);
+}
+
+@media (max-width: 520px) {
+  .eval-expand-scoresheet-cta {
+    font-size: 0.72rem;
+    padding: 0.52rem 0.65rem;
   }
 }

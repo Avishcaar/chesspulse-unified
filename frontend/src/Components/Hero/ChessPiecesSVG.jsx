@@ -10,14 +10,14 @@ const THEME_PALETTES = {
   },
   blitz: {
     stop1: "#e9d5ff",
-    stop2: "#a855f7",
+    stop2: "#f43f5e",
     stop3: "#4c1d95",
     stroke: "#f3e8ff",
     glow: "rgba(168, 85, 247, 0.55)",
   },
   engine: {
     stop1: "#e9d5ff",
-    stop2: "#a855f7",
+    stop2: "#f43f5e",
     stop3: "#4c1d95",
     stroke: "#f3e8ff",
     glow: "rgba(168, 85, 247, 0.55)",

@@ -2,26 +2,25 @@ import React from "react";
 import PageLoader from "../../Components/PageLoader/PageLoader";
 import Hero from "../../Components/Hero/Hero";
 import FeatureBand from "../../Components/FeatureBand/FeatureBand";
-import MetricsStrip from "../../Components/MetricsStrip/MetricsStrip";
+import ChessArtCinematic from "../../Components/ChessArtCinematic/ChessArtCinematic";
 import EvalSection from "../../Components/EvalSection/EvalSection";
 import LiveGame from "../../Components/LiveGame/LiveGame";
 import Rankings from "../../Components/Rankings/Rankings";
-import RecruiterCTA from "../../Components/RecruiterCTA/RecruiterCTA";
 
-export default function Home({ onOpenSandbox }) {
+export default function Home() {
   return (
     <>
-      {/* Intro Telemetry Loader (Counts 000 -> 100 and slides up like Lumora) */}
+      {/* Intro Telemetry Loader */}
       <PageLoader />
 
-      {/* Hero with Interactive Canvas, Typographic Watermark & Showcase Card */}
-      <Hero onOpenSandbox={onOpenSandbox} />
+      {/* Hero with Interactive Canvas, Typographic Watermark & 3D Centerpiece */}
+      <Hero />
 
-      {/* 4-Pill Architectural Band */}
+      {/* 4-Card Curated Exhibition Gallery */}
       <FeatureBand />
 
-      {/* Scroll-Driven Grandmaster Telemetry Metrics */}
-      <MetricsStrip />
+      {/* Interactive Living Canvas: 2.5D Optical Parallax & Cinematic Story */}
+      <ChessArtCinematic />
 
       {/* Interactive Telemetry Workstation Preview */}
       <EvalSection />
@@ -32,8 +31,6 @@ export default function Home({ onOpenSandbox }) {
       {/* World Grandmaster Leaderboard */}
       <Rankings />
 
-      {/* High-Impact Recruiter Fast-Track Banner */}
-      <RecruiterCTA onOpenSandbox={onOpenSandbox} />
     </>
   );
 }

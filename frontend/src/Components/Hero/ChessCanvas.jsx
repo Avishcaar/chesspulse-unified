@@ -74,9 +74,9 @@ export default function ChessCanvas() {
         document.body.getAttribute("data-theme") === "dark" ||
         !document.documentElement.classList.contains("light");
 
-      const nodeColor = isDark ? "rgba(139, 92, 246, 0.4)" : "rgba(124, 58, 237, 0.25)";
-      const lineColor = isDark ? "rgba(6, 182, 212, 0.12)" : "rgba(2, 132, 199, 0.08)";
-      const activeLineColor = isDark ? "rgba(139, 92, 246, 0.35)" : "rgba(124, 58, 237, 0.25)";
+      const nodeColor = isDark ? "rgba(244, 63, 94, 0.35)" : "rgba(190, 18, 60, 0.25)";
+      const lineColor = isDark ? "rgba(244, 63, 94, 0.08)" : "rgba(190, 18, 60, 0.06)";
+      const activeLineColor = isDark ? "rgba(251, 113, 133, 0.35)" : "rgba(225, 29, 72, 0.25)";
 
       // Update positions
       nodes.forEach((n) => {

@@ -31,16 +31,15 @@
 }
 
 .live-stream-card {
-  background: linear-gradient(165deg, rgba(19, 25, 42, 0.86) 0%, rgba(9, 12, 22, 0.96) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: var(--bg2);
+  border: 1px solid var(--border);
   border-radius: 22px;
   padding: 1.35rem;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  box-shadow:
-    0 20px 50px -12px rgba(0, 0, 0, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.45),
+              inset 0 1px 0 rgba(255, 255, 255, 0.08);
   position: relative;
   overflow: hidden;
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
@@ -58,9 +57,9 @@
 }
 
 body[data-theme="light"] .live-stream-card {
-  background: #ffffff;
-  border-color: rgba(15, 23, 42, 0.1);
-  box-shadow: 0 16px 40px -10px rgba(15, 23, 42, 0.06);
+  background: var(--bg-soft);
+  border-color: var(--border);
+  box-shadow: 0 16px 40px -10px rgba(28, 25, 23, 0.06);
 }
 
 .live-stream-card:hover {
