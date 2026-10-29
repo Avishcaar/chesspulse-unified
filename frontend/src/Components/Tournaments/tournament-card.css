@@ -1,9 +1,9 @@
 /* Compact Tournament Card */
 .fide-tournament-card.compact {
-    background: rgba(17, 24, 39, 0.72);
+    background: var(--bg2); border: 1px solid var(--border);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+
     border-radius: 18px;
     padding: 0;
     transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
@@ -42,7 +42,7 @@
 }
 
 .tournament-image-compact.variant-violet {
-    --card-rgb: 139, 92, 246;
+    --card-rgb: 244, 63, 94;
     --card-hex: #a78bfa;
 }
 
@@ -258,7 +258,7 @@
     margin-top: auto;
     padding: 10px 14px;
     background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+
     border-radius: 10px;
     color: #e2e8f0;
     font-weight: 600;
@@ -300,8 +300,8 @@
    ========================================================================== */
 body[data-theme="light"] .fide-tournament-card.compact,
 html[data-theme="light"] .fide-tournament-card.compact {
-    background: #ffffff;
-    border-color: rgba(15, 23, 42, 0.1);
+    background: var(--bg-soft);
+    border-color: var(--border);
     box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06), inset 0 1px 0 #ffffff;
 }
 

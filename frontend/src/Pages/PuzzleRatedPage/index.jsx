@@ -10,7 +10,6 @@ import {
   TrendingUp,
   Trophy,
   Target,
-  Sparkles,
   ArrowRight,
   RotateCcw,
   BarChart3,
@@ -196,13 +195,13 @@ const PuzzleRatedPage = () => {
         <PageAmbient watermark="RATED" theme="classic" />
 
         <PageHeader
-          badge="RATED TRACK COMPLETE · SESSION TELEMETRY"
-          title="Session"
+          badge="SESSION COMPLETE"
+          title="Rated"
           accent="Summary"
-          subtitle="Review your tactical accuracy, rating shifts, and AI Coach calculation breakdown."
+          subtitle="Review your tactical performance and rating update below."
           theme="classic"
           backTo="/puzzles"
-          backLabel="Tactical Hub"
+          backLabel="Tactics Hub"
         />
 
         <PuzzleSubnav />
@@ -326,13 +325,13 @@ const PuzzleRatedPage = () => {
         <PageAmbient watermark="RATED" theme="classic" />
 
         <PageHeader
-          badge="DYNAMIC MATCHMAKING · FIDE K=32 FORMULA"
+          badge="RATED TRACK"
           title="Rated"
-          accent="ELO Track"
-          subtitle="Measure your tactical calculation strength against dynamically matched puzzles. Rating updates live with every solve."
+          accent="Puzzles"
+          subtitle="Solve matched puzzles that adapt to your tactical rating."
           theme="classic"
           backTo="/puzzles"
-          backLabel="Tactical Hub"
+          backLabel="Tactics Hub"
         />
 
         <PuzzleSubnav />
@@ -455,10 +454,10 @@ const PuzzleRatedPage = () => {
       <PageAmbient watermark="RATED" theme="classic" />
 
       <PageHeader
-        badge="LIVE RATED SESSION · ACTIVE ENGINE"
+        badge="RATED SESSION"
         title="Rated"
-        accent="Studio"
-        subtitle="Calculate deeply. Find the single winning continuation."
+        accent="Puzzles"
+        subtitle="Find the winning continuation."
         theme="classic"
         rightElement={
           <button

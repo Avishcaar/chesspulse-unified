@@ -69,10 +69,10 @@ const LeaderboardPage = () => {
             <PageAmbient watermark="STANDINGS" theme="gold" />
 
             <PageHeader
-                badge="GLOBAL TELEMETRY STANDINGS • TOP 50"
+                badge="LEADERBOARD"
                 title="Global"
                 accent="Leaderboard"
-                subtitle="Compare tactical accuracy, streaks, and ratings across the ChessPulse community."
+                subtitle="Compare tactical ratings, streaks, and records across top solvers."
                 theme="gold"
                 backTo="/puzzles"
                 backLabel="Tactical Hub"

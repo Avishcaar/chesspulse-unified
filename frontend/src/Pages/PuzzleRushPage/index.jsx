@@ -19,8 +19,7 @@ import {
   ShieldCheck,
   FastForward,
   CheckCircle2,
-  XCircle,
-  Sparkles
+  XCircle
 } from 'lucide-react';
 import './puzzleRush.css';
 
@@ -218,13 +217,13 @@ const PuzzleRushPage = () => {
         <PageAmbient watermark="RUSH" theme="gold" />
 
         <PageHeader
-          badge="SPRINT TIMEOUT · FINAL TELEMETRY"
+          badge="RUSH COMPLETE"
           title="Puzzle Rush"
           accent="Summary"
-          subtitle="Time has expired! Inspect your high-velocity calculation metrics and AI Coach evaluation."
+          subtitle="Time has expired. Review your score and accuracy below."
           theme="gold"
           backTo="/puzzles"
-          backLabel="Tactical Hub"
+          backLabel="Tactics Hub"
         />
 
         <PuzzleSubnav />
@@ -350,13 +349,13 @@ const PuzzleRushPage = () => {
         <PageAmbient watermark="RUSH" theme="gold" />
 
         <PageHeader
-          badge="HIGH-VELOCITY SPRINT · REAL-TIME SPEED DRILL"
+          badge="PUZZLE RUSH"
           title="Puzzle"
           accent="Rush"
-          subtitle="Race against the clock to solve as many tactical combinations as possible before time expires."
+          subtitle="Solve as many tactical puzzles as you can before time expires."
           theme="gold"
           backTo="/puzzles"
-          backLabel="Tactical Hub"
+          backLabel="Tactics Hub"
         />
 
         <PuzzleSubnav />
@@ -475,10 +474,10 @@ const PuzzleRushPage = () => {
       <PageAmbient watermark="RUSH" theme="gold" />
 
       <PageHeader
-        badge="ACTIVE SPRINT · HIGH-VELOCITY PULSE"
+        badge="ACTIVE RUN"
         title="Puzzle"
         accent="Rush"
-        subtitle="Speed calculation session in progress. Clock is ticking!"
+        subtitle="Solve quickly — the clock is ticking."
         theme="gold"
         rightElement={
           <button

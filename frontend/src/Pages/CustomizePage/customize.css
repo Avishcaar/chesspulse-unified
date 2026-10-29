@@ -4,7 +4,7 @@
 
 .customize-page.cp-subpage {
   min-height: calc(100vh - 70px);
-  background: #07090f;
+  background: var(--bg);
   color: var(--text, #f8fafc);
   padding: 1.5rem 2rem 3rem;
   font-family: var(--font-sans, 'Inter', -apple-system, BlinkMacSystemFont, sans-serif);

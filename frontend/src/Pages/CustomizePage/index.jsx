@@ -12,9 +12,7 @@ import {
   RotateCcw,
   Play,
   Check,
-  Sparkles,
   Layers,
-  Activity,
   Music,
   CheckCircle2
 } from 'lucide-react';
@@ -287,53 +285,20 @@ export default function CustomizePage() {
       <PageAmbient watermark="STUDIO" theme="gold" />
 
       <div className="customize-container">
-        {/* ====================================================================
-            PAGE HEADER & TOP TELEMETRY RIBBON
-            ==================================================================== */}
+        {/* PAGE HEADER */}
         <div className="studio-topbar-wrapper">
           <PageHeader
-            badge="HARDWARE TELEMETRY · BOARD CALIBRATION ENGINE"
-            title="Board Studio"
-            accent="Studio"
-            subtitle="Calibrate square pigments, Staunton piece geometry, coordinate notation, and acoustic feedback."
+            badge="CUSTOMIZATION"
+            title="Board"
+            accent="Customizer"
             theme="gold"
             rightElement={
               <div className="studio-save-badge">
                 <span className={`live-pulse-dot ${saveIndicator ? 'active' : ''}`} />
-                <span>{saveIndicator ? 'SAVED TO LOCAL STORAGE' : 'AUTO-SAVED IN BROWSER'}</span>
+                <span>{saveIndicator ? 'Saved' : 'Auto-Saved'}</span>
               </div>
             }
           />
-
-          {/* Quick HUD Metrics */}
-          <div className="cp-console-window studio-hud-ribbon">
-            <div className="studio-hud-cell">
-              <span className="hud-code">PIGMENT // PALETTE</span>
-              <span className="hud-val gold">{activePreset ? activePreset.name : 'Custom Matrix'}</span>
-              <span className="hud-lbl">{darkSquareColor} / {lightSquareColor}</span>
-            </div>
-            <div className="studio-hud-cell">
-              <span className="hud-code">GEOMETRY // PIECE SET</span>
-              <span className="hud-val cyan">
-                {PIECE_SETS.find((s) => s.id === pieceSet)?.name || pieceSet}
-              </span>
-              <span className="hud-lbl">High-Precision Vector Assets</span>
-            </div>
-            <div className="studio-hud-cell">
-              <span className="hud-code">ACOUSTICS // ENGINE</span>
-              <span className="hud-val emerald">
-                {soundEnabled ? (SOUND_THEMES.find((t) => t.id === soundTheme)?.name || soundTheme) : 'Muted'}
-              </span>
-              <span className="hud-lbl">{soundEnabled ? 'Low-Latency Audio Relay' : 'Audio Disabled'}</span>
-            </div>
-            <div className="studio-hud-cell">
-              <span className="hud-code">ANIMATION // CADENCE</span>
-              <span className="hud-val violet">
-                {animationSpeed === 0 ? 'Instant' : `${animationSpeed}ms`}
-              </span>
-              <span className="hud-lbl">Square Translation Time</span>
-            </div>
-          </div>
         </div>
 
         {/* ====================================================================
@@ -630,7 +595,7 @@ export default function CustomizePage() {
                       <div className="audio-test-bar cp-console-window">
                         <div className="test-bar-header">
                           <span className="test-bar-title">
-                            <Sparkles size={13} />
+                            <Volume2 size={13} />
                             <span>TEST ACOUSTIC CUES ({SOUND_THEMES.find((t) => t.id === soundTheme)?.name || soundTheme})</span>
                           </span>
                           <span className="test-bar-hint">Click to listen</span>
@@ -835,7 +800,7 @@ export default function CustomizePage() {
                 </div>
 
                 <div className="footer-hint-text">
-                  <span>💡 Drag pieces or click to test movement & acoustics</span>
+                  <span>Drag pieces or click to test movement & acoustics</span>
                 </div>
               </div>
             </div>

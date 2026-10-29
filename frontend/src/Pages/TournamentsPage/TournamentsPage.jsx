@@ -7,7 +7,7 @@ import TournamentSearch from "../../Components/Tournaments/TournamentSearch";
 import TournamentLoader from "../../Components/Tournaments/TournamentLoader";
 import RoundGamesModal from "../../Components/Tournaments/RoundGamesModal";
 import PageHeader, { PageAmbient } from "../../Components/UI/PageHeader";
-import { Trophy, Radio, Cpu, AlertCircle, Download, Check } from "lucide-react";
+import { Trophy, Radio, Cpu, AlertCircle, Download, Check, SlidersHorizontal, ChevronDown, ChevronUp } from "lucide-react";
 import "./tournaments-page.css";
 
 export default function TournamentsPage() {
@@ -18,6 +18,7 @@ export default function TournamentsPage() {
   const [loading, setLoading] = useState(true);
   const [selectedRound, setSelectedRound] = useState(null);
   const [toastMessage, setToastMessage] = useState(null);
+  const [showTourneyTelemetry, setShowTourneyTelemetry] = useState(false);
 
   const showToast = (msg) => {
     setToastMessage(msg);
@@ -231,10 +232,10 @@ export default function TournamentsPage() {
       )}
 
       <PageHeader
-        badge="FIDE SANCTIONED BROADCASTS · REAL-TIME PGN STREAM"
-        title="Official Chess"
+        badge="FIDE BROADCASTS"
+        title="Live"
         accentText="Tournaments"
-        subtitle="Live grandmaster broadcasts from around the world with sub-second Stockfish engine telemetry."
+        subtitle="Watch live grandmaster broadcasts and official FIDE events."
         theme="classic"
         rightElement={
           <div className="tournaments-export-group">
@@ -251,29 +252,64 @@ export default function TournamentsPage() {
       />
 
       <div className="tournaments-studio-wrap">
-        {/* 4-Cell Broadcast Telemetry Monolith Ribbon */}
-        <div className="cp-console-window tournaments-hud-ribbon">
-          <div className="tournaments-hud-cell">
-            <span className="t-hud-code">CH-01 // EVENTS</span>
-            <span className="t-hud-val">{stats.total}</span>
-            <span className="t-hud-lbl">Sanctioned FIDE Broadcasts</span>
+        {/* Broadcast Telemetry: Single-line Summary Ribbon vs Collapsible 4-Cell Monolith */}
+        {!showTourneyTelemetry ? (
+          <div className="tournaments-telemetry-summary-ribbon">
+            <div className="tournaments-summary-chips">
+              <span className="summary-chip-val gold">{stats.total} FIDE Events</span>
+              <span className="summary-chip-dot">·</span>
+              <span className="summary-chip-val emerald">{stats.activeBoards} Active Streams</span>
+              <span className="summary-chip-dot">·</span>
+              <span className="summary-chip-val cyan">99.8% WASM Sync</span>
+              <span className="summary-chip-dot">·</span>
+              <span className="summary-chip-val live">{stats.ongoing} Live Now</span>
+            </div>
+            <button
+              type="button"
+              className="tournaments-telemetry-toggle-btn"
+              onClick={() => setShowTourneyTelemetry(true)}
+              title="Expand Full 4-Node Telemetry Ribbon"
+            >
+              <SlidersHorizontal size={12} />
+              <span>Expand Benchmarks</span>
+              <ChevronDown size={12} />
+            </button>
           </div>
-          <div className="tournaments-hud-cell">
-            <span className="t-hud-code">CH-02 // BOARDS</span>
-            <span className="t-hud-val emerald">{stats.activeBoards}</span>
-            <span className="t-hud-lbl">Active PGN Streams</span>
+        ) : (
+          <div className="cp-console-window tournaments-hud-ribbon">
+            <div className="tournaments-hud-cell">
+              <span className="t-hud-code">CH-01 // EVENTS</span>
+              <span className="t-hud-val">{stats.total}</span>
+              <span className="t-hud-lbl">Sanctioned FIDE Broadcasts</span>
+            </div>
+            <div className="tournaments-hud-cell">
+              <span className="t-hud-code">CH-02 // BOARDS</span>
+              <span className="t-hud-val emerald">{stats.activeBoards}</span>
+              <span className="t-hud-lbl">Active PGN Streams</span>
+            </div>
+            <div className="tournaments-hud-cell">
+              <span className="t-hud-code">CH-03 // ENGINE</span>
+              <span className="t-hud-val cyan">99.8%</span>
+              <span className="t-hud-lbl">Stockfish 17 Sync Rate</span>
+            </div>
+            <div className="tournaments-hud-cell">
+              <span className="t-hud-code">CH-04 // ON AIR</span>
+              <span className="t-hud-val gold">{stats.ongoing}</span>
+              <span className="t-hud-lbl">Live Championships Now</span>
+            </div>
+            <div className="tournaments-hud-collapse-bar">
+              <button
+                type="button"
+                className="tournaments-telemetry-toggle-btn active"
+                onClick={() => setShowTourneyTelemetry(false)}
+                title="Collapse to Summary Ribbon"
+              >
+                <span>Hide Benchmark Cards</span>
+                <ChevronUp size={12} />
+              </button>
+            </div>
           </div>
-          <div className="tournaments-hud-cell">
-            <span className="t-hud-code">CH-03 // ENGINE</span>
-            <span className="t-hud-val cyan">99.8%</span>
-            <span className="t-hud-lbl">Stockfish 17 Sync Rate</span>
-          </div>
-          <div className="tournaments-hud-cell">
-            <span className="t-hud-code">CH-04 // ON AIR</span>
-            <span className="t-hud-val gold">{stats.ongoing}</span>
-            <span className="t-hud-lbl">Live Championships Now</span>
-          </div>
-        </div>
+        )}
 
         {/* Featured Championship Spotlight Banner */}
         {!loading && featuredTournament && (

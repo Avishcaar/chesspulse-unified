@@ -1,5 +1,5 @@
 /* ==========================================================================
-   PUZZLE SUBNAV — HORIZONTAL TELEMETRY TACTICAL WORKSTATION SWITCHER
+   PUZZLE SUBNAV — HORIZONTAL ATELIER TACTICAL WORKSTATION SWITCHER
    ========================================================================== */
 
 .puzzle-subnav-strip {
@@ -13,16 +13,14 @@
 .puzzle-subnav-scroll {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px;
-  background: rgba(13, 17, 28, 0.82);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 999px;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  gap: 4px;
+  padding: 4px;
+  background: var(--bg2, #24201d);
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+  border-radius: 9999px;
   overflow-x: auto;
   scrollbar-width: none;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
 }
 
 .puzzle-subnav-scroll::-webkit-scrollbar {
@@ -30,18 +28,18 @@
 }
 
 body[data-theme="light"] .puzzle-subnav-scroll {
-  background: rgba(255, 255, 255, 0.9);
-  border-color: rgba(15, 23, 42, 0.1);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  background: #eae5dc;
+  border-color: rgba(36, 32, 29, 0.1);
+  box-shadow: 0 2px 8px rgba(36, 32, 29, 0.04);
 }
 
 .puzzle-subnav-pill {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 6px 14px;
-  border-radius: 999px;
-  color: var(--text-muted, #94a3b8);
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 9999px;
+  color: var(--text-muted, #a8a29e);
   text-decoration: none;
   font-size: 0.8rem;
   font-weight: 600;
@@ -52,7 +50,7 @@ body[data-theme="light"] .puzzle-subnav-scroll {
 }
 
 body[data-theme="light"] .puzzle-subnav-pill {
-  color: #64748b;
+  color: #6b635b;
 }
 
 .subnav-pill-icon {
@@ -67,54 +65,26 @@ body[data-theme="light"] .puzzle-subnav-pill {
   letter-spacing: -0.01em;
 }
 
-.subnav-pill-tag {
-  font-family: var(--font-mono, 'JetBrains Mono', monospace);
-  font-size: 0.62rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  padding: 2px 6px;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--text-muted, #94a3b8);
-}
-
-body[data-theme="light"] .subnav-pill-tag {
-  background: rgba(15, 23, 42, 0.06);
-  color: #64748b;
-}
-
 .puzzle-subnav-pill:hover {
-  color: var(--text, #f8fafc);
-  background: rgba(255, 255, 255, 0.06);
-}
-
-.puzzle-subnav-pill:hover .subnav-pill-icon {
-  transform: scale(1.1);
+  color: var(--text, #f7f4ee);
+  background: rgba(255, 255, 255, 0.04);
 }
 
 body[data-theme="light"] .puzzle-subnav-pill:hover {
-  color: #0f172a;
-  background: rgba(15, 23, 42, 0.04);
+  color: #151312;
+  background: rgba(36, 32, 29, 0.04);
 }
 
 .puzzle-subnav-pill.active {
-  color: #fbbf24;
-  background: rgba(245, 158, 11, 0.14);
-  border-color: rgba(245, 158, 11, 0.32);
-  box-shadow: 0 0 16px rgba(245, 158, 11, 0.15);
+  color: var(--text, #f7f4ee);
+  background: var(--bg, #151312);
+  border-color: var(--border, rgba(255, 255, 255, 0.12));
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 body[data-theme="light"] .puzzle-subnav-pill.active {
-  color: #b45309;
-  background: rgba(245, 158, 11, 0.12);
-  border-color: rgba(245, 158, 11, 0.3);
-}
-
-.puzzle-subnav-pill.active .subnav-pill-tag {
-  background: rgba(245, 158, 11, 0.22);
-  color: #fbbf24;
-}
-
-body[data-theme="light"] .puzzle-subnav-pill.active .subnav-pill-tag {
-  color: #b45309;
+  color: #151312;
+  background: #ffffff;
+  border-color: rgba(36, 32, 29, 0.12);
+  box-shadow: 0 2px 8px rgba(36, 32, 29, 0.08);
 }

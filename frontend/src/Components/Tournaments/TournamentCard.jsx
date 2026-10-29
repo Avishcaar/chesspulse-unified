@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./tournament-card.css";
 import TournamentModal from "./TournamentModal";
-import { Radio, Trophy, Globe, Activity } from "lucide-react";
+import { Radio, Trophy, Globe } from "lucide-react";
 
 const ACCENT_VARIANTS = ["emerald", "violet", "amber", "cyan"];
 

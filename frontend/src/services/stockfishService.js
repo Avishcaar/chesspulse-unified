@@ -233,6 +233,11 @@ class StockfishService {
                 this.evalCache.set(cacheKey, 0.0);
                 return 0.0;
             }
+            // Standard start position opening baseline (slight first-move initiative)
+            if (fen.startsWith('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq')) {
+                this.evalCache.set(cacheKey, 0.18);
+                return 0.18;
+            }
         } catch (e) {
             // Ignore parsing error, proceed to engine
         }

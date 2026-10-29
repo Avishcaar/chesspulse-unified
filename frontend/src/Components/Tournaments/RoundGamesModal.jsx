@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { X, Radio } from 'lucide-react';
 import { fetchRoundGames, splitGames } from '../../utils/pgnStream';
 import { parsePlayerNames, getGameResult } from '../../utils/pgnParser';
 import ChessLoader from '../ChessLoader/ChessLoader';
@@ -8,7 +9,6 @@ const RoundGamesModal = ({ roundId, roundName, isOpen, onClose, onSelectGame }) 
     const [games, setGames] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [pgnBuffer, setPgnBuffer] = useState('');
 
     useEffect(() => {
         if (!isOpen || !roundId) return;
@@ -21,7 +21,6 @@ const RoundGamesModal = ({ roundId, roundName, isOpen, onClose, onSelectGame }) 
         (async () => {
             try {
                 cleanupFn = await fetchRoundGames(roundId, (buffer) => {
-                    setPgnBuffer(buffer);
                     const gamesParsed = splitGames(buffer);
 
                     const gamesData = gamesParsed.map((pgn, index) => {
@@ -30,10 +29,10 @@ const RoundGamesModal = ({ roundId, roundName, isOpen, onClose, onSelectGame }) 
 
                         return {
                             index,
-                            white,
-                            black,
+                            white: white || 'White',
+                            black: black || 'Black',
                             result,
-                            isLive: result === null
+                            isLive: result === null || result === '*'
                         };
                     });
 
@@ -65,13 +64,26 @@ const RoundGamesModal = ({ roundId, roundName, isOpen, onClose, onSelectGame }) 
         <div className="round-games-modal-overlay" onClick={onClose}>
             <div className="round-games-modal" onClick={(e) => e.stopPropagation()}>
                 <div className="round-games-header">
-                    <h2>{roundName || 'Round Games'}</h2>
-                    <button className="modal-close-button" onClick={onClose}>×</button>
+                    <div className="round-header-left">
+                        <span className="round-kicker">
+                            <Radio size={13} className="round-kicker-icon" />
+                            <span>ROUND BROADCAST BOARDS</span>
+                        </span>
+                        <h2 className="round-title">{roundName || 'Round Games'}</h2>
+                    </div>
+                    <button
+                        type="button"
+                        className="modal-close-icon-btn"
+                        onClick={onClose}
+                        aria-label="Close modal"
+                    >
+                        <X size={18} />
+                    </button>
                 </div>
 
                 {loading && (
                     <div className="loading-state">
-                        <ChessLoader text="Loading games..." />
+                        <ChessLoader text="Syncing live broadcast boards..." />
                     </div>
                 )}
 
@@ -83,7 +95,7 @@ const RoundGamesModal = ({ roundId, roundName, isOpen, onClose, onSelectGame }) 
 
                 {!loading && !error && games.length === 0 && (
                     <div className="empty-state">
-                        <p>No games found in this round</p>
+                        <p>No games currently recorded for this round.</p>
                     </div>
                 )}
 
@@ -95,23 +107,39 @@ const RoundGamesModal = ({ roundId, roundName, isOpen, onClose, onSelectGame }) 
                                 className="game-card"
                                 onClick={() => handleGameClick(game.index)}
                             >
-                                {game.isLive && <div className="live-badge">LIVE</div>}
-
-                                <div className="modal-player white-player">
-                                    <span className="modal-player-color">⬜</span>
-                                    <span className="modal-player-name">{game.white}</span>
+                                <div className="game-card-topbar">
+                                    <span className="game-board-index">Board {game.index + 1}</span>
+                                    {game.isLive ? (
+                                        <span className="game-live-pill">
+                                            <span className="live-dot" /> LIVE
+                                        </span>
+                                    ) : (
+                                        <span className="game-result-pill">
+                                            {game.result}
+                                        </span>
+                                    )}
                                 </div>
 
-                                <div className="vs-divider">vs</div>
+                                <div className="game-matchup">
+                                    <div className="modal-player white-player">
+                                        <span className="stone-dot white" />
+                                        <span className="modal-player-name">{game.white}</span>
+                                    </div>
 
-                                <div className="modal-player black-player">
-                                    <span className="modal-player-color">⬛</span>
-                                    <span className="modal-player-name">{game.black}</span>
+                                    <div className="game-vs-row">
+                                        <span className="vs-text">vs</span>
+                                    </div>
+
+                                    <div className="modal-player black-player">
+                                        <span className="stone-dot black" />
+                                        <span className="modal-player-name">{game.black}</span>
+                                    </div>
                                 </div>
 
-                                {game.result && (
-                                    <div className="game-result">{game.result}</div>
-                                )}
+                                <div className="game-card-cta">
+                                    <span>Watch Board</span>
+                                    <span className="cta-arrow">→</span>
+                                </div>
                             </div>
                         ))}
                     </div>

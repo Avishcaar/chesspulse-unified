@@ -17,12 +17,11 @@ import {
   Dices,
   Trophy,
   CheckCircle2,
-  Sparkles,
   Flame,
   Target,
-  Activity,
   Layers,
-  RotateCcw
+  RotateCcw,
+  SlidersHorizontal,
 } from 'lucide-react';
 import './bots.css';
 
@@ -33,7 +32,7 @@ const TIER_META = {
   intermediate: { label: 'Intermediate', color: '#3b82f6', rgb: '59, 130, 246', badge: 'THEORETICAL' },
   advanced: { label: 'Tactical', color: '#f59e0b', rgb: '245, 158, 11', badge: 'HYPER-AGGRO' },
   expert: { label: 'Expert', color: '#f43f5e', rgb: '244, 63, 94', badge: 'ENDGAME GENIUS' },
-  master: { label: 'Master', color: '#a855f7', rgb: '168, 85, 247', badge: 'ROYAL MASTER' },
+  master: { label: 'Master', color: '#e11d48', rgb: '225, 29, 72', badge: 'CRIMSON MASTER' },
   grandmaster: { label: 'Grandmaster', color: '#eab308', rgb: '234, 179, 8', badge: 'SUPREME GM' },
 };
 
@@ -196,15 +195,13 @@ export default function BotsPage() {
     <div className="bots-page cp-subpage">
       <PageAmbient watermark="CHALLENGERS" theme="blitz" />
 
-      {/* ====================================================================
-          PAGE HEADER & ARENA HUD TELEMETRY
-          ==================================================================== */}
+      {/* PAGE HEADER */}
       <div className="bots-top-wrapper">
         <PageHeader
-          badge="STOCKFISH 17 NEURAL PERSONALITIES · 400 - 2400 ELO"
-          title="Neural AI"
-          accent="Arena"
-          subtitle="Rotate through calibrated Stockfish sparring personas in full 3D perspective to test openings and sharpen tactical reflexes."
+          badge="AI BOTS"
+          title="AI"
+          accent="Opponents"
+          subtitle="Practice against calibrated AI personalities from 400 to 2400+ Elo."
           theme="blitz"
           backTo="/"
           backLabel="Back to Home"
@@ -212,48 +209,20 @@ export default function BotsPage() {
             <div className="bots-progress-chip">
               <Trophy size={14} className="trophy-gold" />
               <span>
-                {defeatedCount} / {totalBots} CONQUERED
+                {defeatedCount} / {totalBots} DEFEATED
               </span>
             </div>
           }
         />
 
-        {/* 4-Cell Telemetry Ribbon */}
-        <div className="cp-console-window bots-hud-ribbon">
-          <div className="bots-hud-cell">
-            <span className="hud-code">SYS-01 // ACTIVE CHALLENGER</span>
-            <span className="hud-val cyan">{currentBot.name}</span>
-            <span className="hud-lbl">{currentBot.elo} ELO RATING</span>
-          </div>
-          <div className="bots-hud-cell">
-            <span className="hud-code">SYS-02 // HARDWARE PROFILE</span>
-            <span className="hud-val gold">
-              Depth {currentBot.engineConfig?.depth || 12} Plies
-            </span>
-            <span className="hud-lbl">
-              Skill Lvl {currentBot.engineConfig?.skillLevel || 5} · {currentBot.engineConfig?.thinkTimeMs || 1000}ms Think
-            </span>
-          </div>
-          <div className="bots-hud-cell">
-            <span className="hud-code">SYS-03 // TACTICAL CADENCE</span>
-            <span className="hud-val emerald">{tierInfo.badge}</span>
-            <span className="hud-lbl">{tierInfo.label} Sparring Tier</span>
-          </div>
-          <div className="bots-hud-cell">
-            <span className="hud-code">SYS-04 // ENGINE PROTOCOL</span>
-            <span className="hud-val violet">Stockfish WASM</span>
-            <span className="hud-lbl">Calibrated Multi-Tier Matrix</span>
-          </div>
-        </div>
-
         {/* Action & Filter Toolbar */}
         <div className="bots-toolbar-row">
           <div className="bots-tier-filter-pills">
             {[
-              { id: 'all', label: 'All Roster (7)' },
-              { id: 'beginner', label: 'Novice (400-800)' },
-              { id: 'intermediate', label: 'Club (1200-1500)' },
-              { id: 'expert', label: 'Master (1800-2400)' },
+              { id: 'all', label: 'All (7)' },
+              { id: 'beginner', label: 'Novice' },
+              { id: 'intermediate', label: 'Club' },
+              { id: 'expert', label: 'Master' },
             ].map((f) => (
               <button
                 key={f.id}
@@ -359,7 +328,7 @@ export default function BotsPage() {
                 key={bot.id}
                 className={`carousel-card-3d tier-${botTierKey} ${isCenter ? 'is-active' : ''} ${
                   !isVisible ? 'is-hidden' : ''
-                }`}
+                } compact-specs`}
                 style={{
                   transform: transformStyle,
                   opacity: opacity,
@@ -573,7 +542,7 @@ export default function BotsPage() {
         </div>
 
         <div className="carousel-nav-hints">
-          <span>💡 Swipe / Drag or use [←] [→] Arrow Keys to rotate the 3D challenger cylinder</span>
+          <span>Swipe or use [←] [→] arrow keys to rotate challengers</span>
         </div>
       </div>
     </div>

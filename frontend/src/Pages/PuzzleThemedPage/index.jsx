@@ -8,7 +8,7 @@ import PuzzleSubnav from '../../Components/Puzzles/PuzzleSubnav';
 import PageHeader, { PageAmbient } from '../../Components/UI/PageHeader';
 import {
   Crown,
-  Sparkles,
+  Flame,
   GitFork,
   Crosshair,
   Layers,
@@ -29,7 +29,7 @@ const THEME_DATA = {
   fork: {
     name: 'Tactical Fork',
     icon: GitFork,
-    color: '#8b5cf6',
+    color: '#f43f5e',
     tag: 'DOUBLE ATTACK',
     description: 'Attack two enemy pieces simultaneously, forcing immediate material gain.'
   },
@@ -56,7 +56,7 @@ const THEME_DATA = {
   },
   mateIn1: {
     name: 'Mate in 1 Strike',
-    icon: Sparkles,
+    icon: Flame,
     color: '#dc2626',
     tag: 'ONE PLY',
     description: 'Spot instant single-move checkmates from sharp positions.'
@@ -206,9 +206,9 @@ const PuzzleThemedPage = () => {
         <PageAmbient watermark="PATTERNS" theme="gold" />
 
         <PageHeader
-          badge={`MOTIF DRILL · ${currentThemeData.name?.toUpperCase() || 'CUSTOM'}`}
-          title="Motif"
-          accent="Drill Lab"
+          badge="MOTIF DRILL"
+          title={currentThemeData.name || 'Motif'}
+          accent="Drill"
           subtitle={currentThemeData.description || 'Isolate and master this tactical pattern.'}
           theme="gold"
           backTo="/puzzles/themed"
@@ -373,13 +373,13 @@ const PuzzleThemedPage = () => {
       <PageAmbient watermark="PATTERNS" theme="gold" />
 
       <PageHeader
-        badge="11 TACTICAL MOTIFS · PATTERN RECOGNITION LAB"
+        badge="MOTIFS"
         title="Tactical"
-        accent="Motif Lab"
-        subtitle="Isolate and drill essential tactical motifs — from forks and pins to skewers and back-rank checkmates — until recognition is automatic."
+        accent="Motifs"
+        subtitle="Master key tactical patterns like forks, pins, and skewers."
         theme="gold"
         backTo="/puzzles"
-        backLabel="Tactical Hub"
+        backLabel="Tactics Hub"
       />
 
       <PuzzleSubnav />

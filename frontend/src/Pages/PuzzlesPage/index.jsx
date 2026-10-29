@@ -10,12 +10,13 @@ import {
     Flame,
     TrendingUp,
     Target,
-    Sparkles,
+    Cpu,
     Trophy,
     BarChart3,
     ArrowUpRight,
     RefreshCw,
     Lock,
+    SlidersHorizontal,
 } from 'lucide-react';
 import './puzzles.css';
 
@@ -105,9 +106,9 @@ const PuzzlesPage = () => {
             id: 'survival',
             title: '3-Life Survival',
             tag: 'ENDURANCE',
-            description: 'Zero time pressure, 3 strikes allowed — climb into deep calculation.',
+            description: 'Zero time pressure, 3 strikes allowed: climb into deep calculation.',
             icon: Flame,
-            color: '#a855f7',
+            color: '#f43f5e',
             path: '/puzzles/survival',
         },
         {
@@ -134,10 +135,10 @@ const PuzzlesPage = () => {
         {
             code: 'MOD-05',
             id: 'curated',
-            title: 'Pulse AI Curated',
+            title: 'Pulse',
             tag: 'NEURAL SET',
-            description: 'Hand-picked grandmaster combinations tailored to your repertoire.',
-            icon: Sparkles,
+            description: 'A focused puzzle session shaped by your goals and ChessPulse history.',
+            icon: Cpu,
             color: '#06b6d4',
             path: '/puzzles/curated',
             requiresAuth: true,
@@ -167,16 +168,15 @@ const PuzzlesPage = () => {
             <PageAmbient watermark="TACTICS" theme="gold" />
 
             <PageHeader
-                badge="2,500+ CURATED TACTICS · PATTERN RECOGNITION"
-                title="Tactical"
-                accent="Training Lab"
-                subtitle="Sharpen calculation speed with daily grandmaster combinations, timed Puzzle Rush, and motif-specific drills."
+                badge="TACTICS"
+                title="Tactics"
+                accent="Trainer"
                 theme="gold"
                 rightElement={
                     isAuthenticated ? (
                         <Link to="/puzzles/stats" className="puzzles-stats-pill-btn">
                             <BarChart3 size={14} />
-                            <span>Performance Telemetry</span>
+                            <span>Stats</span>
                             <ArrowUpRight size={14} />
                         </Link>
                     ) : null
@@ -185,30 +185,30 @@ const PuzzlesPage = () => {
 
             <PuzzleSubnav />
 
-            {/* Top Telemetry HUD Ribbon */}
+            {/* Top Stat Strip */}
             <div className="puzzles-container">
                 <div className="cp-console-window puzzles-hud-ribbon">
                     <div className="puzzles-hud-cell">
-                        <span className="hud-cell-code">SYS-01 // TARGET</span>
+                        <span className="hud-cell-code">PUZZLE RATING</span>
                         <span className="hud-cell-val gold">
-                            {currentPuzzle?.rating ? `${currentPuzzle.rating} ELO` : '1850 ELO'}
+                            {currentPuzzle?.rating ? `${currentPuzzle.rating}` : '1850'}
                         </span>
-                        <span className="hud-cell-lbl">Active Puzzle Rating</span>
+                        <span className="hud-cell-lbl">Elo Rating</span>
                     </div>
                     <div className="puzzles-hud-cell">
-                        <span className="hud-cell-code">SYS-02 // STREAK</span>
+                        <span className="hud-cell-code">STREAK</span>
                         <span className="hud-cell-val emerald">{streak}</span>
-                        <span className="hud-cell-lbl">Consecutive Solved</span>
+                        <span className="hud-cell-lbl">Solved in a row</span>
                     </div>
                     <div className="puzzles-hud-cell">
-                        <span className="hud-cell-code">SYS-03 // SESSION</span>
+                        <span className="hud-cell-code">TODAY</span>
                         <span className="hud-cell-val cyan">{puzzleCount}</span>
-                        <span className="hud-cell-lbl">Solved Today</span>
+                        <span className="hud-cell-lbl">Solved today</span>
                     </div>
                     <div className="puzzles-hud-cell">
-                        <span className="hud-cell-code">SYS-04 // CORPUS</span>
+                        <span className="hud-cell-code">DATABASE</span>
                         <span className="hud-cell-val violet">2,500+</span>
-                        <span className="hud-cell-lbl">Verified GM Motifs</span>
+                        <span className="hud-cell-lbl">Curated puzzles</span>
                     </div>
                 </div>
 
@@ -219,7 +219,7 @@ const PuzzlesPage = () => {
                         <div className="cp-window-topbar">
                             <div className="cp-window-title">
                                 <span className="cp-window-dot amber" />
-                                <span>DAILY TACTICAL COMBINATION</span>
+                                <span>Daily Puzzle</span>
                             </div>
                             <div className="puzzle-topbar-right">
                                 {currentPuzzle?.rating && (
@@ -274,17 +274,21 @@ const PuzzlesPage = () => {
                     <div className="cp-console-window puzzle-modes-console">
                         <div className="cp-window-topbar">
                             <span className="cp-window-title">
-                                <span>TRAINING MODULES // 06 WORKSTATIONS</span>
+                                <span>Training Modes</span>
                             </span>
-                            {!isAuthenticated && (
-                                <Link to="/signin" className="puzzles-signin-chip">
-                                    Sign in to sync ELO →
-                                </Link>
-                            )}
+                            <div className="puzzle-topbar-controls">
+                                {!isAuthenticated && (
+                                    <Link to="/signin" className="puzzles-signin-chip">
+                                        Sign in to sync ELO →
+                                    </Link>
+                                )}
+                            </div>
                         </div>
 
-                        <div className="modes-bento-list">
-                            {puzzleModes.map((mode) => {
+                        <div className="modes-bento-list compact-modes">
+                            {puzzleModes
+                                .filter((mode) => mode.id !== 'curated' || isAuthenticated)
+                                .map((mode) => {
                                 const Icon = mode.icon;
                                 const isLocked = mode.requiresAuth && !isAuthenticated;
 

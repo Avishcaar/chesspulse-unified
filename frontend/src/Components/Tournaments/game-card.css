@@ -111,3 +111,6 @@ body[data-theme="light"] .game-card {
 body[data-theme="light"] .player-name {
     color: #0f172a;
 }
+.player-color-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+.player-color-dot.dot-white { background: #f8fafc; border: 1.5px solid #cbd5e1; box-shadow: 0 0 6px rgba(255, 255, 255, 0.4); }
+.player-color-dot.dot-black { background: #1e293b; border: 1.5px solid #475569; box-shadow: 0 0 6px rgba(0, 0, 0, 0.4); }

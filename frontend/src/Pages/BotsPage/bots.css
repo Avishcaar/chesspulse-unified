@@ -4,7 +4,7 @@
 
 .bots-page.cp-subpage {
   min-height: calc(100vh - 70px);
-  background: #07090f;
+  background: var(--bg);
   color: var(--text, #f8fafc);
   padding: 1.5rem 2rem 3.5rem;
   font-family: var(--font-sans, 'Inter', -apple-system, BlinkMacSystemFont, sans-serif);
@@ -146,6 +146,36 @@
   border-color: rgba(168, 85, 247, 0.45);
   color: #c084fc;
   box-shadow: 0 0 12px rgba(168, 85, 247, 0.2);
+}
+
+.bots-specs-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-muted, #94a3b8);
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+body[data-theme="light"] .bots-specs-toggle-btn {
+  background: #ffffff;
+  border-color: rgba(15, 23, 42, 0.12);
+  color: #475569;
+}
+
+.bots-specs-toggle-btn:hover,
+.bots-specs-toggle-btn.active {
+  background: rgba(244, 63, 94, 0.12);
+  border-color: var(--arena-accent, #f43f5e);
+  color: var(--arena-accent, #f43f5e);
+  transform: translateY(-1px);
 }
 
 .surprise-bot-btn {
@@ -293,6 +323,20 @@
     height: 540px;
     padding: 1.25rem;
   }
+}
+
+/* Compact Specs Mode (Declutter) */
+.carousel-card-3d.compact-specs {
+  height: 470px;
+  justify-content: space-between;
+}
+
+.carousel-card-3d.compact-specs .card-comms-quote {
+  display: none;
+}
+
+.carousel-card-3d.compact-specs .card-telemetry-block {
+  display: none;
 }
 
 .carousel-card-3d.is-active {
@@ -816,7 +860,37 @@ body[data-theme="light"] .tier-pill-btn:hover {
   color: #0f172a;
 }
 
-body[data-theme="light"] .surprise-bot-btn {
+body[data-theme="light"] .bots-specs-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-muted, #94a3b8);
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+body[data-theme="light"] .bots-specs-toggle-btn {
+  background: #ffffff;
+  border-color: rgba(15, 23, 42, 0.12);
+  color: #475569;
+}
+
+.bots-specs-toggle-btn:hover,
+.bots-specs-toggle-btn.active {
+  background: rgba(244, 63, 94, 0.12);
+  border-color: var(--arena-accent, #f43f5e);
+  color: var(--arena-accent, #f43f5e);
+  transform: translateY(-1px);
+}
+
+.surprise-bot-btn {
   background: #ffffff;
   border-color: rgba(15, 23, 42, 0.12);
   color: #0f172a;

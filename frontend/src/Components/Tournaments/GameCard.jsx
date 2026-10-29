@@ -19,7 +19,7 @@ export default function GameCard({ game, onClick }) {
         <div className="game-card">
             <div className="game-card-header">
                 <div className="player-info">
-                    <span className="player-color">⚫</span>
+                    <span className="player-color-dot dot-black" title="Black" />
                     <span className="player-name">{black || "Unknown"}</span>
                 </div>
             </div>
@@ -43,7 +43,7 @@ export default function GameCard({ game, onClick }) {
 
             <div className="game-card-footer">
                 <div className="player-info">
-                    <span className="player-color">⚪</span>
+                    <span className="player-color-dot dot-white" title="White" />
                     <span className="player-name">{white || "Unknown"}</span>
                 </div>
             </div>

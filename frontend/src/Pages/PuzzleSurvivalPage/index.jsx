@@ -172,13 +172,13 @@ const PuzzleSurvivalPage = () => {
         <PageAmbient watermark="SURVIVAL" theme="blitz" />
 
         <PageHeader
-          badge="SURVIVAL CLIMB CONCLUDED · 3 STRIKES"
+          badge="SURVIVAL COMPLETE"
           title="Survival"
           accent="Summary"
-          subtitle="Your 3 lives have expired. Review your streak depth and endurance telemetry."
+          subtitle="Your 3 lives have expired. Review your score and streak below."
           theme="blitz"
           backTo="/puzzles"
-          backLabel="Tactical Hub"
+          backLabel="Tactics Hub"
         />
 
         <PuzzleSubnav />
@@ -295,13 +295,13 @@ const PuzzleSurvivalPage = () => {
         <PageAmbient watermark="SURVIVAL" theme="blitz" />
 
         <PageHeader
-          badge="ENDURANCE CLIMB · 3 STRIKES ALLOWED"
+          badge="SURVIVAL"
           title="3-Life"
           accent="Survival"
-          subtitle="Zero time limit. Calculate as deeply as you need. Three tactical blunders and your run ends."
+          subtitle="No time limit. Three mistakes and your run ends."
           theme="blitz"
           backTo="/puzzles"
-          backLabel="Tactical Hub"
+          backLabel="Tactics Hub"
         />
 
         <PuzzleSubnav />
@@ -430,10 +430,10 @@ const PuzzleSurvivalPage = () => {
       <PageAmbient watermark="SURVIVAL" theme="blitz" />
 
       <PageHeader
-        badge="ACTIVE SURVIVAL RUN · 3 LIVES"
+        badge="ACTIVE RUN"
         title="3-Life"
         accent="Survival"
-        subtitle="Endurance calculation in progress. Guard your remaining lives."
+        subtitle="Calculate carefully. Guard your remaining lives."
         theme="blitz"
         rightElement={
           <button

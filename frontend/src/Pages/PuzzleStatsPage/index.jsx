@@ -95,11 +95,11 @@ const PuzzleStatsPage = () => {
             <PageAmbient watermark="ANALYTICS" theme="classic" />
 
             <PageHeader
-                badge="TACTICAL TELEMETRY · PERFORMANCE DATA"
+                badge="ANALYTICS"
                 badgeColor="emerald"
                 title="Performance"
                 titleAccent="Analytics"
-                subtitle="Track ELO progression, motif accuracy, and solve-time distribution across your tactical training sessions."
+                subtitle="Track your puzzle rating progression, motif accuracy, and solve speed."
                 theme="classic"
                 backTo="/puzzles"
                 backLabel="Tactical Hub"

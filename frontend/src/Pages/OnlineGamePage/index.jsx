@@ -16,7 +16,6 @@ import {
   Radio,
   Trophy,
   Users,
-  Activity,
   ArrowRight,
   RotateCcw,
   Flag,
@@ -30,11 +29,11 @@ import {
   Copy,
   Check,
   Send,
-  Sparkles,
   Wifi,
   Globe,
   AlertTriangle,
   Sliders,
+  SlidersHorizontal,
   Plus,
   Minus,
   CheckCircle2
@@ -96,8 +95,8 @@ const TIME_CONTROLS_DATA = [
     estDuration: '~5 min',
     desc: 'The global benchmark cadence for online competition',
     icon: Flame,
-    color: '#a855f7',
-    glow: 'rgba(168, 85, 247, 0.25)',
+    color: '#f43f5e',
+    glow: 'rgba(244, 63, 94, 0.25)',
     popular: true
   },
   {
@@ -110,8 +109,8 @@ const TIME_CONTROLS_DATA = [
     estDuration: '~7 min',
     desc: 'World Championship standard tournament cadence',
     icon: Flame,
-    color: '#a855f7',
-    glow: 'rgba(168, 85, 247, 0.25)',
+    color: '#f43f5e',
+    glow: 'rgba(244, 63, 94, 0.25)',
     popular: true
   },
   {
@@ -196,11 +195,11 @@ const CUSTOM_PRESETS = [
 
 // Quick in-game communication presets
 const QUICK_CHAT_PRESETS = [
-  'Good luck! 👋',
-  'Nice move! 🎯',
-  'Well played! 🤝',
-  'Rematch? ⚡',
-  'Thanks for the game! ⏱️'
+  'Good luck!',
+  'Nice move!',
+  'Well played!',
+  'Rematch?',
+  'Thanks for the game!'
 ];
 
 // Helper to compute captured pieces and material score
@@ -370,8 +369,8 @@ export default function OnlineGamePage() {
         tag: `${customCategory.toUpperCase()} CLASS`,
         estDuration: `~${customEstDurationMinutes} min`,
         desc: 'Custom player-defined clock configuration',
-        color: customCategory === 'bullet' ? '#06b6d4' : customCategory === 'blitz' ? '#a855f7' : '#f59e0b',
-        glow: customCategory === 'bullet' ? 'rgba(6, 182, 212, 0.25)' : customCategory === 'blitz' ? 'rgba(168, 85, 247, 0.25)' : 'rgba(245, 158, 11, 0.25)',
+        color: customCategory === 'bullet' ? '#06b6d4' : customCategory === 'blitz' ? '#f43f5e' : '#f59e0b',
+        glow: customCategory === 'bullet' ? 'rgba(6, 182, 212, 0.25)' : customCategory === 'blitz' ? 'rgba(244, 63, 94, 0.25)' : 'rgba(245, 158, 11, 0.25)',
         mins: parseInt(customMinutes, 10) || 5,
         inc: parseInt(customIncrement, 10) || 0
       };
@@ -386,7 +385,7 @@ export default function OnlineGamePage() {
       tag: 'Arena Rated',
       estDuration: '~10 min',
       desc: 'Rated competitive ladder match',
-      color: cat === 'bullet' ? '#06b6d4' : cat === 'blitz' ? '#a855f7' : '#f59e0b',
+      color: cat === 'bullet' ? '#06b6d4' : cat === 'blitz' ? '#f43f5e' : '#f59e0b',
       glow: 'rgba(16, 185, 129, 0.25)',
       mins: parseInt(String(selectedTimeControl).split('+')[0], 10) || 10,
       inc: parseInt(String(selectedTimeControl).split('+')[1], 10) || 0
@@ -1078,48 +1077,17 @@ export default function OnlineGamePage() {
         {gameState === 'idle' && (
           <div className="online-dashboard">
             <PageHeader
-              badge="WEBSOCKET MATCHMAKING · LOW-LATENCY FULL-DUPLEX RELAY"
-              title="Multiplayer"
-              accent="Arena"
-              subtitle="Pair instantaneously across bullet, blitz, and rapid time controls or accept broadcasted challenges from the arena queue."
+              badge="ONLINE PLAY"
+              title="Play"
+              accent="Online"
               theme="classic"
               rightElement={
                 <div className="arena-ping-chip">
                   <span className="live-pulse-dot" />
-                  <span>WS RELAY: CONNECTED (~22ms)</span>
+                  <span>Connected (~22ms)</span>
                 </div>
               }
             />
-
-            {/* Top Telemetry Monolith Ribbon */}
-            <div className="cp-console-window online-hud-ribbon">
-              <div className="online-hud-cell">
-                <span className="hud-cell-code">SYS-01 // RATING</span>
-                <span className="hud-cell-val emerald">{myRating} ELO</span>
-                <span className="hud-cell-lbl">
-                  {getRatingCategory(selectedTimeControl).toUpperCase()} CLASS
-                </span>
-              </div>
-              <div className="online-hud-cell">
-                <span className="hud-cell-code">SYS-02 // ARENA QUEUE</span>
-                <span className="hud-cell-val cyan">{challenges.length} Open</span>
-                <span className="hud-cell-lbl">Active Challenges in Lobby</span>
-              </div>
-              <div className="online-hud-cell">
-                <span className="hud-cell-code">SYS-03 // CADENCE</span>
-                <span className="hud-cell-val gold">
-                  {selectedTimeControl === 'custom'
-                    ? `${customMinutes}+${customIncrement}`
-                    : selectedTimeControl}
-                </span>
-                <span className="hud-cell-lbl">Selected Time Control</span>
-              </div>
-              <div className="online-hud-cell">
-                <span className="hud-cell-code">SYS-04 // PROTOCOL</span>
-                <span className="hud-cell-val violet">Socket.IO</span>
-                <span className="hud-cell-lbl">Full-Duplex Pairing Relay</span>
-              </div>
-            </div>
 
             {/* 2-Column Lobby Console */}
             <div className="online-lobby-console-grid">
@@ -1128,19 +1096,21 @@ export default function OnlineGamePage() {
                 <div className="cp-window-topbar">
                   <span className="cp-window-title">
                     <span className="cp-window-dot emerald" />
-                    <span>TIME-CONTROL MATRIX // SELECT MATCH SPEED</span>
+                    <span>SELECT MATCH SPEED</span>
                   </span>
-                  <span
-                    className="online-active-tc-badge"
-                    style={{
-                      borderColor: `${activeTcMeta.color}55`,
-                      color: activeTcMeta.color,
-                      background: `${activeTcMeta.color}15`
-                    }}
-                  >
-                    <span className="live-pulse-dot" style={{ background: activeTcMeta.color }} />
-                    <span>CADENCE: {activeTcMeta.tc} &middot; {activeTcMeta.category.toUpperCase()}</span>
-                  </span>
+                  <div className="online-topbar-controls">
+                    <span
+                      className="online-active-tc-badge"
+                      style={{
+                        borderColor: `${activeTcMeta.color}55`,
+                        color: activeTcMeta.color,
+                        background: `${activeTcMeta.color}15`
+                      }}
+                    >
+                      <span className="live-pulse-dot" style={{ background: activeTcMeta.color }} />
+                      <span>CADENCE: {activeTcMeta.tc} &middot; {activeTcMeta.category.toUpperCase()}</span>
+                    </span>
+                  </div>
                 </div>
 
                 <div className="online-matrix-body">
@@ -1149,7 +1119,7 @@ export default function OnlineGamePage() {
                     {[
                       { id: 'all', label: 'All Cadences', count: '10', icon: Trophy },
                       { id: 'bullet', label: 'Bullet', rating: categoryRatings.bullet, icon: Zap, color: '#06b6d4' },
-                      { id: 'blitz', label: 'Blitz', rating: categoryRatings.blitz, icon: Flame, color: '#a855f7' },
+                      { id: 'blitz', label: 'Blitz', rating: categoryRatings.blitz, icon: Flame, color: '#f43f5e' },
                       { id: 'rapid', label: 'Rapid', rating: categoryRatings.rapid, icon: Clock, color: '#f59e0b' },
                       { id: 'custom', label: 'Custom Protocol', tag: 'Config', icon: Sliders, color: '#38bdf8' }
                     ].map((tab) => {
@@ -1187,7 +1157,7 @@ export default function OnlineGamePage() {
 
                   {/* Cadence Cards Grid (when not purely custom tab) */}
                   {matrixCategoryFilter !== 'custom' && (
-                    <div className="tc-matrix-cards-grid">
+                    <div className="tc-matrix-cards-grid compact-cadences">
                       {TIME_CONTROLS_DATA
                         .filter((item) => matrixCategoryFilter === 'all' || item.category === matrixCategoryFilter)
                         .map((item) => {
@@ -1212,7 +1182,7 @@ export default function OnlineGamePage() {
                                 <div className="tc-header-badges">
                                   {item.popular && (
                                     <span className="tc-popular-chip">
-                                      <Sparkles size={10} />
+                                      <Flame size={10} />
                                       <span>POPULAR</span>
                                     </span>
                                   )}
@@ -1321,13 +1291,13 @@ export default function OnlineGamePage() {
                               customCategory === 'bullet'
                                 ? '#06b6d4'
                                 : customCategory === 'blitz'
-                                ? '#a855f7'
+                                ? '#f43f5e'
                                 : '#f59e0b',
                             color:
                               customCategory === 'bullet'
                                 ? '#06b6d4'
                                 : customCategory === 'blitz'
-                                ? '#a855f7'
+                                ? '#f43f5e'
                                 : '#f59e0b'
                           }}
                         >
@@ -1605,15 +1575,15 @@ export default function OnlineGamePage() {
                   {/* Action Bar */}
                   <div className="action-bar">
                     <button className="primary-action-btn" onClick={findGame}>
-                      <Zap size={18} />
                       <div className="btn-text-stack">
                         <span className="btn-main-text">
-                          Initiate Rated Matchmaking ({activeTcMeta.tc})
+                          Play Rated ({activeTcMeta.tc})
                         </span>
                         <span className="btn-sub-text">
                           Pair with {categoryRatings[activeTcMeta.category]} &plusmn; 200 ELO opponent
                         </span>
                       </div>
+                      <ArrowRight size={16} className="btn-action-arrow" />
                     </button>
                     <button className="secondary-action-btn" onClick={createChallenge}>
                       <Radio size={16} />
@@ -1623,46 +1593,8 @@ export default function OnlineGamePage() {
                 </div>
               </div>
 
-              {/* Right Column: Live Sonar Radar & Open Challenges Relay */}
+              {/* Right Column: Open Challenges Relay & Practice Against Bots */}
               <div className="online-lobby-right-col">
-                {/* Live Radar Mini-Scanner */}
-                <div className="cp-console-window lobby-mini-radar-card">
-                  <div className="cp-window-topbar">
-                    <span className="cp-window-title">
-                      <span className="cp-window-dot emerald" />
-                      <span>ARENA ACTIVITY SONAR // LIVE RELAY</span>
-                    </span>
-                    <span className="radar-status-text">
-                      <Wifi size={12} />
-                      <span>ONLINE</span>
-                    </span>
-                  </div>
-
-                  <div className="lobby-radar-body">
-                    <div className="mini-radar-animation">
-                      <div className="mini-radar-ring ring-1" />
-                      <div className="mini-radar-ring ring-2" />
-                      <div className="mini-radar-sweep" />
-                      <div className="radar-blip blip-1" />
-                      <div className="radar-blip blip-2" />
-                      <div className="radar-blip blip-3" />
-                      <Activity size={18} className="mini-radar-center-icon" />
-                    </div>
-
-                    <div className="mini-radar-meta">
-                      <span className="radar-pool-title">GLOBAL RATED MATCH POOL</span>
-                      <p className="radar-pool-desc">
-                        Full-duplex WebSocket matchmaking automatically connects you to active opponents in your rating window.
-                      </p>
-                      <div className="radar-pills-row">
-                        <span className="radar-metric-pill">~22ms PING</span>
-                        <span className="radar-metric-pill">GLOBAL POOL</span>
-                        <span className="radar-metric-pill">FIDE CADENCE</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
                 {/* Challenges Feed */}
                 <div className="cp-console-window challenges-feed">
                   <div className="cp-window-topbar">
@@ -1725,9 +1657,9 @@ export default function OnlineGamePage() {
                   onClick={() => navigate('/bots')}
                 >
                   <div className="teaser-content">
-                    <span className="teaser-kicker">INSTANT ZERO-WAIT SPARRING //</span>
-                    <h3>3D Neural AI Personalities Arena</h3>
-                    <p>Rotate through calibrated Stockfish bot personas from 400 to 2400 ELO in full 3D perspective.</p>
+                    <span className="teaser-kicker">SPARRING PARTNERS</span>
+                    <h3>Play Against Bots</h3>
+                    <p>Practice against calibrated engine personalities from beginner to grandmaster level.</p>
                   </div>
                   <div className="teaser-arrow">
                     <ArrowRight size={18} />
@@ -1760,7 +1692,6 @@ export default function OnlineGamePage() {
                 <div className="radar-sweep" />
                 <div className="radar-blip blip-search-1" />
                 <div className="radar-blip blip-search-2" />
-                <Activity size={26} className="radar-center-icon" />
               </div>
 
               <h2>Scanning for Opponents</h2>

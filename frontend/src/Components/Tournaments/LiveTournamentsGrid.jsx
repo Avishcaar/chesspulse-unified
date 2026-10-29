@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Users, Zap, AlertCircle } from "lucide-react";
 import "./live-tournaments-grid.css";
 
 export default function LiveTournamentsGrid() {
@@ -82,7 +83,7 @@ export default function LiveTournamentsGrid() {
         return (
             <div className="tournaments-grid-container">
                 <div className="error-message">
-                    <span className="error-icon">⚠️</span>
+                    <AlertCircle size={16} className="error-icon" />
                     <p>{error}</p>
                     <button onClick={fetchTournaments} className="retry-btn">Retry</button>
                 </div>
@@ -135,11 +136,11 @@ export default function LiveTournamentsGrid() {
                                 <div className="tournament-card-body">
                                     <div className="tournament-info-row">
                                         <div className="info-item">
-                                            <span className="info-icon">👥</span>
+                                            <Users size={13} className="info-icon" />
                                             <span className="info-value">{tournament.nbPlayers || 0} players</span>
                                         </div>
                                         <div className="info-item">
-                                            <span className="info-icon">⚡</span>
+                                            <Zap size={13} className="info-icon" />
                                             <span className="info-value">{getVariantDisplay(tournament)}</span>
                                         </div>
                                     </div>

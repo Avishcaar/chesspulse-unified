@@ -4,7 +4,7 @@ import { Radio, Calendar, Archive } from "lucide-react";
 export default function TournamentTabs({ activeTab, onTabChange }) {
     const tabs = [
         { id: "ongoing", label: "Live Broadcasts", Icon: Radio, color: "#10b981", live: true },
-        { id: "upcoming", label: "Upcoming Calendar", Icon: Calendar, color: "#a855f7", live: false },
+        { id: "upcoming", label: "Upcoming Calendar", Icon: Calendar, color: "#f43f5e", live: false },
         { id: "past", label: "Completed Archives", Icon: Archive, color: "#f59e0b", live: false }
     ];
 

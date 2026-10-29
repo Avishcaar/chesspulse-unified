@@ -5,12 +5,12 @@
 .puzzle-rated-page {
   min-height: calc(100vh - 80px);
   padding: 0 24px 72px;
-  background: #07090f;
+  background: var(--bg);
   position: relative;
 }
 
 body[data-theme="light"] .puzzle-rated-page {
-  background: #f8fafc;
+  background: var(--bg);
 }
 
 .rated-container {

@@ -19,9 +19,11 @@ import {
   Copy,
   Check,
   Code2,
-  Activity,
-  Sparkles,
+  BookOpen,
   GitBranch,
+  SlidersHorizontal,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react';
 import './gameAnalysis.css';
 
@@ -76,7 +78,7 @@ const SHOWCASE_GAMES = {
 function classifyMove(cpLoss) {
   if (cpLoss <= 0) return { name: 'Best', symbol: '★', color: '#10b981' };
   if (cpLoss <= 15) return { name: 'Excellent', symbol: '✓', color: '#06b6d4' };
-  if (cpLoss <= 35) return { name: 'Good', symbol: '○', color: '#8b5cf6' };
+  if (cpLoss <= 35) return { name: 'Good', symbol: '○', color: '#3b82f6' };
   if (cpLoss <= 90) return { name: 'Inaccuracy', symbol: '?!', color: '#f59e0b' };
   if (cpLoss <= 250) return { name: 'Mistake', symbol: '?', color: '#f97316' };
   return { name: 'Blunder', symbol: '??', color: '#ef4444' };
@@ -99,6 +101,7 @@ export default function GameAnalysisPage() {
   });
   const [customGameData, setCustomGameData] = useState(null);
   const [showPgnImporter, setShowPgnImporter] = useState(false);
+  const [activeRightTab, setActiveRightTab] = useState('scoresheet');
   const [pgnInput, setPgnInput] = useState('');
 
   const gameData = useMemo(() => {
@@ -601,7 +604,7 @@ export default function GameAnalysisPage() {
     const categories = [
       { key: 'Best', color: '#10b981', symbol: '★' },
       { key: 'Excellent', color: '#06b6d4', symbol: '✓' },
-      { key: 'Good', color: '#8b5cf6', symbol: '○' },
+      { key: 'Good', color: '#3b82f6', symbol: '○' },
       { key: 'Inaccuracy', color: '#f59e0b', symbol: '?!' },
       { key: 'Mistake', color: '#f97316', symbol: '?' },
       { key: 'Blunder', color: '#ef4444', symbol: '??' },
@@ -634,15 +637,15 @@ export default function GameAnalysisPage() {
       <PageHeader
         badge={
           gameData?.source === 'puzzle'
-            ? 'TACTICAL PUZZLE ANALYSIS // DEPTH 18 NNUE'
-            : 'STOCKFISH 17 NNUE · DEPTH 18 CENTIPAWN WORKSTATION'
+            ? 'PUZZLE ANALYSIS'
+            : 'STOCKFISH 17 ENGINE'
         }
-        title={gameData?.source === 'puzzle' ? 'Tactical Puzzle' : 'Grandmaster'}
-        accent={gameData?.source === 'puzzle' ? 'Studio' : 'Telemetry Lab'}
+        title={gameData?.source === 'puzzle' ? 'Puzzle' : 'Game'}
+        accent="Analysis"
         subtitle={
           gameData?.source === 'puzzle'
-            ? 'Analyzing tactical solution line, defensive responses, and alternative variations.'
-            : 'Inspect centipawn loss, move classification matrices, interactive board variations, and engine evaluation curves.'
+            ? 'Review the tactical combination and alternative variations.'
+            : 'Analyze moves, accuracy, and variations with live Stockfish 17 evaluation.'
         }
         theme="classic"
         backTo={
@@ -665,26 +668,25 @@ export default function GameAnalysisPage() {
         }
         rightElement={
           <div className="analysis-header-controls">
-            <div className="analysis-mode-selector">
+            <div className="analysis-segmented-switch">
               <button
                 type="button"
-                className={`mode-btn ${analysisMode === 'manual' ? 'active' : ''}`}
+                className={`analysis-segment-pill ${analysisMode === 'manual' ? 'active' : ''}`}
                 onClick={() => setAnalysisMode('manual')}
               >
-                Manual Eval
+                <SlidersHorizontal size={13} />
+                <span>Manual</span>
               </button>
               <button
                 type="button"
-                className={`mode-btn ${analysisMode === 'stockfish' ? 'active' : ''}`}
+                className={`analysis-segment-pill ${analysisMode === 'stockfish' ? 'active' : ''}`}
                 onClick={() => setAnalysisMode('stockfish')}
               >
                 <Cpu size={13} />
                 <span>Stockfish 17</span>
+                {analysisMode === 'stockfish' && <span className="engine-active-pulse" />}
               </button>
             </div>
-            <Link to="/customize" className="analysis-studio-link">
-              Board Studio →
-            </Link>
           </div>
         }
       />
@@ -772,7 +774,7 @@ export default function GameAnalysisPage() {
                       setAnalysisComplete(false);
                     }}
                   >
-                    <Sparkles size={11} />
+                    <BookOpen size={11} />
                     <span>
                       {rawGameData.source === 'puzzle'
                         ? 'Tactical Puzzle'
@@ -793,7 +795,7 @@ export default function GameAnalysisPage() {
                       setSelectedPreset(preset.id);
                     }}
                   >
-                    <Sparkles size={11} />
+                    <BookOpen size={11} />
                     <span>{preset.label}</span>
                   </button>
                 ))}
@@ -959,165 +961,216 @@ export default function GameAnalysisPage() {
             </div>
           </div>
 
-          {/* RIGHT CONSOLE: Telemetry Curve, Move Quality Matrix, & 2-Column FIDE Scoresheet */}
+          {/* RIGHT CONSOLE: Clean Scoresheet, Advantage Curve & Move Quality Tabs */}
           <div className="cp-console-window analysis-telemetry-console">
             <div className="cp-window-topbar">
-              <span className="cp-window-title">
-                <Activity size={14} />
-                <span>TELEMETRY & FIDE SCORESHEET ({moves.length} PLIES)</span>
-              </span>
-              <span className="result-tag-pill">{gameData.result || '1-0'} · VERIFIED</span>
+              <div className="analysis-panel-tabs">
+                <button
+                  type="button"
+                  className={`panel-tab-btn ${activeRightTab === 'scoresheet' ? 'active' : ''}`}
+                  onClick={() => setActiveRightTab('scoresheet')}
+                >
+                  <BookOpen size={13} />
+                  <span>Moves</span>
+                  <span className="panel-tab-badge">{moves.length}</span>
+                </button>
+                <button
+                  type="button"
+                  className={`panel-tab-btn ${activeRightTab === 'graph' ? 'active' : ''}`}
+                  onClick={() => setActiveRightTab('graph')}
+                >
+                  <span>Advantage Curve</span>
+                </button>
+                <button
+                  type="button"
+                  className={`panel-tab-btn ${activeRightTab === 'accuracy' ? 'active' : ''}`}
+                  onClick={() => setActiveRightTab('accuracy')}
+                >
+                  <Check size={13} />
+                  <span>Move Quality</span>
+                </button>
+              </div>
+
+              <span className="result-tag-pill">{gameData.result || '1-0'}</span>
             </div>
 
             <div className="analysis-telemetry-body">
-              {/* 1. Engine Centipawn Flow Curve */}
-              {evalHistory.length > 0 && (
-                <div className="eval-graph-container">
-                  <div className="subpanel-head">
-                    <span>CENTIPAWN ADVANTAGE CURVE</span>
-                    <span className="subpanel-hint">Click curve to jump</span>
+              {/* TAB 1: Clean, Uncluttered Scoresheet */}
+              {activeRightTab === 'scoresheet' && (
+                <div className="scoresheet-view-pane">
+                  {/* Accuracy & Match Ribbon */}
+                  <div className="scoresheet-acc-strip">
+                    <div className="scoresheet-player-acc white">
+                      <span className="player-stone white" />
+                      <span className="player-name-txt">{playerName}</span>
+                      <strong className="player-acc-pct">{accuracy.white}%</strong>
+                    </div>
+                    <div className="scoresheet-vs-tag">VS</div>
+                    <div className="scoresheet-player-acc black">
+                      <span className="player-stone black" />
+                      <span className="player-name-txt">{opponentName}</span>
+                      <strong className="player-acc-pct">{accuracy.black}%</strong>
+                    </div>
                   </div>
-                  <div className="eval-graph-wrapper" style={{ width: '100%', height: 135 }}>
-                    <ResponsiveContainer width="100%" height="100%">
-                      <AreaChart
-                        data={evalHistory.map((ev, i) => ({
-                          move: i,
-                          eval: Math.max(-10, Math.min(10, ev)),
-                        }))}
-                        margin={{ top: 8, right: 4, left: -24, bottom: 0 }}
-                        onClick={(data) => {
-                          if (data && data.activeLabel !== undefined) {
-                            gotoMove(data.activeLabel);
-                          }
-                        }}
-                      >
-                        <defs>
-                          <linearGradient id="evalGrad" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor="#10b981" stopOpacity={0.65} />
-                            <stop offset="50%" stopColor="#06b6d4" stopOpacity={0.2} />
-                            <stop offset="100%" stopColor="#a855f7" stopOpacity={0.5} />
-                          </linearGradient>
-                        </defs>
-                        <XAxis dataKey="move" hide />
-                        <YAxis domain={[-10, 10]} hide />
-                        <Tooltip
-                          content={({ active, payload, label }) => {
-                            if (active && payload && payload.length) {
-                              const val = payload[0].value;
-                              return (
-                                <div className="analysis-chart-tooltip">
-                                  <span>Ply {label}</span>
-                                  <strong style={{ color: val >= 0 ? '#10b981' : '#ef4444' }}>
-                                    {val >= 0 ? `+${val.toFixed(2)}` : val.toFixed(2)}
-                                  </strong>
-                                </div>
-                              );
-                            }
-                            return null;
-                          }}
-                        />
-                        <ReferenceLine y={0} stroke="rgba(255,255,255,0.22)" strokeDasharray="3 3" />
-                        <Area
-                          type="monotone"
-                          dataKey="eval"
-                          stroke="#10b981"
-                          fill="url(#evalGrad)"
-                          strokeWidth={2}
-                          activeDot={{ r: 4, stroke: '#fff' }}
-                        />
-                      </AreaChart>
-                    </ResponsiveContainer>
+
+                  {/* Paired 2-Column FIDE Move Table */}
+                  <div className="analysis-scoresheet">
+                    <div className="a-scoresheet-head">
+                      <span>#</span>
+                      <span>WHITE MOVE</span>
+                      <span>BLACK MOVE</span>
+                    </div>
+                    <div className="a-scoresheet-body">
+                      {movePairs.map((pair) => {
+                        const wActive =
+                          pair.white && currentIndex === pair.white.index && !inVariation;
+                        const bActive =
+                          pair.black && currentIndex === pair.black.index && !inVariation;
+
+                        return (
+                          <div key={pair.moveNumber} className="a-scoresheet-row">
+                            <span className="a-move-num">{pair.moveNumber}.</span>
+
+                            {pair.white ? (
+                              <button
+                                type="button"
+                                className={`a-ply-btn ${wActive ? 'active' : ''}`}
+                                onClick={() => gotoMove(pair.white.index)}
+                              >
+                                <span className="a-ply-san">{pair.white.san}</span>
+                                {pair.white.analysis && (
+                                  <span
+                                    className="a-ply-badge"
+                                    style={{ color: pair.white.analysis.classification.color }}
+                                    title={`${pair.white.analysis.classification.name}`}
+                                  >
+                                    {pair.white.analysis.classification.symbol}
+                                  </span>
+                                )}
+                              </button>
+                            ) : (
+                              <span className="a-ply-empty">...</span>
+                            )}
+
+                            {pair.black ? (
+                              <button
+                                type="button"
+                                className={`a-ply-btn ${bActive ? 'active' : ''}`}
+                                onClick={() => gotoMove(pair.black.index)}
+                              >
+                                <span className="a-ply-san">{pair.black.san}</span>
+                                {pair.black.analysis && (
+                                  <span
+                                    className="a-ply-badge"
+                                    style={{ color: pair.black.analysis.classification.color }}
+                                    title={`${pair.black.analysis.classification.name}`}
+                                  >
+                                    {pair.black.analysis.classification.symbol}
+                                  </span>
+                                )}
+                              </button>
+                            ) : (
+                              <span className="a-ply-empty">—</span>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
                 </div>
               )}
 
-              {/* 2. Move Classification Breakdown Matrix */}
-              <div className="classification-matrix">
-                <div className="subpanel-head">
-                  <span>WHITE</span>
-                  <span>MOVE CLASSIFICATION</span>
-                  <span>BLACK</span>
-                </div>
-                <div className="classification-rows">
-                  {classificationCounts.map((item) => (
-                    <div key={item.key} className="class-matrix-row">
-                      <span className="class-count white-count">{item.white}</span>
-                      <div className="class-center-label" style={{ color: item.color }}>
-                        <span className="class-sym">{item.symbol}</span>
-                        <span>{item.key}</span>
-                      </div>
-                      <span className="class-count black-count">{item.black}</span>
+              {/* TAB 2: Full-Size Centipawn Advantage Curve */}
+              {activeRightTab === 'graph' && (
+                <div className="graph-view-pane">
+                  <div className="subpanel-head">
+                    <span>CENTIPAWN EVALUATION TRAJECTORY</span>
+                    <span className="subpanel-hint">Click on chart to jump to ply</span>
+                  </div>
+                  {evalHistory.length > 0 ? (
+                    <div className="eval-graph-wrapper" style={{ width: '100%', height: 260 }}>
+                      <ResponsiveContainer width="100%" height="100%">
+                        <AreaChart
+                          data={evalHistory.map((ev, i) => ({
+                            move: i,
+                            eval: Math.max(-10, Math.min(10, ev)),
+                          }))}
+                          margin={{ top: 8, right: 4, left: -24, bottom: 0 }}
+                          onClick={(data) => {
+                            if (data && data.activeLabel !== undefined) {
+                              gotoMove(data.activeLabel);
+                            }
+                          }}
+                        >
+                          <defs>
+                            <linearGradient id="evalGrad" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="0%" stopColor="#10b981" stopOpacity={0.65} />
+                              <stop offset="50%" stopColor="#06b6d4" stopOpacity={0.2} />
+                              <stop offset="100%" stopColor="#f43f5e" stopOpacity={0.5} />
+                            </linearGradient>
+                          </defs>
+                          <XAxis dataKey="move" stroke="rgba(255,255,255,0.2)" />
+                          <YAxis domain={[-10, 10]} stroke="rgba(255,255,255,0.2)" />
+                          <Tooltip
+                            content={({ active, payload, label }) => {
+                              if (active && payload && payload.length) {
+                                const val = payload[0].value;
+                                return (
+                                  <div className="analysis-chart-tooltip">
+                                    <span>Ply {label}</span>
+                                    <strong style={{ color: val >= 0 ? '#10b981' : '#ef4444' }}>
+                                      {val >= 0 ? `+${val.toFixed(2)}` : val.toFixed(2)}
+                                    </strong>
+                                  </div>
+                                );
+                              }
+                              return null;
+                            }}
+                          />
+                          <ReferenceLine y={0} stroke="rgba(255,255,255,0.22)" strokeDasharray="3 3" />
+                          <Area
+                            type="monotone"
+                            dataKey="eval"
+                            stroke="#10b981"
+                            fill="url(#evalGrad)"
+                            strokeWidth={2}
+                            activeDot={{ r: 4, stroke: '#fff' }}
+                          />
+                        </AreaChart>
+                      </ResponsiveContainer>
                     </div>
-                  ))}
+                  ) : (
+                    <div className="empty-tab-state">
+                      <p>Run evaluation to view the advantage trajectory.</p>
+                    </div>
+                  )}
                 </div>
-              </div>
+              )}
 
-              {/* 3. Paired 2-Column FIDE Scoresheet */}
-              <div className="analysis-scoresheet">
-                <div className="a-scoresheet-head">
-                  <span>#</span>
-                  <span>WHITE MOVE</span>
-                  <span>BLACK MOVE</span>
-                </div>
-                <div className="a-scoresheet-body">
-                  {movePairs.map((pair) => {
-                    const wActive =
-                      pair.white && currentIndex === pair.white.index && !inVariation;
-                    const bActive =
-                      pair.black && currentIndex === pair.black.index && !inVariation;
-
-                    return (
-                      <div key={pair.moveNumber} className="a-scoresheet-row">
-                        <span className="a-move-num">{pair.moveNumber}.</span>
-
-                        {pair.white ? (
-                          <button
-                            type="button"
-                            className={`a-ply-btn ${wActive ? 'active' : ''}`}
-                            onClick={() => gotoMove(pair.white.index)}
-                          >
-                            <span className="a-ply-san">{pair.white.san}</span>
-                            {pair.white.analysis && (
-                              <span
-                                className="a-ply-badge"
-                                style={{ color: pair.white.analysis.classification.color }}
-                                title={`${pair.white.analysis.classification.name}`}
-                              >
-                                {pair.white.analysis.classification.symbol}
-                              </span>
-                            )}
-                          </button>
-                        ) : (
-                          <span className="a-ply-empty">...</span>
-                        )}
-
-                        {pair.black ? (
-                          <button
-                            type="button"
-                            className={`a-ply-btn ${bActive ? 'active' : ''}`}
-                            onClick={() => gotoMove(pair.black.index)}
-                          >
-                            <span className="a-ply-san">{pair.black.san}</span>
-                            {pair.black.analysis && (
-                              <span
-                                className="a-ply-badge"
-                                style={{ color: pair.black.analysis.classification.color }}
-                                title={`${pair.black.analysis.classification.name}`}
-                              >
-                                {pair.black.analysis.classification.symbol}
-                              </span>
-                            )}
-                          </button>
-                        ) : (
-                          <span className="a-ply-empty">—</span>
-                        )}
+              {/* TAB 3: Move Classification Breakdown Matrix */}
+              {activeRightTab === 'accuracy' && (
+                <div className="accuracy-view-pane">
+                  <div className="subpanel-head">
+                    <span>WHITE ({playerName})</span>
+                    <span>QUALITY BREAKDOWN</span>
+                    <span>BLACK ({opponentName})</span>
+                  </div>
+                  <div className="classification-rows">
+                    {classificationCounts.map((item) => (
+                      <div key={item.key} className="class-matrix-row">
+                        <span className="class-count white-count">{item.white}</span>
+                        <div className="class-center-label" style={{ color: item.color }}>
+                          <span className="class-sym">{item.symbol}</span>
+                          <span>{item.key}</span>
+                        </div>
+                        <span className="class-count black-count">{item.black}</span>
                       </div>
-                    );
-                  })}
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
-              {/* 4. Compact FEN String Readout */}
+              {/* Compact FEN String Readout */}
               <div className="analysis-fen-strip">
                 <span className="fen-strip-kicker">FEN</span>
                 <code className="fen-strip-code">{currentFen}</code>
