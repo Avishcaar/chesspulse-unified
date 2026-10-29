@@ -1,10 +1,10 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
-  Activity,
+  Cpu,
   Trophy,
   Zap,
-  Sparkles,
+  Target,
   Bot,
   Swords,
   BarChart3,
@@ -13,16 +13,15 @@ import {
   LogOut,
   LogIn,
   ChevronRight,
-  FlaskConical,
   X
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 
 const NAV_ITEMS = [
-  { name: 'Analysis Workstation', path: '/analysis', icon: Activity, badge: 'Stockfish' },
+  { name: 'Analysis Workstation', path: '/analysis', icon: Cpu, badge: 'Stockfish' },
   { name: 'Live Tournaments', path: '/tournaments', icon: Trophy, badge: 'Live' },
   { name: 'Tactical Puzzles', path: '/puzzles', icon: Zap },
-  { name: 'Pulse AI Coach', path: '/puzzles/curated', icon: Sparkles, badge: 'AI' },
+  { name: 'Pulse', path: '/puzzles/curated', icon: Target, badge: 'Coach' },
   { name: 'Bot Arena', path: '/bots', icon: Bot },
   { name: 'Play Online', path: '/play/online', icon: Swords },
   { name: 'Leaderboard', path: '/puzzles/leaderboard', icon: BarChart3 },
@@ -30,7 +29,7 @@ const NAV_ITEMS = [
   { name: 'Board Studio', path: '/customize', icon: Palette }
 ];
 
-export default function Sidebar({ isOpen, onClose, onOpenSandbox }) {
+export default function Sidebar({ isOpen, onClose }) {
   const { user, isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
 
@@ -57,10 +56,7 @@ export default function Sidebar({ isOpen, onClose, onOpenSandbox }) {
         {/* Top Brand Section */}
         <div className="p-5 border-b border-gray-200 dark:border-white/[0.08] flex items-center justify-between">
           <NavLink to="/" onClick={onClose} className="flex flex-col group">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-violet-600 to-indigo-500 flex items-center justify-center text-white shadow-md shadow-violet-500/30">
-                <Activity className="w-4 h-4" />
-              </div>
+            <div className="flex items-center">
               <span className="font-bold text-lg tracking-tight text-gray-900 dark:text-gray-100 group-hover:text-violet-500 transition-colors">
                 ChessPulse
               </span>
@@ -80,27 +76,6 @@ export default function Sidebar({ isOpen, onClose, onOpenSandbox }) {
           </button>
         </div>
 
-        {/* 1-Click Recruiter Sandbox Quick Banner */}
-        <div className="p-3">
-          <button
-            onClick={() => {
-              if (onClose) onClose();
-              if (onOpenSandbox) onOpenSandbox();
-            }}
-            className="w-full text-left p-3 rounded-xl bg-gradient-to-r from-violet-500/15 via-indigo-500/10 to-cyan-500/10 hover:from-violet-500/25 hover:via-indigo-500/20 hover:to-cyan-500/20 border border-violet-500/25 transition-all group relative overflow-hidden"
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 text-violet-600 dark:text-violet-300 font-semibold text-xs tracking-wide">
-                <FlaskConical className="w-3.5 h-3.5 text-violet-500 animate-bounce" />
-                <span>Recruiter Sandbox</span>
-              </div>
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-            </div>
-            <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-1">
-              1-Click GM match simulations & engine pipelines
-            </p>
-          </button>
-        </div>
 
         {/* Middle Navigation Section */}
         <nav className="flex-1 overflow-y-auto px-3 py-2 space-y-1">
@@ -108,7 +83,7 @@ export default function Sidebar({ isOpen, onClose, onOpenSandbox }) {
             Platform Modules
           </div>
 
-          {NAV_ITEMS.map((item) => {
+          {NAV_ITEMS.filter((item) => item.path !== '/puzzles/curated' || isAuthenticated).map((item) => {
             const Icon = item.icon;
             return (
               <NavLink

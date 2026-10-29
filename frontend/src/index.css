@@ -7,49 +7,55 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-    --color-surface-0: #ffffff;
-    --color-surface-1: #f8fafc;
-    --color-surface-2: #f1f5f9;
-    --color-surface-3: #e2e8f0;
-    --color-dark-0: #0B0F19;
-    --color-dark-1: #111827;
-    --color-dark-2: #1E293B;
-    --color-dark-3: #334155;
-    --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --color-surface-0: #f7f4ee;
+    --color-surface-1: #efe9df;
+    --color-surface-2: #e5ded2;
+    --color-surface-3: #d6ccbe;
+    --color-dark-0: #151312;
+    --color-dark-1: #1c1917;
+    --color-dark-2: #24201d;
+    --color-dark-3: #38332e;
+    --font-serif: 'Cormorant Garamond', Garamond, 'Playfair Display', Georgia, serif;
+    --font-sans: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
-/* Light Theme Variables (Default and explicit light) */
+/* Light / Atelier Linen Theme (Gallery Warm Travertine) */
 :root,
 html[data-theme="light"],
 body[data-theme="light"],
 .light {
-  --bg: #ffffff;
-  --bg-soft: #f8fafc;
-  --bg2: #f1f5f9;
-  --text: #0f172a;
-  --text-muted: #64748b;
+  --bg: #f7f4ee;
+  --bg-soft: #efe9df;
+  --bg2: #e5ded2;
+  --text: #1c1917;
+  --text-muted: #57534e;
 
-  --accent: #7c3aed;
-  --accent-2: #0284c7;
-  --accent-rgb: 124, 58, 237;
-  --accent-faint: rgba(124, 58, 237, 0.1);
-  --accent-gold: #d97706;
-  --accent-blue: #2563eb;
+  --font-serif: 'Cormorant Garamond', Garamond, 'Playfair Display', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
 
-  --success: #10b981;
-  --error: #ef4444;
-  --danger: #ef4444;
-  --warning: #f59e0b;
+  --accent: #be123c;
+  --accent-2: #9f1239;
+  --accent-rgb: 190, 18, 60;
+  --accent-faint: rgba(190, 18, 60, 0.08);
+  --accent-gold: #c2410c;
+  --accent-blue: #1d4ed8;
 
-  --card-glow: rgba(124, 58, 237, 0.12);
-  --image-glow: rgba(124, 58, 237, 0.25);
+  --success: #15803d;
+  --error: #b91c1c;
+  --danger: #b91c1c;
+  --warning: #b45309;
 
-  --border: rgba(15, 23, 42, 0.1);
-  --glass: rgba(15, 23, 42, 0.04);
+  --card-bg: rgba(255, 255, 255, 0.72);
+  --card-glow: rgba(190, 18, 60, 0.12);
+  --image-glow: rgba(190, 18, 60, 0.2);
+
+  --border: rgba(28, 25, 23, 0.1);
+  --glass: rgba(28, 25, 23, 0.03);
 }
 
-/* Dark Theme Variables */
+/* Dark / Atelier Charcoal Theme (Warm Roasted Umber & Velvet Crimson) */
 :root.dark,
 :root[data-theme="dark"],
 html.dark,
@@ -57,33 +63,38 @@ html[data-theme="dark"],
 body[data-theme="dark"],
 body.dark,
 .dark {
-  --bg: #0b0b0d;
-  --bg-soft: #111118;
-  --bg2: #161622;
-  --text: #f5f5f5;
-  --text-muted: #94a3b8;
+  --bg: #151312;
+  --bg-soft: #1c1917;
+  --bg2: #24201d;
+  --text: #f5f0ea;
+  --text-muted: #a8a29e;
 
-  --accent: #8b5cf6;
-  --accent-2: #06b6d4;
-  --accent-rgb: 139, 92, 246;
-  --accent-faint: rgba(139, 92, 246, 0.12);
+  --font-serif: 'Cormorant Garamond', Garamond, 'Playfair Display', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --accent: #f43f5e;
+  --accent-2: #fb7185;
+  --accent-rgb: 244, 63, 94;
+  --accent-faint: rgba(244, 63, 94, 0.12);
   --accent-gold: #f59e0b;
-  --accent-blue: #3b82f6;
+  --accent-blue: #38bdf8;
 
   --success: #10b981;
   --error: #ef4444;
   --danger: #ef4444;
   --warning: #f59e0b;
 
-  --card-glow: rgba(139, 92, 246, 0.15);
-  --image-glow: rgba(139, 92, 246, 0.25);
+  --card-bg: rgba(28, 25, 23, 0.75);
+  --card-glow: rgba(244, 63, 94, 0.18);
+  --image-glow: rgba(244, 63, 94, 0.3);
 
-  --border: rgba(255, 255, 255, 0.08);
-  --glass: rgba(255, 255, 255, 0.05);
+  --border: rgba(245, 240, 234, 0.08);
+  --glass: rgba(245, 240, 234, 0.04);
 }
 
 :root {
-  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: var(--font-sans, 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif);
   line-height: 1.5;
   font-weight: 400;
 
@@ -106,7 +117,10 @@ body.dark,
   box-sizing: border-box;
 }
 
-html,
+html {
+  min-height: 100%;
+}
+
 body {
   background: var(--bg);
   color: var(--text);
@@ -116,10 +130,6 @@ body {
   overscroll-behavior-x: none;
   touch-action: pan-y;
   transition: background-color 0.25s ease, color 0.25s ease;
-}
-
-html {
-  min-height: 100%;
 }
 
 #root,
@@ -133,6 +143,29 @@ html {
 
 .main-content {
   flex: 1;
+  position: relative;
+  background: var(--bg);
+}
+
+/* Universal subpage background continuity behind floating pill navbar */
+.app-subpage .main-content {
+  padding-top: 0;
+}
+
+.app-subpage .main-content::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 420px;
+  background: radial-gradient(110% 100% at 50% 0%, rgba(244, 63, 94, 0.08) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+body[data-theme="light"] .app-subpage .main-content::before {
+  background: radial-gradient(110% 100% at 50% 0%, rgba(190, 18, 60, 0.05) 0%, transparent 100%);
 }
 
 /* Subtle micro-scrollbars */
@@ -159,9 +192,63 @@ html {
 
 /* Custom text selection tint */
 ::selection {
-    background: rgba(139, 92, 246, 0.3);
+    background: rgba(244, 63, 94, 0.3);
     color: inherit;
 }
 .dark ::selection, body[data-theme="dark"] ::selection {
-    background: rgba(139, 92, 246, 0.4);
+    background: rgba(244, 63, 94, 0.4);
+}
+
+/* ==========================================================================
+   FINE-ART EDITORIAL TYPOGRAPHY & TEXTURE OVERLAYS
+   ========================================================================== */
+
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+.font-sans {
+  font-family: var(--font-sans);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* Expressive Cursive Italic Calligraphic Accent */
+.art-italic {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  font-feature-settings: "swsh" 1, "dlig" 1;
+}
+
+/* Atmospheric Editorial Headline */
+.art-editorial-title {
+  font-family: var(--font-serif);
+  letter-spacing: -0.025em;
+  line-height: 1.08;
+}
+
+/* Subtle Organic Film Grain Texture Overlay */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Accessibility Focus Ring System (R-32) */
+:focus-visible,
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid var(--accent, #f43f5e) !important;
+    outline-offset: 2px !important;
 }

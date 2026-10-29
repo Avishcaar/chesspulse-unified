@@ -22,6 +22,9 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
+# Local design artifact generated during UI work
+/DESIGN.md
+
 # Editor & OS files
 .DS_Store
 Thumbs.db

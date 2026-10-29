@@ -4,7 +4,6 @@ import {
   Menu,
   Sun,
   Moon,
-  FlaskConical,
   ChevronDown,
   User,
   Palette,
@@ -19,26 +18,26 @@ import { useAuth } from '../../contexts/AuthContext';
 import Button from '../UI/Button';
 
 const ROUTE_META = {
-  '/': { title: 'Intelligence Overview', section: 'Pulse Analytics' },
-  '/tournaments': { title: 'Live Tournament Command Center', section: 'Grandmaster Broadcasts' },
-  '/analysis': { title: 'Stockfish Neural Workstation', section: 'Deep Engine Inspector' },
-  '/puzzles': { title: 'Tactical Puzzle Hub', section: 'Pattern Training' },
-  '/puzzles/rush': { title: 'Puzzle Rush Sprint', section: 'Speed Assessment' },
-  '/puzzles/survival': { title: 'Tactical Survival Mode', section: 'Precision Endurance' },
-  '/puzzles/rating': { title: 'Adaptive Rated Ladder', section: 'Elo Rating' },
-  '/puzzles/themed': { title: 'Themed Motifs & Openings', section: 'Curated Tactics' },
-  '/puzzles/curated': { title: 'Pulse AI Coach', section: 'Intelligent Tutor' },
-  '/puzzles/stats': { title: 'Performance Metrics', section: 'Statistical Analysis' },
-  '/puzzles/leaderboard': { title: 'Global Rankings', section: 'Rating Matrix' },
-  '/bots': { title: 'AI Bot Arena', section: 'Neural Opponents' },
-  '/play/online': { title: 'Multiplayer Arena', section: 'WebSocket Matchmaking' },
-  '/profile': { title: 'Player Profile & Dossier', section: 'User Account' },
-  '/customize': { title: 'Board Customization Studio', section: 'Visual Personalization' },
-  '/signin': { title: 'Authentication', section: 'Sign In' },
-  '/signup': { title: 'New Registration', section: 'Sign Up' }
+  '/': { title: 'Overview', section: 'ChessPulse' },
+  '/tournaments': { title: 'Live Tournaments', section: 'Broadcasts' },
+  '/analysis': { title: 'Game Analysis', section: 'Stockfish 17' },
+  '/puzzles': { title: 'Tactics Trainer', section: 'Puzzles' },
+  '/puzzles/rush': { title: 'Puzzle Rush', section: 'Puzzles' },
+  '/puzzles/survival': { title: '3-Life Survival', section: 'Puzzles' },
+  '/puzzles/rating': { title: 'Rated Puzzles', section: 'Puzzles' },
+  '/puzzles/themed': { title: 'Tactical Motifs', section: 'Puzzles' },
+  '/puzzles/curated': { title: 'Pulse', section: 'Chess Training' },
+  '/puzzles/stats': { title: 'Stats', section: 'Puzzles' },
+  '/puzzles/leaderboard': { title: 'Leaderboard', section: 'Puzzles' },
+  '/bots': { title: 'AI Opponents', section: 'Sparring' },
+  '/play/online': { title: 'Play Online', section: 'Multiplayer' },
+  '/profile': { title: 'Profile', section: 'Account' },
+  '/customize': { title: 'Board Customizer', section: 'Appearance' },
+  '/signin': { title: 'Sign In', section: 'Account' },
+  '/signup': { title: 'Register', section: 'Account' }
 };
 
-export default function Header({ onToggleSidebar, onOpenSandbox }) {
+export default function Header({ onToggleSidebar }) {
   const location = useLocation();
   const navigate = useNavigate();
   const { darkMode, toggleDarkMode } = useTheme();
@@ -94,15 +93,6 @@ export default function Header({ onToggleSidebar, onOpenSandbox }) {
 
       {/* Right Action Strip */}
       <div className="flex items-center gap-2.5">
-        {/* 1-Click Sandbox Trigger Button */}
-        <button
-          onClick={onOpenSandbox}
-          className="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold bg-violet-500/10 hover:bg-violet-500/20 text-violet-600 dark:text-violet-400 border border-violet-500/30 transition-all shadow-sm shadow-violet-500/10 group cursor-pointer"
-        >
-          <FlaskConical className="w-3.5 h-3.5 group-hover:rotate-12 transition-transform text-violet-500" />
-          <span>⚡ Recruiter Sandbox</span>
-        </button>
-
         {/* Theme Toggle Button */}
         <button
           onClick={toggleDarkMode}
