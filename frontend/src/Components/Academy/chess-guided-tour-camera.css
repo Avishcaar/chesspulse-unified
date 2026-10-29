@@ -1,0 +1,875 @@
+/* ==========================================================================
+   Chess Guided Tour Camera Rig Styles (Atelier Luxury Edition)
+   Pure 2D top-down camera flight across the chessboard,
+   fine-art Cormorant Garamond typography, specular roasted obsidian glass,
+   and clean minimal controls aligned with the ChessPulse design system.
+   ========================================================================== */
+
+.chess-camera-tour-root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  font-family: inherit;
+  color: #f5f5f4;
+  overflow: hidden;
+}
+
+.chess-camera-tour-root.is-page-view {
+  width: 100vw;
+  height: calc(100vh - 64px);
+  max-width: 100vw;
+  margin: 0;
+  padding: 0;
+}
+
+.chess-camera-tour-root.is-section-view {
+  height: clamp(600px, 75vh, 800px);
+  border-radius: 16px;
+  border: 1px solid rgba(212, 175, 55, 0.25);
+}
+
+/* ── 1. Top View Options (Positioned Below Navbar Pill with Zero Overlap) ── */
+
+.camera-tour-topbar {
+  position: absolute;
+  top: 82px;
+  left: 28px;
+  right: 28px;
+  z-index: 25;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 1rem;
+  pointer-events: none;
+}
+
+.camera-tour-control-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  width: max-content;
+  max-width: 100%;
+  padding: 0.32rem 0.45rem;
+  border: 1px solid rgba(212, 175, 55, 0.26);
+  border-radius: 9999px;
+  background: rgba(18, 14, 12, 0.9);
+  box-shadow: 0 12px 30px -4px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 245, 220, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  pointer-events: auto;
+}
+
+.camera-tour-exit-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.72rem;
+  border-radius: 9999px;
+  color: #d6d3d1;
+  font-family: var(--font-sans, 'Plus Jakarta Sans', system-ui, sans-serif);
+  font-size: 0.76rem;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.camera-tour-exit-btn:hover {
+  color: #fef08a;
+  background: rgba(212, 175, 55, 0.12);
+}
+
+.camera-hud-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42rem;
+  padding: 0.4rem 0.72rem;
+  border: 0;
+  border-radius: 9999px;
+  background: transparent;
+  color: #d6d3d1;
+  font-family: var(--font-sans, 'Plus Jakarta Sans', system-ui, sans-serif);
+  font-size: 0.74rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.camera-hud-pill-btn:hover {
+  color: #fdfaf6;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.camera-hud-pill-btn svg {
+  color: #f0cc63;
+}
+
+.camera-hud-divider {
+  width: 1px;
+  height: 18px;
+  flex: 0 0 1px;
+  background: rgba(212, 175, 55, 0.27);
+}
+
+.camera-tour-course-context {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.18rem;
+  text-align: center;
+  pointer-events: none;
+}
+
+.camera-tour-context-eyebrow {
+  color: #b9a56b;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+}
+
+.camera-tour-context-title {
+  max-width: 30vw;
+  overflow: hidden;
+  color: #f7f2e8;
+  font-family: var(--font-serif, 'Cormorant Garamond', Garamond, serif);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.camera-tour-top-progress {
+  justify-self: end;
+  width: 166px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.38rem;
+  pointer-events: none;
+}
+
+.camera-tour-top-progress-label {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 0.35rem;
+  color: #a8a29e;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+}
+
+.camera-tour-top-progress-label strong {
+  color: #f5e7ba;
+  font-size: 0.8rem;
+}
+
+.camera-tour-progress-total {
+  color: #736a59;
+}
+
+.camera-tour-top-progress-track {
+  height: 3px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.camera-tour-top-progress-track span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #d6ae3f, #f7df94);
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.55);
+  transition: width 0.35s ease;
+}
+.camera-viewport-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 50% 50%, #15120f 0%, #070605 85%);
+  overflow: hidden;
+  box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.75);
+}
+
+.camera-ambient-floor {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(212, 175, 55, 0.05) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ── 3. Pure 2D Camera Rig (Centered 840px Board, Zero 3D Tilt) ───────────── */
+
+.camera-moving-rig {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 840px;
+  height: 840px;
+  margin-left: -420px;
+  margin-top: -420px;
+  transform-origin: 420px 420px;
+  transition: transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 5;
+}
+
+.camera-moving-rig.is-flying {
+  will-change: transform;
+}
+
+/* In testing mode, all transforms and containing blocks are completely removed
+   so that @dnd-kit DragOverlay positions pieces 1:1 in viewport coordinates! */
+.camera-moving-rig.is-testing-mode {
+  transform: none !important;
+  will-change: auto !important;
+  transition: none !important;
+  filter: none !important;
+  perspective: none !important;
+}
+
+.camera-board-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Spotlight SVG Mask Overlay — perfectly matched 1:1 to boardSize with zero offset */
+.camera-spotlight-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* ── 4. Dynamic Piece Highlight Rings & Beacons ─────────────────────────── */
+
+.camera-piece-focus-ring {
+  position: absolute;
+  pointer-events: none;
+  z-index: 12;
+  transition: left 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+              top 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.focus-pulse-glow {
+  position: absolute;
+  inset: -6px;
+  border-radius: 12px;
+  background: radial-gradient(
+    circle,
+    rgba(212, 175, 55, 0.22) 0%,
+    rgba(212, 175, 55, 0) 75%
+  );
+  animation: focus-breathing 2s infinite ease-in-out;
+}
+
+@keyframes focus-breathing {
+  0%, 100% { transform: scale(1); opacity: 0.75; }
+  50% { transform: scale(1.08); opacity: 1; }
+}
+
+.focus-corner {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-color: #fef08a;
+  border-style: solid;
+  border-width: 0;
+  box-shadow: 0 0 10px rgba(254, 240, 138, 0.85);
+}
+
+.corner-tl { top: -2px; left: -2px; border-top-width: 2.5px; border-left-width: 2.5px; border-top-left-radius: 4px; }
+.corner-tr { top: -2px; right: -2px; border-top-width: 2.5px; border-right-width: 2.5px; border-top-right-radius: 4px; }
+.corner-bl { bottom: -2px; left: -2px; border-bottom-width: 2.5px; border-left-width: 2.5px; border-bottom-left-radius: 4px; }
+.corner-br { bottom: -2px; right: -2px; border-bottom-width: 2.5px; border-right-width: 2.5px; border-bottom-right-radius: 4px; }
+
+.focus-coordinate-tag {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fef08a;
+  color: #1a140c;
+  font-size: 0.62rem;
+  font-weight: 800;
+  padding: 1px 7px;
+  border-radius: 4px;
+  letter-spacing: 0.08em;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.8);
+  pointer-events: none;
+}
+
+.camera-target-beacon {
+  position: absolute;
+  pointer-events: none;
+  z-index: 11;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.beacon-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 16px #10b981;
+}
+
+.beacon-ping {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid rgba(16, 185, 129, 0.8);
+  animation: beacon-ping-anim 1.8s infinite cubic-bezier(0, 0, 0.2, 1);
+}
+
+@keyframes beacon-ping-anim {
+  0% { transform: scale(0.6); opacity: 1; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+.beacon-tag {
+  position: absolute;
+  bottom: 8px;
+  font-size: 0.58rem;
+  font-weight: 800;
+  color: #a7f3d0;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95);
+  letter-spacing: 0.06em;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+}
+
+/* ── 5. Atelier Luxury Controller Bar (Exhibition Design) ───────────────── */
+
+.tour-minimal-bar {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(980px, calc(100vw - 48px));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2.25rem;
+  padding: 1.2rem 1.65rem;
+  background: linear-gradient(180deg, rgba(22, 18, 15, 0.94) 0%, rgba(13, 10, 9, 0.98) 100%);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(212, 175, 55, 0.32);
+  border-radius: 20px;
+  box-shadow:
+    0 24px 60px -10px rgba(0, 0, 0, 0.88),
+    0 0 35px -5px rgba(212, 175, 55, 0.12),
+    inset 0 1px 0 rgba(255, 245, 220, 0.14);
+  z-index: 30;
+  overflow: hidden;
+}
+
+/* Top Specular Gilded Hairline Accent */
+.tour-bar-accent-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(212, 175, 55, 0.4) 20%,
+    rgba(212, 175, 55, 0.95) 50%,
+    rgba(212, 175, 55, 0.4) 80%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+.tour-learning-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.22rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.tour-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.tour-learning-path {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin: 0.15rem 0 0.25rem;
+  padding: 0;
+  list-style: none;
+}
+
+.tour-learning-path li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #77716a;
+  font-family: var(--font-sans, 'Plus Jakarta Sans', system-ui, sans-serif);
+  font-size: 0.68rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.tour-learning-path li + li::before {
+  width: 1.3rem;
+  height: 1px;
+  margin: 0 0.55rem;
+  background: rgba(212, 175, 55, 0.25);
+  content: "";
+}
+
+.tour-learning-path-marker {
+  display: inline-grid;
+  width: 1.1rem;
+  height: 1.1rem;
+  place-items: center;
+  border: 1px solid rgba(168, 162, 158, 0.35);
+  border-radius: 50%;
+  color: #a8a29e;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.58rem;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.tour-learning-path li.is-current {
+  color: #f4e2a4;
+}
+
+.tour-learning-path li.is-current .tour-learning-path-marker {
+  border-color: #d4af37;
+  background: rgba(212, 175, 55, 0.14);
+  color: #f4d777;
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.16);
+}
+
+.tour-learning-path li.is-complete {
+  color: #a7f3d0;
+}
+
+.tour-learning-path li.is-complete .tour-learning-path-marker {
+  border-color: rgba(16, 185, 129, 0.65);
+  background: rgba(16, 185, 129, 0.14);
+  color: #6ee7b7;
+}
+
+.tour-step-badge {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #d4af37;
+  text-transform: uppercase;
+}
+
+.tour-meta-dot {
+  color: #57534e;
+  font-size: 0.75rem;
+}
+
+/* Dynamic Status Pills */
+.tour-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.18rem 0.6rem;
+  border-radius: 9999px;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.status-beacon-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-beacon-dot.is-gold {
+  background: #d4af37;
+  box-shadow: 0 0 8px #d4af37;
+}
+
+.status-beacon-dot.is-cyan {
+  background: #38bdf8;
+  box-shadow: 0 0 8px #38bdf8;
+}
+
+.status-beacon-dot.is-emerald {
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+}
+
+.tour-status-pill.is-instructing {
+  background: rgba(212, 175, 55, 0.14);
+  border: 1px solid rgba(212, 175, 55, 0.38);
+  color: #fef08a;
+}
+
+.tour-status-pill.is-demo {
+  background: rgba(56, 189, 248, 0.14);
+  border: 1px solid rgba(56, 189, 248, 0.38);
+  color: #7dd3fc;
+}
+
+.tour-status-pill.is-testing {
+  background: rgba(16, 185, 129, 0.16);
+  border: 1px solid rgba(16, 185, 129, 0.48);
+  color: #6ee7b7;
+  animation: test-pill-glow 1.8s infinite ease-in-out;
+}
+
+@keyframes test-pill-glow {
+  0%, 100% { box-shadow: 0 0 6px rgba(16, 185, 129, 0.2); }
+  50% { box-shadow: 0 0 14px rgba(16, 185, 129, 0.5); }
+}
+
+.tour-status-pill.is-passed {
+  background: rgba(16, 185, 129, 0.25);
+  border: 1px solid rgba(16, 185, 129, 0.7);
+  color: #a7f3d0;
+}
+
+.tour-status-pill.is-failed {
+  background: rgba(245, 158, 11, 0.2);
+  border: 1px solid rgba(245, 158, 11, 0.55);
+  color: #fde68a;
+}
+
+.tour-counter-tag {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.68rem;
+  color: #78716c;
+  letter-spacing: 0.06em;
+}
+
+/* Exhibition Heading Typography */
+.tour-heading-title {
+  font-family: var(--font-serif, 'Cormorant Garamond', Garamond, serif);
+  font-size: 1.48rem;
+  line-height: 1.15;
+  font-weight: 600;
+  color: #fdfaf6;
+  letter-spacing: -0.015em;
+  margin: 0.15rem 0 0.1rem;
+  max-width: 100%;
+}
+
+.tour-heading-title.is-passed-title {
+  color: #a7f3d0;
+  text-shadow: 0 0 24px rgba(16, 185, 129, 0.4);
+}
+
+.tour-heading-title.is-failed-title {
+  color: #fde68a;
+}
+
+.tour-heading-caption {
+  font-family: var(--font-sans, 'Plus Jakarta Sans', system-ui, sans-serif);
+  font-size: 0.82rem;
+  color: #a8a29e;
+  line-height: 1.42;
+  margin: 0;
+  max-width: 72ch;
+}
+
+/* Contextual Sub-actions */
+.tour-subactions-row {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-top: 0.2rem;
+}
+
+.tour-subaction-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: #d4af37;
+  font-family: var(--font-sans, 'Plus Jakarta Sans', system-ui, sans-serif);
+  font-size: 0.74rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: all 0.2s ease;
+}
+
+.tour-subaction-link:hover {
+  color: #fef08a;
+  transform: translateX(2px);
+}
+
+/* Luxury Gilded Navigation Buttons */
+.tour-minimal-nav-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.tour-minimal-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  border-radius: 9999px;
+  font-family: var(--font-sans, 'Plus Jakarta Sans', system-ui, sans-serif);
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tour-btn-prev {
+  padding: 0.65rem 1.3rem;
+  background: rgba(28, 23, 20, 0.8);
+  border: 1px solid rgba(212, 175, 55, 0.28);
+  color: #d6d3d1;
+}
+
+.tour-btn-prev:hover {
+  background: rgba(45, 36, 30, 0.95);
+  border-color: rgba(212, 175, 55, 0.55);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.tour-btn-next {
+  padding: 0.65rem 1.5rem;
+  background: linear-gradient(135deg, #d4af37 0%, #aa8420 100%);
+  color: #120e06;
+  border: 1px solid rgba(255, 240, 160, 0.5);
+  font-weight: 700;
+  box-shadow: 0 4px 18px rgba(212, 175, 55, 0.35);
+}
+
+.tour-btn-next:hover {
+  background: linear-gradient(135deg, #e5c158 0%, #bf9628 100%);
+  color: #080603;
+  box-shadow: 0 6px 26px rgba(212, 175, 55, 0.55);
+  transform: translateY(-1px) scale(1.02);
+}
+
+/* Pulsing Next Button on Test Passed */
+.tour-minimal-nav-btn.is-passed-pulse {
+  background: linear-gradient(135deg, #10b981 0%, #047857 100%) !important;
+  color: #ffffff !important;
+  border-color: rgba(167, 243, 208, 0.7) !important;
+  box-shadow: 0 0 24px rgba(16, 185, 129, 0.65) !important;
+  animation: passed-glow-pulse 1.8s infinite ease-in-out;
+}
+
+@keyframes passed-glow-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 16px rgba(16, 185, 129, 0.5);
+  }
+  50% {
+    transform: scale(1.04);
+    box-shadow: 0 0 28px rgba(16, 185, 129, 0.85);
+  }
+}
+
+/* ── 6. Mobile Responsiveness ────────────────────────────────────────────── */
+
+@media (max-width: 680px) {
+  .camera-tour-topbar {
+    top: 76px;
+    left: 14px;
+    right: 14px;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.55rem;
+  }
+
+  .camera-tour-course-context {
+    display: none;
+  }
+
+  .camera-tour-top-progress {
+    width: 62px;
+  }
+
+  .camera-tour-top-progress-label > span:first-child,
+  .camera-tour-progress-total {
+    display: none;
+  }
+
+  .camera-hud-pill-btn {
+    padding: 0.34rem 0.5rem;
+    font-size: 0.7rem;
+  }
+
+  .tour-minimal-bar {
+    bottom: max(14px, env(safe-area-inset-bottom));
+    width: calc(100vw - 24px);
+    gap: 0.75rem;
+    padding: 0.95rem 1rem;
+    flex-direction: column;
+    align-items: stretch;
+    border-radius: 18px;
+  }
+
+  .tour-heading-title {
+    font-size: 1.35rem;
+  }
+
+  .tour-heading-caption {
+    font-size: 0.78rem;
+    white-space: normal;
+  }
+
+  .tour-learning-path li {
+    font-size: 0.64rem;
+  }
+
+  .tour-learning-path li + li::before {
+    width: 0.9rem;
+    margin: 0 0.38rem;
+  }
+
+  .tour-minimal-nav-group {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .tour-minimal-nav-btn {
+    flex: 1;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 420px) {
+  .camera-tour-topbar {
+    left: 10px;
+    right: 10px;
+  }
+
+  .camera-tour-control-group {
+    gap: 0.15rem;
+    padding: 0.25rem 0.3rem;
+  }
+
+  .camera-tour-exit-btn,
+  .camera-hud-pill-btn {
+    gap: 0.28rem;
+    padding: 0.32rem 0.48rem;
+    font-size: 0.65rem;
+  }
+
+  .camera-hud-pill-btn svg {
+    width: 13px;
+  }
+
+  .camera-hud-divider {
+    margin: 0;
+  }
+
+  .camera-tour-top-progress {
+    width: 46px;
+  }
+
+  .tour-minimal-bar {
+    width: calc(100vw - 20px);
+    padding: 0.85rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .camera-hud-pill-btn span {
+    display: none;
+  }
+}
+
+/* Light theme camera controls and lesson panel. The colored board remains unchanged. */
+body[data-theme="light"] .chess-camera-tour-root { color: #292b27; }
+
+body[data-theme="light"] .camera-viewport-frame {
+  background: radial-gradient(circle at 50% 45%, #f4f1e8 0%, #e8e7dc 85%);
+  box-shadow: inset 0 0 100px rgba(62, 66, 53, 0.12);
+}
+
+body[data-theme="light"] .camera-ambient-floor {
+  background: radial-gradient(circle at 50% 50%, rgba(195, 163, 82, 0.1) 0%, transparent 70%);
+}
+
+body[data-theme="light"] .camera-tour-control-group {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(143, 113, 37, 0.28);
+  box-shadow: 0 10px 28px rgba(55, 52, 42, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+body[data-theme="light"] .camera-tour-exit-btn,
+body[data-theme="light"] .camera-hud-pill-btn { color: #50544c; }
+body[data-theme="light"] .camera-tour-exit-btn:hover { color: #755a13; background: rgba(212, 175, 55, 0.13); }
+body[data-theme="light"] .camera-hud-pill-btn:hover { color: #292b27; background: rgba(47, 49, 43, 0.06); }
+body[data-theme="light"] .camera-hud-pill-btn svg { color: #967319; }
+body[data-theme="light"] .camera-hud-divider { background: rgba(143, 113, 37, 0.25); }
+body[data-theme="light"] .camera-tour-context-eyebrow { color: #756126; }
+body[data-theme="light"] .camera-tour-context-title { color: #292b27; }
+body[data-theme="light"] .camera-tour-top-progress-label { color: #696c65; }
+body[data-theme="light"] .camera-tour-top-progress-label strong { color: #373a33; }
+body[data-theme="light"] .camera-tour-progress-total { color: #85867d; }
+body[data-theme="light"] .camera-tour-top-progress-track { background: rgba(47, 49, 43, 0.14); }
+
+body[data-theme="light"] .tour-minimal-bar {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(249, 247, 240, 0.97));
+  border-color: rgba(143, 113, 37, 0.28);
+  box-shadow: 0 20px 50px rgba(48, 45, 36, 0.17), 0 0 28px rgba(144, 117, 43, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+body[data-theme="light"] .tour-learning-path li { color: #7b7c74; }
+body[data-theme="light"] .tour-learning-path-marker { color: #64685f; border-color: rgba(83, 86, 77, 0.35); }
+body[data-theme="light"] .tour-learning-path li.is-current { color: #705710; }
+body[data-theme="light"] .tour-learning-path li.is-current .tour-learning-path-marker { color: #705710; background: rgba(212, 175, 55, 0.14); }
+body[data-theme="light"] .tour-step-badge { color: #80631a; }
+body[data-theme="light"] .tour-meta-dot { color: #9a988e; }
+body[data-theme="light"] .tour-heading-title { color: #2d302a; }
+body[data-theme="light"] .tour-heading-title.is-passed-title { color: #256d4d; }
+body[data-theme="light"] .tour-heading-title.is-failed-title { color: #8c5b0a; }
+body[data-theme="light"] .tour-heading-caption { color: #62665e; }
+body[data-theme="light"] .tour-counter-tag { color: #76786f; }
+body[data-theme="light"] .tour-subaction-link { color: #80631a; }
+body[data-theme="light"] .tour-subaction-link:hover { color: #5e480e; }
+body[data-theme="light"] .tour-btn-prev { color: #4f534b; background: #fff; border-color: rgba(70, 72, 64, 0.16); }
+body[data-theme="light"] .tour-btn-prev:hover { color: #292b27; background: #f3f1e9; border-color: rgba(143, 113, 37, 0.35); }
+body[data-theme="light"] .tour-btn-next { color: #29220d; border-color: rgba(143, 113, 37, 0.45); }
+body[data-theme="light"] .tour-btn-next:hover { color: #221b09; }
+
+body[data-theme="light"] .tour-status-pill.is-instructing { color: #735912; }
+body[data-theme="light"] .tour-status-pill.is-demo { color: #17648a; }
+body[data-theme="light"] .tour-status-pill.is-testing { color: #176547; }
+body[data-theme="light"] .tour-status-pill.is-passed { color: #176547; }
+body[data-theme="light"] .tour-status-pill.is-failed { color: #80520d; }
+
+body[data-theme="light"] .focus-coordinate-tag { color: #28230f; box-shadow: 0 3px 10px rgba(42, 40, 32, 0.2); }

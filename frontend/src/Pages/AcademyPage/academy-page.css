@@ -1,0 +1,205 @@
+/* ==========================================================================
+   Academy Page Styles — Atelier Exhibition Design (Spacious Cinema Edition)
+   ========================================================================== */
+
+.cp-academy-page {
+  position: relative;
+  min-height: calc(100vh - 64px);
+  background: radial-gradient(
+      ellipse 80% 50% at 50% 0%,
+      rgba(212, 175, 55, 0.06) 0%,
+      transparent 70%
+    ),
+    linear-gradient(180deg, #090807 0%, #110f0e 50%, #090807 100%);
+  box-sizing: border-box;
+}
+
+/* When in camera flight mode, occupy 100% of the viewport with zero dead margins */
+.cp-academy-page.is-camera-mode {
+  width: 100vw;
+  height: calc(100vh - 64px);
+  max-width: 100vw;
+  max-height: calc(100vh - 64px);
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+/* When in curriculum mode, allow natural scrolling */
+.cp-academy-page.is-curriculum-mode {
+  padding: 4.5rem 1.25rem 3.5rem;
+  overflow-x: hidden;
+}
+
+.cp-academy-bg-glow {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1100px;
+  height: 440px;
+  background: radial-gradient(
+    ellipse at top,
+    rgba(212, 175, 55, 0.09) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+.cp-academy-page-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* Streamlined Top Bar */
+.cp-academy-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.cp-academy-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: 9999px;
+  background: rgba(22, 18, 15, 0.8);
+  border: 1px solid rgba(212, 175, 55, 0.28);
+  color: #a8a29e;
+  font-size: 0.78rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.cp-academy-back-link:hover {
+  color: #fef08a;
+  border-color: rgba(212, 175, 55, 0.55);
+  background: rgba(212, 175, 55, 0.12);
+  transform: translateX(-2px);
+}
+
+.cp-academy-center-masthead {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.2rem;
+}
+
+.cp-academy-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.22rem 0.65rem;
+  border-radius: 9999px;
+  background: rgba(212, 175, 55, 0.12);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #fef08a;
+  text-transform: uppercase;
+}
+
+.cp-academy-live-tag {
+  font-size: 0.68rem;
+  color: #78716c;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.cp-academy-hero-title {
+  font-size: clamp(1.4rem, 2.5vw, 2rem);
+  font-weight: 800;
+  color: #f5f5f4;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.academy-page-mode-switcher {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(22, 18, 15, 0.85);
+  border: 1px solid rgba(212, 175, 55, 0.28);
+  border-radius: 9999px;
+  padding: 3px;
+  gap: 3px;
+}
+
+.academy-mode-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 9999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #a8a29e;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.academy-mode-pill:hover {
+  color: #f5f5f4;
+}
+
+.academy-mode-pill.is-selected {
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.25) 0%, rgba(212, 175, 55, 0.12) 100%);
+  color: #fef08a;
+  border: 1px solid rgba(212, 175, 55, 0.45);
+}
+
+/* Light theme: keep the curriculum warm while restoring readable surfaces. */
+body[data-theme="light"] .cp-academy-page {
+  color: #292b27;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(186, 151, 63, 0.12) 0%, transparent 70%),
+    linear-gradient(180deg, #f8f7f2 0%, #f1efe7 52%, #f8f7f2 100%);
+}
+
+body[data-theme="light"] .cp-academy-bg-glow {
+  background: radial-gradient(ellipse at top, rgba(186, 151, 63, 0.12) 0%, transparent 70%);
+}
+
+body[data-theme="light"] .cp-academy-back-link {
+  color: #565a52;
+  background: rgba(255, 255, 255, 0.82);
+  border-color: rgba(143, 113, 37, 0.25);
+}
+
+body[data-theme="light"] .cp-academy-back-link:hover {
+  color: #765b13;
+  background: #fffdf7;
+  border-color: rgba(143, 113, 37, 0.5);
+}
+
+body[data-theme="light"] .cp-academy-pill {
+  color: #725814;
+  background: rgba(212, 175, 55, 0.13);
+  border-color: rgba(143, 113, 37, 0.28);
+}
+
+body[data-theme="light"] .cp-academy-live-tag { color: #73766e; }
+body[data-theme="light"] .cp-academy-hero-title { color: #292b27; }
+
+body[data-theme="light"] .academy-page-mode-switcher {
+  background: rgba(231, 229, 220, 0.9);
+  border-color: rgba(75, 76, 67, 0.15);
+}
+
+body[data-theme="light"] .academy-mode-pill { color: #656960; }
+body[data-theme="light"] .academy-mode-pill:hover { color: #282b26; }
+
+body[data-theme="light"] .academy-mode-pill.is-selected {
+  color: #69520c;
+  background: #fffdf7;
+  border-color: rgba(143, 113, 37, 0.35);
+}
